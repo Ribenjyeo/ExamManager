@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto+Slab&display=swap');
+
+:root{
+    --font-Roboto: 'Roboto Condensed', sans-serif;
+    --font-Roboto-Slab:'Roboto Slab', serif;
+    --normal-font-size: 18px; 
+}
+
+body .tasks{
+    position: relative;
+    height: 100%;
+}
+
+.tasks-list{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tasks-list .task-item{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    padding: 20px;
+    width: 50%;
+    
+    border: 1px solid rgba(0, 0, 0, .4);
+}
+
+.task-item .task-title{
+    font-size: 25px;
+    font-family: var(--font-Roboto-Slab);
+}
+
+.task-title *{
+    margin: 0;
+    padding: 0;
+}
+
+.task-item .task-title .task-desc{
+    margin-top: 1%;
+    max-height: 2.8rem;
+    font-size: 15px;
+    color: rgba(0, 0, 0, .5);
+
+    overflow: hidden;
+}
+
+@media(min-width: 1000px){
+    .tasks-list .task-item{
+        width: 40%;
+    }
+}
+
+@media(min-width: 1400px){
+    .tasks-list .task-item{
+        width: 30%;
+    }
+}

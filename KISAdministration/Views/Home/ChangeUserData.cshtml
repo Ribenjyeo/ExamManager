@@ -1,0 +1,49 @@
+﻿@model KISAdministration.Models.RegisterEditModel;
+@{
+    ViewData["Title"] = "Изменить учетные данные";
+    //Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KISAdministration</title>
+    <link rel="stylesheet" href="~/css/main-style.css" />
+</head>
+<body class="main">
+    @if (int.Parse(Context.Request.Query["pageId"]) == 1)
+    {
+        <form class="auth-form" method="POST" action="/change?pageId=1" autocomplete="off">
+            <div class="header">Изменить учетные данные</div>
+            <div class="body">
+                <input class="normal" type="text" placeholder="Новый логин" asp-for="Login" />
+                <span asp-validation-for="Login" class="danger" style="font-weight: bold"></span>
+                <input class="normal" type="password" placeholder="Новый пароль" asp-for="Password" />
+                <span asp-validation-for="Password" class="danger" style="font-weight: bold"></span>
+                <input class="normal" type="password" placeholder="Подтвердить пароль" asp-for="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword" class="danger" style="font-weight: bold"></span>
+            </div>
+            <div class="footer">
+                <input type="submit" value="Изменить" />
+            </div>
+        </form>
+    }
+    else if(int.Parse(Context.Request.Query["pageId"]) == 2)
+    {
+        <form class="auth-form" method="POST" action="/change?pageId=2" autocomplete="off">
+            <div class="header">Изменить личные данные</div>
+            <div class="body">
+                <input class="normal" type="text" placeholder="Имя" asp-for="FirstName" />
+                <span asp-validation-for="FirstName" class="danger" style="font-weight: bold"></span>
+                <input class="normal" type="text" placeholder="Фамилия" asp-for="MiddleName" />
+                <span asp-validation-for="MiddleName" class="danger" style="font-weight: bold"></span>
+            </div>
+            <div class="footer">
+                <input type="submit" value="Изменить" />
+            </div>
+        </form>
+    }
+</body>
+</html>

@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+:root {
+    --font-Roboto: 'Roboto Condensed', sans-serif;
+    --normal-font-size: 18px;
+}
+
+body {
+    height: 100vh;
+}
+
+    body.main {
+        background-color: white;
+        display: grid;
+        place-content: center;
+    }
+
+span.danger {
+    margin-top: .5em;
+    align-self: start;
+    margin-left: 8px;
+    color: red;
+}
+
+span.field-validation-error {
+    margin-top: .5em;
+    align-self: start;
+    margin-left: 8px;
+    color: red;
+    font-weight: bold;
+}
+
+input.input-validation-error {
+    outline: 1px solid red;
+}
+
+.auth-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, .2);
+    background-color: white;
+    width: 30vw;
+    /* height: 40vh; */
+
+    box-shadow: 0 0 40px rgba(0, 0, 0, .2);
+}
+
+    /*Header*/
+    .auth-form .header {
+        position: relative;
+        display: grid;
+        font-size: 2em;
+        place-items: center;
+        font-family: var(--font-Roboto);
+        padding: 7%;
+    }
+
+        .auth-form .header::after {
+            content: '';
+            position: absolute;
+            background-color: black;
+            bottom: 0;
+            left: 1em;
+            right: 1em;
+            height: 2px;
+        }
+
+    /*Body*/
+    .auth-form .body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15%;
+        padding-top: 1em;
+    }
+
+        .auth-form .body input {
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, .2);
+            height: 3em;
+            width: 90%;
+            padding-left: 15px;
+            margin-top: 1em;
+            font-size: var(--normal-font-size);
+            font-family: var(--font-Roboto);
+        }
+
+            .auth-form .body input.normal:focus {
+                outline: 2px solid rgba(36, 137, 204, 0.7);
+            }
+
+
+    /*Footer*/
+    .auth-form .footer {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        padding-bottom: 20px;
+        padding-top: 30px;
+        padding-right: 15%;
+    }
+
+        .auth-form .footer input {
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, .2);
+            background-color: #187bb1;
+            padding: 0 10px;
+            height: 3rem;
+            max-height: 50px;
+            color: white;
+            font-size: var(--normal-font-size);
+            font-family: var(--font-Roboto);
+            transition: background-color .4s;
+        }
+
+            .auth-form .footer input:hover {
+                cursor: pointer;
+                background-color: #12608a;
+            }
+
+@media(max-width: 1200px) {
+    .auth-form {
+        width: 50vw;
+    }
+}

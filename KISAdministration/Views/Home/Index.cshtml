@@ -1,12 +1,38 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+@model KISAdministration.Models.LoginEditModel;
+@{
     ViewData["Title"] = "Home Page";
     //Layout = "_Layout";
 }
 
-<div class="row">
-    <div class="col-12 align-items-md-center">
-        <div class="row border-1">
-            HELLO
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KISAdministration</title>
+    <link rel="stylesheet" href="~/css/main-style.css" />
+  </head>
+  <body class="main">
+    <form class="auth-form" method="POST" asp-controller="Home" asp-action="Login" autocomplete="off">
+      <div class="header">Авторизация</div>
+      <div class="body">
+          <input class="normal" type="text" placeholder="Логин" asp-for="Login"/>
+          <span asp-validation-for="Login" class="danger" style="font-weight: bold"></span>
+          <input class="normal" type="password" placeholder="Пароль" asp-for="Password"/>
+          <span asp-validation-for="Password" class="danger" style="font-weight: bold"></span>
+          @foreach(var errors in ViewContext.ViewData.ModelState.Where(kvp => string.IsNullOrEmpty(kvp.Key)).Select(kvp => kvp.Value.Errors.Select(error => error.ErrorMessage)) ?? new List<List<string>>())
+            {
+                foreach (var error in errors)
+                {
+                    <span class="danger" style="font-weight: bold">@error</span>
+                }
+            }
         </div>
-    </div>
-</div>
+      <div class="footer">
+        <input type="submit" name="sumbitButton" value="Войти" onclick="this.form.submit(); this.disabled=true;"/>
+      </div>
+    </form>
+  </body>
+</html>

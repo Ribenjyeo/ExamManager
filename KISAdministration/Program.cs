@@ -1,7 +1,35 @@
+using AutoMapper;
+using KISAdministration.DAO;
+using KISAdministration.Mapping;
+using KISAdministration.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+var configManager = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = configManager.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<DbContext, ApplicationDBContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors());
+
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ISecurityService, SecurityService>();
+
+builder.Services.AddClaimsAuthentication();
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new MappingProfile(provider.GetService<ISecurityService>()));
+})
+            .CreateMapper());
 
 var app = builder.Build();
 
@@ -18,6 +46,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
