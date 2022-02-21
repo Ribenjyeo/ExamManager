@@ -1,4 +1,5 @@
-﻿@{
+﻿@model KISAdministration.Models.UserViewModel;
+@{
     ViewData["Title"] = "Home Page";
     //Layout = "_Layout";
 }
@@ -15,8 +16,8 @@
   </head>
   <body>
     <div class="nav">
-      <div class="nav-title">Нечаев Илья</div>
-      <a onclick="@(Url.Action("Logout", "Home"))" class="exit-button">Выйти</a>
+      <div class="nav-title">@($"{Model!.MiddleName} {Model!.FirstName}")</div>
+      <a href="/logout" class="exit-button">Выйти</a>
     </div>
     <div class="tasks">
       <div class="tasks-list">

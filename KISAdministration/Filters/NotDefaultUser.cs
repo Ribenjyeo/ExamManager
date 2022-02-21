@@ -3,6 +3,7 @@ using KISAdministration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace KISAdministration.Filters
 {
@@ -10,11 +11,14 @@ namespace KISAdministration.Filters
     {
         string _redirectController { get; set; }
         string _redirectAction { get; set; }
+        object[] _routeValues { get; set; }
         public NotDefaultUserAttribute(string RedirectController, 
-                                       string RedirectAction)
+                                       string RedirectAction,
+                                       params object[] RouteValues)
         {
             _redirectController = RedirectController;
             _redirectAction = RedirectAction;
+            _routeValues = RouteValues;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -28,7 +32,10 @@ namespace KISAdministration.Filters
 
             if (currentUser.IsDefault)
             {
-                context.Result = new RedirectToActionResult(_redirectAction, _redirectController, null);
+                var constructorParameters = new Type[] { typeof(string), typeof(string), typeof(object) };
+                var constructor = typeof(RedirectToActionResult).GetConstructor(System.Reflection.BindingFlags.Public, constructorParameters);
+                
+                context.Result = new RedirectToActionResult(_redirectAction, _redirectController, _routeValues);
                 return;
             }
 

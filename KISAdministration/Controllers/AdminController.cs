@@ -4,10 +4,14 @@ using AutoMapper;
 using KISAdministration.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using KISAdministration.Filters;
 
 namespace KISAdministration.Controllers
 {
+
     [Route("admin")]
+    [Authorize]
+    [NotDefaultUser("Home", nameof(HomeController.ChangeUserData), "pageId", 1)]
     public class AdminController : Controller
     {
         IUserService _userService { get; set; }

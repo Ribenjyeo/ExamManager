@@ -48,7 +48,7 @@ public static class AuthenticationExtensions
                     options.ExpireTimeSpan = TimeSpan.FromHours(2);
                     options.SlidingExpiration = true;
 
-                    options.LoginPath = new PathString("/login");
+                    options.LoginPath = new PathString("/home");
                     options.LogoutPath = new PathString("/logout");
                     options.AccessDeniedPath = new PathString("/home");
                 });

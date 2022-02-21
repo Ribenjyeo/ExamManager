@@ -27,8 +27,12 @@ namespace KISAdministration.Controllers
         }
 
         [HttpGet("/home")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (User.Identity?.IsAuthenticated ?? false)
+            {
+                return await RedirectAfterAuthorization();
+            }
             return View();
         }
 
@@ -60,7 +64,7 @@ namespace KISAdministration.Controllers
                 return View("Index", model);
             }
 
-            return RedirectToAction(nameof(ChangeUserData));
+            return RedirectToAction(nameof(ChangeUserData), new { pageId = 1 });
         }
 
         [HttpGet("/change")]
@@ -70,19 +74,15 @@ namespace KISAdministration.Controllers
             var userId = Guid.Parse(User.GetClaim(ClaimKey.Id));
             var user = await userService.GetUser(userId);
 
-            switch (pageId)
+            var action = pageId switch
             {
-                case 1 when !user.IsDefault:
-                    return await RedirectAfterAuthorization();
+                1 when !user.IsDefault => await RedirectAfterAuthorization(),
+                2 when user.IsDefault => RedirectToAction(nameof(ChangeUserData), new { pageId = 1 }),
+                > 2 => await RedirectAfterAuthorization(),
+                _ => View()
+            };
 
-                case 2 when user.IsDefault:
-                    return RedirectToAction(nameof(ChangeUserData), new { pageId = 1 });
-
-                default:
-                    return await RedirectAfterAuthorization();
-            }
-
-            return View();
+            return action;
         }
 
         [HttpPost("/change")]

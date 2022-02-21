@@ -12,9 +12,7 @@ public class User
     [Required(ErrorMessage = "Введите пароль")]
     public string PasswordHash { get; set; }
 
-    [Required]
     public string FirstName { get; set; }
-    [Required]
     public string MiddleName { get; set; }
 
     public UserRole Role { get; set; }
