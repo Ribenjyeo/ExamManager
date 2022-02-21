@@ -29,13 +29,19 @@ namespace KISAdministration.Filters
             var UserSet = dbContext.Set<User>();
 
             var currentUser = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
+            var r = new RedirectToActionResult("", "", null);
 
             if (currentUser.IsDefault)
             {
-                var constructorParameters = new Type[] { typeof(string), typeof(string), typeof(object) };
-                var constructor = typeof(RedirectToActionResult).GetConstructor(System.Reflection.BindingFlags.Public, constructorParameters);
-                
-                context.Result = new RedirectToActionResult(_redirectAction, _redirectController, _routeValues);
+                var result = new RedirectToActionResult(_redirectAction, _redirectController, null);
+                var routeValueDic = new RouteValueDictionary();
+                for (int i = 0; i < (_routeValues?.Length ?? 0); i+=2)
+                {
+                    routeValueDic.Add( (string)_routeValues[i], _routeValues[i + 1] );
+                }
+
+                result.RouteValues = routeValueDic;
+                context.Result = result;
                 return;
             }
 

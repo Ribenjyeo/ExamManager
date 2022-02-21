@@ -10,7 +10,7 @@ namespace KISAdministration.Controllers
 {
     [Route("student")]
     [Authorize]
-    [NotDefaultUser("Home", nameof(HomeController.ChangeUserData))]
+    [NotDefaultUser("Home", nameof(HomeController.ChangeUserData), "pageId", 1)]
     public class StudentController : Controller
     {
         IUserService _userService { get; set; }
