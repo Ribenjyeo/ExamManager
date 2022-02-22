@@ -2,7 +2,7 @@
 
 namespace KISAdministration.Models;
 
-public class User
+public class User : IUserValidationModel
 {
     [Key]
     public Guid ObjectID { get; set; }
@@ -18,6 +18,11 @@ public class User
     public UserRole Role { get; set; }
 
     public bool IsDefault { get; set; } = true;
+
+    public string GetFirstName() => FirstName;
+    public string GetLogin() => Login;
+    public string GetMiddleName() => MiddleName;
+    public Guid GetObjectID() => ObjectID;
 }
 
 public enum UserRole

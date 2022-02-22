@@ -2,6 +2,7 @@
 using KISAdministration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace KISAdministration.Services;
@@ -55,25 +56,63 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<User?> ChangeUserData(Guid userId, params (string Name, object Value)[] fieldsToChange)
+    public async Task<ValidationResult> ChangeUserData(Guid userId, params Property[] data)
     {
         var UserSet = DbContext.Set<User>();
         var user = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
+        var result = new ValidationResult();
 
         if (user is null)
         {
-            return null;
+            result.AddCommonMessage("Пользователь не найден");
+            return result;
         }
 
-        var userType = typeof(User);
-        foreach (var field in fieldsToChange)
+        var entityManager = new EntityManager();
+        // Создаем временного пользователя и копируем значения свойств из user
+        var tempUser = new User();
+        tempUser = entityManager.CopyInto(tempUser).AllPropertiesFrom(user).GetResult();
+
+        // Для изменяемых свойств временного пользователя присваиваем переданные значения
+        var userCopyManager = entityManager.CopyInto(tempUser);
+        foreach (var prop in data)
         {
-            userType.GetProperty(field.Name)!.SetValue(user, field.Value);
+            userCopyManager.Property(prop.Name, prop.Value);
+        }
+        tempUser = userCopyManager.GetResult();
+
+        // Если в изменяемых параметрах присутствует логин
+        if (data?.Select(field => field.Name).Contains(nameof(Models.User.Login)) ?? false)
+        {
+            result = await ValidateRegisterUserLogin(tempUser);
         }
 
-        UserSet.Update(user);
-        await DbContext.SaveChangesAsync();
+        if (!result.HasErrors)
+        {
+            user = entityManager.CopyInto(user).AllPropertiesFrom(tempUser).GetResult();
+            UserSet.Update(user);
+            await DbContext.SaveChangesAsync();
+        }
 
-        return user;
+        return result;
+
+        async Task<ValidationResult> ValidateRegisterUserLogin(User userValidation)
+        {
+            if (await UserSet.AnyAsync(user => user.Login.Equals(userValidation.GetLogin())))
+            {
+                result.AddMessage(nameof(User.Login), "Пользователь с таким логином уже существует");
+            }
+
+            return result;
+        }
+    }
+
+    private void CopyFields(User source, User target)
+    {
+        var userType = typeof(User);
+        foreach(var property in userType.GetProperties())
+        {
+            property.SetValue(target, property.GetValue(source));
+        }
     }
 }

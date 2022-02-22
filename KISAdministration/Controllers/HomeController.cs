@@ -152,11 +152,11 @@ namespace KISAdministration.Controllers
             return action;
         }
 
-        private async Task<bool> ChangeUserData(RegisterEditModel model, params string[] fieldsToChange)
+        private async Task<bool> ChangeUserData(RegisterEditModel model, params string[] data)
         {
             foreach (var errorField in ModelState.Keys)
             {
-                if (!fieldsToChange.Contains(errorField))
+                if (!data.Contains(errorField))
                 {
                     ModelState.Remove(errorField);
                 }
@@ -171,29 +171,57 @@ namespace KISAdministration.Controllers
             var userType = typeof(User);
             var registeredUser = _mapper.Map<RegisterEditModel, User>(model);
 
-            // Преобразование названий свойств из RegisterEditModel в User
-            var userFieldsDict = new Dictionary<string, string>()
+            // Подготовка свойств
+            #region DATA_PREPARATION
+
+            //// Преобразование названий свойств из RegisterEditModel в User
+            //var userFieldsDict = new Dictionary<string, string>()
+            //{
+            //    { nameof(RegisterEditModel.Password), nameof(Models.User.PasswordHash) },
+            //    { nameof(RegisterEditModel.ConfirmPassword), null }
+            //};
+
+            //List<Property> propertiesData = data
+            //    // Убираем свойства, которые не присутствуют в User (например, свойство, где повторно написан пароль)
+            //    .Where(fieldName => !userFieldsDict.ContainsKey(fieldName) || !string.IsNullOrEmpty(userFieldsDict[fieldName]))
+            //    .Select(fieldName =>
+            //    {
+            //        var name = userFieldsDict.ContainsKey(fieldName) ? userFieldsDict[fieldName] : fieldName;
+            //        var value = userType.GetProperty(name)!.GetValue(registeredUser);
+            //        return new Property { Name = name, Value = value };
+            //    })
+            //    .ToList()!;
+            var mappingManager = new EntityManager().Map<RegisterEditModel, User>();
+            var propertiesData = new List<Property>();
+
+            foreach (var propertyName in data)
             {
-                { nameof(RegisterEditModel.Password), nameof(Models.User.PasswordHash) },
-                { nameof(RegisterEditModel.ConfirmPassword), null }
-            };
-            List<(string Name, object Value)> fieldsNameValue = fieldsToChange
-                // Убираем свойства, которые не присутствуют в User (например, свойство, где повторно написан пароль)
-                .Where(fieldName => !userFieldsDict.ContainsKey(fieldName) || !string.IsNullOrEmpty(userFieldsDict[fieldName]))
-                .Select(fieldName =>
+                var property = new Property();
+                property.Name = mappingManager.PropertyName(propertyName);
+
+                if (string.IsNullOrEmpty(property.Name))
                 {
-                    var name = userFieldsDict.ContainsKey(fieldName) ? userFieldsDict[fieldName] : fieldName;
-                    var value = userType.GetProperty(name)!.GetValue(registeredUser);
-                    return (name, value);
-                })
-                .ToList()!;
-            fieldsNameValue.Add((nameof(Models.User.IsDefault), false));
+                    continue;
+                }
 
-            var user = await _userService.ChangeUserData(userId, fieldsNameValue.ToArray());
+                property.Value = userType.GetProperty(property.Name)!.GetValue(registeredUser);
+                propertiesData.Add(property);
+            }
 
-            if (user is null)
+            propertiesData.Add(
+                new Property 
+                { 
+                    Name = nameof(Models.User.IsDefault), 
+                    Value = false 
+                } );
+
+            #endregion
+
+            var validationResult = await _userService.ChangeUserData(userId, propertiesData.ToArray());
+
+            if (validationResult.HasErrors)
             {
-                ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                ModelState.AddErrors(validationResult.ErrorMessages);
                 return false;
             }
 
