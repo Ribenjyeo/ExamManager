@@ -21,13 +21,14 @@ builder.Services.AddDbContext<DbContext, ApplicationDBContext>(
         .EnableDetailedErrors());
 
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<ISecurityService, SecurityService>();
 
 builder.Services.AddClaimsAuthentication();
 
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
-    cfg.AddProfile(new MappingProfile(provider.GetService<ISecurityService>()));
+    cfg.AddProfile(new MappingProfile(provider.GetService<ISecurityService>()!));
 })
             .CreateMapper());
 

@@ -9,13 +9,13 @@ namespace KISAdministration.Services;
 
 public class UserService : IUserService
 {
-    DbContext DbContext { get; init; }
+    DbContext _dbContext { get; init; }
     ISecurityService _securityService { get; init; }
 
     public UserService(DbContext dbContext,
         [FromServices] ISecurityService securityService)
     {
-        DbContext = dbContext;
+        _dbContext = dbContext;
         _securityService = securityService;
     }
 
@@ -39,7 +39,7 @@ public class UserService : IUserService
 
     public async Task<User?> GetUser(Guid userId)
     {
-        var UserSet = DbContext.Set<User>();
+        var UserSet = _dbContext.Set<User>();
 
         var user = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
 
@@ -48,7 +48,7 @@ public class UserService : IUserService
 
     public async Task<User> GetUser(string login, string password)
     {
-        var UserSet = DbContext.Set<User>();
+        var UserSet = _dbContext.Set<User>();
         var passwordHash = _securityService.Encrypt(password);
 
         var user = await UserSet.FirstOrDefaultAsync(user => user.Login == login && user.PasswordHash.Equals(passwordHash));
@@ -58,7 +58,7 @@ public class UserService : IUserService
 
     public async Task<ValidationResult> ChangeUserData(Guid userId, params Property[] data)
     {
-        var UserSet = DbContext.Set<User>();
+        var UserSet = _dbContext.Set<User>();
         var user = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
         var result = new ValidationResult();
 
@@ -91,7 +91,7 @@ public class UserService : IUserService
         {
             user = entityManager.CopyInto(user).AllPropertiesFrom(tempUser).GetResult();
             UserSet.Update(user);
-            await DbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         return result;

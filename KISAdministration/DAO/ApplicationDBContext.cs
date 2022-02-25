@@ -9,6 +9,7 @@ namespace KISAdministration.DAO
     public class ApplicationDBContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options,
                                     [FromServices] ISecurityService securitySerice) : base(options)

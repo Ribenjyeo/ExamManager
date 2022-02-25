@@ -18,6 +18,7 @@ public class User : IUserValidationModel
     public UserRole Role { get; set; }
 
     public bool IsDefault { get; set; } = true;
+    public Group? StudentGroup { get; set; }
 
     public string GetFirstName() => FirstName;
     public string GetLogin() => Login;
@@ -27,6 +28,6 @@ public class User : IUserValidationModel
 
 public enum UserRole
 {
-    STUDENT = 1 << 0,
-    ADMIN = 1 << 1
+    STUDENT = 0,
+    ADMIN = 1 << 0
 }
