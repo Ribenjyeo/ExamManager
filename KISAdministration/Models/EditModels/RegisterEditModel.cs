@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static KISAdministration.Services.EntityManager;
+using static ExamManager.Services.EntityManager;
 
-namespace KISAdministration.Models;
+namespace ExamManager.Models;
 
 public record RegisterEditModel
 {

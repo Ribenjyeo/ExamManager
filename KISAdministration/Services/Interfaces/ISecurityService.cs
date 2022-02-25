@@ -1,4 +1,4 @@
-﻿namespace KISAdministration.Services
+﻿namespace ExamManager.Services
 {
     public interface ISecurityService
     {

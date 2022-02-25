@@ -1,7 +1,7 @@
-﻿using KISAdministration.Models;
+﻿using ExamManager.Models;
 using System.Security.Claims;
 
-namespace KISAdministration.Services;
+namespace ExamManager.Services;
 
 public interface IUserService
 {

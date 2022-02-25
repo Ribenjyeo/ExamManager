@@ -1,11 +1,11 @@
-﻿using KISAdministration.Extensions;
-using KISAdministration.Models;
+﻿using ExamManager.Extensions;
+using ExamManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace KISAdministration.Filters
+namespace ExamManager.Filters
 {
     public class NotDefaultUserAttribute : Attribute, IAsyncActionFilter
     {

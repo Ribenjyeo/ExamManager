@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
-namespace KISAdministration.Services;
+namespace ExamManager.Services;
 
 public class SignInService
 {

@@ -1,10 +1,10 @@
 ﻿using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.EntityFrameworkCore;
-using KISAdministration.Models;
+using ExamManager.Models;
 using Microsoft.AspNetCore.Mvc;
-using KISAdministration.Services;
+using ExamManager.Services;
 
-namespace KISAdministration.DAO
+namespace ExamManager.DAO
 {
     public class ApplicationDBContext : DbContext
     {

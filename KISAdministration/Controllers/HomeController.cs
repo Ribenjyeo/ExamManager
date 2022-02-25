@@ -1,7 +1,7 @@
-﻿using KISAdministration.Extensions;
+﻿using ExamManager.Extensions;
 using AutoMapper;
-using KISAdministration.Models;
-using KISAdministration.Services;
+using ExamManager.Models;
+using ExamManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
-namespace KISAdministration.Controllers
+namespace ExamManager.Controllers
 {
     public class HomeController : Controller
     {

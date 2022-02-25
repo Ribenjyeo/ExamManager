@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using KISAdministration.Models;
+using ExamManager.Models;
 
-namespace KISAdministration.Mapping;
+namespace ExamManager.Mapping;
 
 public partial class MappingProfile
 {

@@ -1,4 +1,4 @@
-﻿namespace KISAdministration.Models;
+﻿namespace ExamManager.Models;
 
 public struct CreateGroupRequest
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace KISAdministration.Extensions
+namespace ExamManager.Extensions
 {
     public static class ClaimKey
     {

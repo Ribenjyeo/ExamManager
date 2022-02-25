@@ -1,11 +1,11 @@
-﻿using KISAdministration.Extensions;
-using KISAdministration.Models;
+﻿using ExamManager.Extensions;
+using ExamManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
 
-namespace KISAdministration.Services;
+namespace ExamManager.Services;
 
 public class UserService : IUserService
 {

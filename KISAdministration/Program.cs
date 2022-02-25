@@ -1,7 +1,7 @@
 using AutoMapper;
-using KISAdministration.DAO;
-using KISAdministration.Mapping;
-using KISAdministration.Services;
+using ExamManager.DAO;
+using ExamManager.Mapping;
+using ExamManager.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 

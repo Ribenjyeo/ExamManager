@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using KISAdministration.Services;
+using ExamManager.Services;
 using System.Reflection;
 
-namespace KISAdministration.Mapping;
+namespace ExamManager.Mapping;
 
 public partial class MappingProfile : Profile
 {

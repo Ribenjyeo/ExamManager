@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KISAdministration.Models;
+namespace ExamManager.Models;
 
 public class User : IUserValidationModel
 {

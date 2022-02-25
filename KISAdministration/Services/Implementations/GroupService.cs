@@ -1,7 +1,7 @@
-﻿using KISAdministration.Models;
+﻿using ExamManager.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace KISAdministration.Services;
+namespace ExamManager.Services;
 
 public class GroupService : IGroupService
 {

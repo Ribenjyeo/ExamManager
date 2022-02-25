@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace KISAdministration.Services
+namespace ExamManager.Services
 {
     public class SecurityService : ISecurityService
     {

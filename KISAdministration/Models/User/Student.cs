@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KISAdministration.Models;
+namespace ExamManager.Models;
 public record Student
 {
     [Key]

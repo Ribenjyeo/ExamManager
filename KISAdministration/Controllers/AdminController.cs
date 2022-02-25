@@ -1,12 +1,12 @@
-﻿using KISAdministration.Extensions;
-using KISAdministration.Models;
+﻿using ExamManager.Extensions;
+using ExamManager.Models;
 using AutoMapper;
-using KISAdministration.Services;
+using ExamManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using KISAdministration.Filters;
+using ExamManager.Filters;
 
-namespace KISAdministration.Controllers
+namespace ExamManager.Controllers
 {
 
     [Route("admin")]

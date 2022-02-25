@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using KISAdministration.Extensions;
-using KISAdministration.Filters;
-using KISAdministration.Services;
-using KISAdministration.Models;
+using ExamManager.Extensions;
+using ExamManager.Filters;
+using ExamManager.Services;
+using ExamManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KISAdministration.Controllers
+namespace ExamManager.Controllers
 {
     [Route("student")]
     [Authorize]

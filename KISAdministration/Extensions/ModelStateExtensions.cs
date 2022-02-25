@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace KISAdministration.Extensions
+namespace ExamManager.Extensions
 {
     public static class ModelStateExtensions
     {

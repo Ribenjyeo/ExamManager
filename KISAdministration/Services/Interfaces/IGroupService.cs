@@ -1,6 +1,6 @@
-﻿using KISAdministration.Models;
+﻿using ExamManager.Models;
 
-namespace KISAdministration.Services;
+namespace ExamManager.Services;
 
 public interface IGroupService
 {
