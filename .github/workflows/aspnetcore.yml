@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ master, asp-refactor ]
+    branches: [ master, asp-refact ]
   pull_request:
     branches: [ master ]
 
