@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto+Slab&display=swap');
+
+:root{
+    --font-Roboto: 'Roboto Condensed', sans-serif;
+    --font-Roboto-Slab:'Roboto Slab', serif;
+    --normal-font-size: 18px; 
+}
+
+body > .nav{
+    display: flex;
+    position: sticky;
+    flex-direction: column;
+    border-right: 1px solid rgba(0, 0, 0, .8);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    width: 15rem;
+}
+
+/*Navigation title*/
+
+.nav .nav-title{
+    align-self: stretch;
+    font-size: 1.7em;
+    font-family: var(--font-Roboto);
+    margin-bottom: 20px;
+    padding: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+    color: black;
+}
+
+.nav .nav-title i{
+    margin-right: .5em;
+}
+
+.nav .nav-title a{
+    text-decoration: none;
+    color: black;
+}
+
+/*Navigation items*/
+
+.nav > *{    
+    display: flex;
+    align-self: stretch;
+    justify-content: start;
+    align-items: center;
+    height: 2.2rem;
+    font-size: 1.2rem;
+    font-family: var(--font-Roboto);
+    padding: .5rem;
+    padding-left: 1rem;
+    text-decoration: none;
+    transition: background-color .4s;
+    color: black;
+}
+
+.nav > .nav-item:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.nav > .nav-exit {
+    background-color: rgb(220, 0, 0);
+    color: white;
+}
+
+.nav .nav-exit:hover{
+    background-color: #b11e1e;
+}
+
+@media(min-width: 1300px){
+    .nav .exit-button{
+        width: 4em;
+    }
+}

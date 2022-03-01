@@ -1,14 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import './index.css';
+import NavBar from './components/NavBar/NavBar';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <NavBar userName="Нечаев Илья" items={
+      [
+        {
+          title: "Главная",
+          href: "/home"
+        },
+        {
+          title: "Настройки",
+          href: "/settings"
+        }
+      ]
+    } />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.querySelector('.main')
 );
 
 // If you want to start measuring performance in your app, pass a function
