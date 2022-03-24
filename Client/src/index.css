@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+* {
+  font-family: "Open Sans"
+}
+
+/* ------ Navbar ------ */
+
+nav {
+  display: flex;
+  max-height: 60px;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+nav .logo-container {
+  width: 50px;
+  margin: 10px;
+}
+
+nav .logo-container .logo {
+  width: 100%;
+}
+
+nav span {
+  margin-left: 1rem;
+  display: inline-block;
+  line-height: inherit;
+  white-space: nowrap;
+  font-size: 1.17rem;
+}
+
+nav .nav-items {
+  
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+nav .nav-items ul {
+  display: flex;
+  flex-direction: row;
+}
+
+nav .nav-items li {
+  display: list-item;
+  list-style-type: none;
+  text-align: -webkit-match-parent;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+nav .nav-items li:hover {
+  transform: translateY(-2px);
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+}
+
+nav .account {
+  margin-right: 10px;
+  margin-left: auto;
+  padding: 0 10px;
+}
+
+nav .account span {
+  margin: 0 30px;
+}
+
+nav .nav-button {
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono",monospace;
+    height: 38px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+  }
+  
+  nav .nav-button:focus {
+    box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  }
+  
+  nav .nav-button:hover {
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+  }
+  
+  nav .nav-button:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+  }
+
+
+  /* ------ Home page ------ */
+
+  .overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+  }
+
+  .home {
+    margin: 0 auto;
+    max-width: 90em;
+    padding-top: 90px;
+  }
+
+  .reminder {
+    background: linear-gradient(69deg, red, #186bae);
+    padding: 10px;
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: -40px;
+    font-size: 15pt;
+  }
+
+
+
+  .list-preview {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: justify;
+  }
+
+  li {
+    display: list-item;
+    list-style-type: none;
+    text-align: -webkit-match-parent;
+  }
+
+  article {
+    display: block;
+  }
+
+  .entry-header {
+    margin-bottom: 0.5em;
+    font-size: 1.3em;
+  }
+
+  .markdown p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+  .link-container{
+    transition: .5s;
+    transition-delay: 0s;
+    width: 20%;
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-radius: 40px;
+    background-color: rgb(233, 233, 233);
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.link{
+    width: 20%;
+    height: 100%;
+    line-height: 40px;
+    color: #000;
+}
+
+.copy-btn{
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    background: #186bae;
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 100%;
+    width: 40%;
+    text-transform: capitalize;
+    font-size: 14px;
+}
+
+
+/* ------ Login page ------ */
+
+.header {
+  display: flex;
+  margin: 0 auto;
+  width: 55rem;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+.header  .logo-container {
+  margin: 0 10px 0 0;
+}
+
+.header .logo-container .img-logo {
+  width: 74px;
+  height: 74px;
+}
+
+.header .title {
+  max-width: 100%;
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+  color: #0069b2;
+  line-height: 1.5rem;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center
+}
+
+.header .subtitle {
+  margin-top: 10px;
+  max-width: 100%;
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+  color: #0069b2;
+  line-height: 1.5rem;
+  text-align: justify
+}
+
+.band {
+  background: linear-gradient(69deg, rgb(97, 205, 255), #0081b4);
+  padding: 20px;
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  margin-bottom: -40px;
+  font-size: 15pt;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  padding-top: 8rem;
+  margin: 0 auto;
+  width: 35rem;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+.modal-box {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: 20rem;
+  padding: 0.5rem;
+  line-height: 1.75rem;
+  border: 2px solid rgb(57,130,193);
+  border-radius: 1rem;
+}
+
+.modal-box form label {
+  width: 5rem;
+  text-align: right;
+  margin-right: 0.5rem;
+  display: inline-block;
+  font-size: 1rem;
+}
+
+.modal-box form input[name="login"] {
+  width: 12rem;
+}
+
+.modal-box form input[name="password"] {
+  width: 12rem;
+}
+
+.modal-box form input[type="submit"] {
+  display: block;
+  margin: 0 auto;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
