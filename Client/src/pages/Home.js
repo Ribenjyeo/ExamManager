@@ -1,15 +1,39 @@
 import Nav from "../components/Nav";
+import React, {useState, useEffect} from "react";
+import TaskHome from '../components/TaskHome'
+import axios from 'axios'
+
 
 const Home = () => {
+
+  const [tasks, setTasks] = useState(null)
+  let descendingTask
 
   const handleClick = (e) => {
     e.preventDefault()
     window.location.assign('/auth')
   }
 
+  const  TaskDataResponse = async () => { 
+    const result = await axios.get('./user/{id}/tasks') //{id?}
+    console.log(result.data)
+    setTasks(result.data)
+  }
+  
+  useEffect(() => {
+    TaskDataResponse()
+  }, [])
+
+  if (tasks) { //Предпологаемая сортировка заданий по возрастанию, для отображение сначала не выполненных заданий
+    descendingTask =  tasks.sort((a, b) => a.status > b.status ? 1 : -1)
+  } 
+
+  console.log(descendingTask)
 
   return (
-    <div className="overlay">
+    <>
+    { descendingTask && (
+      <div className="overlay">
       <Nav />
       <div className="reminder">
         Незабывайте при первом входе в аккаунт
@@ -17,30 +41,16 @@ const Home = () => {
         изменить данные пользователя.
       </div>
       <div className="home">
-        <ol className="list-preview">
-          <li>
-            <article>
-              <div className="entry-header">
-                <p>Задание №1: Определить объекты домена</p>
-              </div>
-              <div className="markdown">
-                <p>
-                  Описание: С помощью встроенной справки операционной системы
-                  или других источников информации определите, какие ещё
-                  объекты, кроме пользователей и компьютеров, могут быть в
-                  домене. Какие из них может создать администратор домена, а
-                  какие появляются автоматически.
-                </p>
-              </div>
-              <div className="link-container">
-                <p class="link">https://example.com/share</p>
-                <button class="copy-btn">Скопировать</button>
-              </div>
-            </article>
-          </li>
-        </ol>
+       {descendingTask.map((descendingTask, index) => (
+         <TaskHome
+            key={index}
+            task={descendingTask}
+          />
+       ))}
       </div>
     </div>
+    )}
+    </>
   );
 };
 

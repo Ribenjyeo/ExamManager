@@ -4,34 +4,48 @@ using System.Security.Claims;
 
 namespace ExamManager.Services;
 
-public class SignInService
+public class SignInManager
 {
-    public LogInClass LogIn()
+    public IServiceProvider ServiceProvider { get; set; }
+    public SignInManager(IServiceProvider provider)
     {
-        return new LogInClass();
+        ServiceProvider = provider;
     }
-    public LogOutClass LogOut()
+    public LogIn LogIn()
     {
-        return new LogOutClass();
+        return new LogIn(this);
+    }
+    public LogOut LogOut()
+    {
+        return new LogOut(this);
+    }
+}
+
+public class LogIn
+{
+    private SignInManager _manager { get; set; }
+    public LogIn(SignInManager manager)
+    {
+        _manager = manager;
     }
 
-    public class LogInClass
+    public T GetService<T>()
     {
-        public async Task WithClaims(HttpContext context, ClaimsPrincipal principal)
-        {
-            await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
-            {
-                IsPersistent = true
-            });
-        }
+        return (T)_manager.ServiceProvider.GetService(typeof(T));
+    }
+}
+
+public class LogOut
+{
+    private SignInManager _manager { get; set; }
+    public LogOut(SignInManager manager)
+    {
+        _manager = manager;
     }
 
-    public class LogOutClass
+    public T GetService<T>()
     {
-        public async Task WithClaims(HttpContext context)
-        {
-            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        }
+        return (T)_manager.ServiceProvider.GetService(typeof(T));
     }
 }
 

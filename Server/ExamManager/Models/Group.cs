@@ -2,7 +2,7 @@
 
 namespace ExamManager.Models;
 
-public class Group
+public record Group
 {
     [Key]
     public Guid ObjectID { get; set; }

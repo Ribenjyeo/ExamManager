@@ -1,5 +1,7 @@
 import logo from "../img/MIREA_Gerb_Colour.png";
 import { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   
@@ -7,12 +9,23 @@ const Login = () => {
   const [login, setLogin] = useState(null)
   const [password, setPassword] = useState(null)
   const [error, setError] = useState (null)
+  const [cookie, setCookie, removeCookie] = useCookies(['user'])
+  let navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault()
       try{
-          window.location.assign('/')
-          console.log('Сделать запрос в БД')
+          console.log('posting', login, password)
+          const response = await axios.post('./login', {login, password})
+
+          setCookie('UserId', response.data.id)
+          setCookie('login', response.data.login)
+          setCookie('password', response.data.password)
+          setCookie('AuthToken', response.data.token)
+
+          const success = response.status === 201
+
+          if(success) navigate('./Home')
       }
       catch (error) {
           console.log(error)

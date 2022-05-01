@@ -10,6 +10,6 @@ public partial class MappingProfile
     {
         CreateMap<User, UserViewModel>()
             .ForMember(model => model.FirstName, options => options.MapFrom(user => user.FirstName))
-            .ForMember(model => model.MiddleName, options => options.MapFrom(user => user.MiddleName));
+            .ForMember(model => model.MiddleName, options => options.MapFrom(user => user.LastName));
     }
 }

@@ -308,3 +308,267 @@ nav .nav-button {
   font-size: 1rem;
   margin-top: 0.5rem;
 }
+
+/* ------ User List ------ */
+
+.AdminContainer {
+  display: flex;
+}
+
+.others {
+  margin-top: 35px;
+  flex: 8;
+}
+
+.userListEdit {
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: #3bb077;
+  color: white;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.userListEdit:hover{
+  background-color: #47d38f;
+}
+
+.userListDelete:hover {
+  cursor: pointer;
+  color: red;
+}
+
+
+
+/* ------ Admin Bar ------ */
+
+.AdminBar {
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  position: sticky;
+  top: 0px;
+  z-index: 999;
+}
+
+.AdminBarWrapper {
+  height: 100%;
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 25px;
+  color: darkblue;
+  cursor: pointer;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+}
+
+.AdminBarIconsContainer {
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #555;
+
+}
+
+.topIconBadge {
+  position: absolute;
+  top: 10px;
+  right: -5px;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+/* ------ Side Admin Bar ------ */
+
+.sidebar {
+  flex: 1;
+  height: calc(100vh - 50px);
+  background-color: white;
+  position: sticky;
+}
+
+.sidebarWrapper {
+  padding: 20px;
+  color: #555;
+}
+
+.sidebarMenu {
+  margin-bottom: 10px;
+}
+
+.sidebarTitle {
+  font-size: 13px;
+  color: rgb(187, 186, 186);
+  text-align: left;
+}
+
+.sidebarList{
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+}
+
+.sidebarListItem {
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.sidebarListItem:active, .sidebarListItem:hover {
+  background-color: rgb(228, 228, 250);
+}
+
+.sidebarIcon {
+  margin-right: 5px;
+  font-size: 20px !important;
+}
+
+/* ------ User ------ */
+
+.user {
+  display: flex;
+}
+
+.userContainer {
+  margin-top: 35px;
+  flex: 8;
+}
+
+.userTitleContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.userAddButton {
+  width: 80px;
+  border: none;
+  padding: 5px;
+  background-color: teal;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  margin-right: 30px;
+}
+
+.userAddButton:hover {
+  background-color: rgb(2, 160, 160);
+}
+
+.userShow {
+  padding: 20px;
+}
+
+.userUpdate {
+  flex: 1;
+  padding: 20px;
+  -webkit-box-shadow: 0px 10px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 10px 15px -10px rgba(0, 0, 0, 0.75);
+  margin-left: 20px;
+}
+
+.userShowTop {
+  display: flex;
+  align-items: center;
+}
+
+.userShowTopTitle {
+  display: flex;
+  align-items: center;
+}
+
+.userShowImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.userShowUserName {
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.userShowUserTitle {
+  font-weight: 300;
+}
+
+.userDetails {
+  display: flex;
+}
+
+.userShowButton {
+  flex: 1;
+  margin-top: 20px;
+  text-align: left;
+  -webkit-box-shadow: 0px 10px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 10px 15px -10px rgba(0, 0, 0, 0.75);
+}
+
+.userShowTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(175, 170, 170);
+}
+
+.userShowInfo {
+  display: flex;
+  align-items: center;
+  margin: 20px 10px;
+  color: #444;
+}
+
+.userUpdateTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(175, 170, 170);
+  display: flex;
+}
+
+.userUpdateForm {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.userUpdateItem {
+  display: flex;
+  margin-top: 10px;
+}
+
+.userUpateItem>label {
+   margin-bottom: 5px;
+   font-size: 14px;
+}
+
+.userUpdateInput {
+  border: none;
+  width: 250px;
+  border-bottom: 1px solid gray;
+  margin-left: 10px;
+}
+
+

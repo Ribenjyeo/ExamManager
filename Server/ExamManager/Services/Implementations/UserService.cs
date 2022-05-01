@@ -37,21 +37,39 @@ public class UserService : IUserService
         return await Task.FromResult(new ClaimsPrincipal(claimId));
     }
 
-    public async Task<User?> GetUser(Guid userId)
+    public async Task<User?> GetUser(Guid userId, bool includeGroup = false, bool includeTasks = false)
     {
         var UserSet = _dbContext.Set<User>();
 
-        var user = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
+        var query = UserSet.AsNoTracking();
+        if (includeGroup)
+        {
+            query = query.Include(u => u.StudentGroup);
+        }
+        if (includeTasks)
+        {
+            query = query.Include(u => u.Tasks);
+        }
+        var user = await query.FirstOrDefaultAsync(user => user.ObjectID == userId);
 
         return user;
     }
 
-    public async Task<User> GetUser(string login, string password)
+    public async Task<User> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false)
     {
         var UserSet = _dbContext.Set<User>();
         var passwordHash = _securityService.Encrypt(password);
 
-        var user = await UserSet.FirstOrDefaultAsync(user => user.Login == login && user.PasswordHash.Equals(passwordHash));
+        var query = UserSet.AsNoTracking();
+        if (includeGroup)
+        {
+            query = query.Include(u => u.StudentGroup);
+        }
+        if (includeTasks)
+        {
+            query = query.Include(u => u.Tasks);
+        }
+        var user = await query.FirstOrDefaultAsync(user => user.Login == login && user.PasswordHash.Equals(passwordHash));
 
         return user;
     }
@@ -114,5 +132,56 @@ public class UserService : IUserService
         {
             property.SetValue(target, property.GetValue(source));
         }
+    }
+
+    public async Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate)
+    {
+        var UserSet = _dbContext.Set<User>();
+        return UserSet.Where(predicate);
+    }
+
+    public async Task<User> RegisterUser(User user)
+    {
+        var UserSet = _dbContext.Set<User>();
+        await UserSet.AddAsync(user);
+
+        await _dbContext.SaveChangesAsync();
+
+        return user;
+    }
+
+    public async Task<List<User>> RegisterUsers(List<User> users)
+    {
+        var UserSet = _dbContext.Set<User>();
+        await UserSet.AddRangeAsync(users);
+
+        await _dbContext.SaveChangesAsync();
+
+        return users;
+    }
+
+    public async Task DeleteUser(Guid userId)
+    {
+        var UserSet = _dbContext.Set<User>();
+        var user = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == userId);
+        if (user is not null)
+        {
+            UserSet.Remove(user);
+        }
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteUsers(HashSet<Guid> userIds)
+    {
+        var UserSet = _dbContext.Set<User>();
+        var users = UserSet.Where(user => userIds.Contains(user.ObjectID));
+
+        if (users.Count() > 0)
+        {
+            UserSet.RemoveRange(users);
+        }
+
+        await _dbContext.SaveChangesAsync();
     }
 }

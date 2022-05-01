@@ -2,16 +2,17 @@ import logo from "../img/MIREA_Gerb_Colour.png";
 import { useCookies } from "react-cookie";
 
 const Nav = () => {
-  const [cookies, setCookies, removeCookies] = useCookies(["user"]);
-
-  // let pathName = window.location.pathname;
-  const authToken = false;
-  const userName = "Нечаев Илья";
-  const data_change = true;
-
+  const [cookies, setCookies, removeCookies] = useCookies(['user']);
+  const [fromData, setFromData] = useState({
+    id: cookies.id,
+    firstName: '',
+    lastName: '',	
+    groupName: ''
+  })
+  
   const logout = () => {
-    removeCookies("UserId", cookies.UserId);
-    removeCookies("AuthToken", cookies.authToken);
+    removeCookies("UserId", cookies.id);
+    removeCookies("AuthToken", cookies.token);
     window.location.assign('/auth');
   };
 
@@ -41,7 +42,8 @@ const Nav = () => {
         </ul>
       </div>
       <div className="account">
-        <span>{userName}</span>
+        <span>{users.firstName}</span>
+        <span>{users.lastName}</span>
         <button className="nav-button" onClick={logout}>
           {authToken ? "Войти" : "Выйти"}
         </button>
