@@ -8,18 +8,17 @@ import TaskList from "./pages/Admin/TaskList"
 import NewUser from "./pages/Admin/NewUser";
 import { useCookies } from "react-cookie";
 
-const App = () => {
+const App = ({authToken}) => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
 
-  const authToken = cookies.authToken;
+  console.log("authToken: ", cookies.AuthToken)
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          {authToken && <Route path='/' element={<Home/>}/>}
-          {!authToken && <Route path='/auth' element={<Login/>}/>}
-          {/* {authToken && <Route path='/admin' element={<AdminPanel/>}/>} */}
+          <Route path='/auth' element={<Login/>}/>
+          <Route path='/' element={<Home/>}/>        
           <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>
           <Route path='/admin/users' element={<UserList/>}/>
           <Route path='/admin/users/:userId' element={<User/>}/>

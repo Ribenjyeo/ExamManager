@@ -1,7 +1,10 @@
 import logo from "../img/MIREA_Gerb_Colour.png";
 import { useCookies } from "react-cookie";
+import React, {useState, useEffect} from "react";
+import axios from 'axios'
 
-const Nav = () => {
+
+const Nav = ({authToken}) => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
   const [fromData, setFromData] = useState({
     id: cookies.id,
@@ -9,10 +12,41 @@ const Nav = () => {
     lastName: '',	
     groupName: ''
   })
+
+  console.log(authToken)
+
+  const instance = axios.create({
+    baseURL: "/user",
+    timeout: 1000,
+    headers: {'Authorization': 'Bearer '+ authToken}
+  });
+
+  console.log(cookies.UserId)
+
+  const getUserName = async (e) => {
+    try {
+      
+      const response = await instance.get(`/${cookies.UserId}`)
+      setCookies("firstName", response.data.firstName)
+      setCookies("lastName", response.data.lastName)
+      
+      console.log(response.data)
+
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+      
+      getUserName()
+    }, [])
+
   
   const logout = () => {
     removeCookies("UserId", cookies.id);
-    removeCookies("AuthToken", cookies.token);
+    removeCookies("AuthToken", cookies.AuthToken);
     window.location.assign('/auth');
   };
 
@@ -34,16 +68,16 @@ const Nav = () => {
           <li>
             <a href="#">Настройки</a>
           </li>
-          {data_change && (
+          (
             <li>
               <a href="#">Смена данных</a>
             </li>
-          )}
+          )
         </ul>
       </div>
       <div className="account">
-        <span>{users.firstName}</span>
-        <span>{users.lastName}</span>
+        <span>{cookies.firstName}</span>
+        <span>{cookies.lastName}</span>
         <button className="nav-button" onClick={logout}>
           {authToken ? "Войти" : "Выйти"}
         </button>
