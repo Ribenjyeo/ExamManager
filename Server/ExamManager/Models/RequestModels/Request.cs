@@ -87,3 +87,14 @@ public struct GetGroupsRequest
     public int? minStudentsCount { get; set; }
     public int? maxStudentsCount { get; set; }
 }
+
+public struct ModifyUserRequest
+{
+    public Guid id { get; set; }
+    public string? login { get; set; }
+    public string? password { get; set; }
+    public string? firstName { get; set; }
+    public string? lastName { get; set; }
+    public UserRole? role { get; set; }
+    public bool? isDefault { get; set; }
+}

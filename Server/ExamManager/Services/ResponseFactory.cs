@@ -49,13 +49,14 @@ public static class ResponseFactory
 
         return response;
     }
-    public static Response CreateResponse(string jwtToken, Guid userId)
+    public static Response CreateResponse(string jwtToken, Guid userId, bool isDefault = false)
     {
         return new JWTResponse
         {
             status = HttpStatusCode.OK,
             token = jwtToken,
-            id = userId
+            id = userId,
+            isDefault = isDefault
         };
     }
     public static Response CreateResponse(Exception ex)
@@ -79,7 +80,8 @@ public static class ResponseFactory
                 id = null,
                 firstName = null,
                 lastName = null,
-                role = null
+                role = null,
+                isDefault = null
             };
         }
 
@@ -89,7 +91,8 @@ public static class ResponseFactory
             id = user.ObjectID,
             firstName = user.FirstName,
             lastName = user.LastName,
-            role = user.Role
+            role = user.Role,
+            isDefault = user.IsDefault
         };
     }
 

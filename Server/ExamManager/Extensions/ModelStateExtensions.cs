@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using ExamManager.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExamManager.Extensions
 {

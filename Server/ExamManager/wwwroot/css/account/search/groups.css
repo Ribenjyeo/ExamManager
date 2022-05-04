@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto+Slab&display=swap');
+
+:root {
+    --font-Roboto: 'Roboto Condensed', sans-serif;
+    --font-Roboto-Slab: 'Roboto Slab', serif;
+    --normal-font-size: 18px;
+    --font-Raleway: 'Raleway', sans-serif;
+}
+
+.container > .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 1.5em;
+    margin: 0 1em;
+    border-bottom: 1px solid rgba(0, 0, 0, .4);
+}
+
+/*Search bar*/
+
+.actions > .search-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 2em;
+    border-radius: 15px;
+}
+
+.search-form > .nav {
+    display: flex;
+    flex-direction: row;
+    border-radius: inherit;
+}
+
+    .search-form > .nav input.search-input {
+        outline: none;
+        border: 2px solid rgba(0, 0, 0, .4);
+        padding: .4em;
+        padding-left: 1em;
+        font-family: var(--font-Roboto);
+        border-radius: inherit;
+        transition: 200ms;
+    }
+
+        .search-form > .nav input.search-input:focus {
+            border: 2px solid rgba(36, 137, 204, 0.7);
+            box-shadow: 0 0 1em rgba(36, 137, 204, 1);
+        }
+
+/*Search bar. Content*/
+
+.search-form > .content {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    max-height: 30em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: white;
+}
+
+    .search-form > .content > .search-item > .header {
+        display: flex;
+        padding: 1em 20px;
+        font-size: 1.3em;
+        font-family: var(--font-Roboto);
+        font-weight: bold;
+    }
+
+    .search-form > .content > .search-item > a {
+        transition: 200ms;
+    }
+
+        .search-form > .content > .search-item > a:hover {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, .4);
+        }
+
+    .search-form > .content::-webkit-scrollbar {
+        width: .7em;
+    }
+
+    .search-form > .content::-webkit-scrollbar-thumb {
+        background-color: rgb(134, 138, 134);
+        border: 1px solid rgba(0, 0, 0, .4);
+        border-radius: 2em;
+    }
+
+        .search-form > .content::-webkit-scrollbar-thumb:hover {
+            background-color: rgb(107, 105, 105);
+        }
+
+/*Action button*/
+
+.btn-action, .btn-cancel {
+    padding: .7em 1.5em;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, .4);
+    font-size: 1rem;
+    font-family: var(--font-Raleway);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 200ms;
+}
+
+.btn-action {
+    background-color: rgb(24, 182, 37);
+    color: white;
+}
+
+    .btn-action:hover {
+        cursor: pointer;
+        background-color: rgb(17, 128, 27);
+    }
+
+.btn-cancel {
+    background-color: rgb(182, 24, 24);
+    color: white;
+}
+
+    .btn-cancel:hover {
+        cursor: pointer;
+        background-color: rgb(128, 17, 17);
+    }
+
+
+
+.create-group-modal {
+    min-width: max(30%, 50ch);
+    max-width: 75%;
+    border: 0;
+    border-radius: 5px;
+}
+
+    .create-group-modal > .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+.modal-input {
+    font-family: var(--font-Raleway);
+    font-size: 22px;
+    padding: .5rem;
+    margin-bottom: 1em;
+    max-width: 30ch;
+    border: 2px solid rgba(1, 1, 1, .5);
+    border-radius: 10px;
+}
+
+    .modal-input:focus {
+        border: 2px solid rgba(36, 137, 204, 0.7);
+        outline: 0;
+    }
+
+.create-group-modal::backdrop {
+    background-color: rgba(1, 1, 1, .5);
+}

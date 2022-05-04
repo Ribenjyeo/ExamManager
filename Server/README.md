@@ -5,6 +5,7 @@
 |  **POST** */login*  |  Проверить зарегистрирован ли пользователь и сгенерировать для него JWT-токен  |  LoginEditModel  |  JwtResponse  |
 |  **GET** */user/{id}*  |  Получить информацию о пользователе по его ID  |  id  |  UserDataResponse  |
 | **GET** */user/{id}/tasks* | Получить информацию о заданиях, которые имеются у пользователя ID | id | TasksDataResponse |
+| **POST** */user/{id}/modify* | Изменить данные пользователя | ModifyUserRequest | UserDataResponse |
 | **GET** */users* | Получить список информации о пользователях | GetUsersRequest | UsersDataResponse |
 | **POST** */users/create* | Зарегистрировать пользователей | CreateUsersRequest | UsersDataResponse |
 | **POST** */users/delete* | Удалить пользователей | DeleteUsersRequest | Response |
@@ -273,6 +274,57 @@
     	<td>Максимальное число студентов в группе</td>
     </tr>
 </table>
+
+
+## ModifyUserRequest
+
+<table>
+    <tr>
+    	<th>Поле</th>
+        <th>Тип данных</th>
+        <th>Обязательно</th>
+        <th>Описание</th>
+    </tr>
+    <tr>
+    	<td>id</td>
+        <td>guid</td>
+        <td></td>
+        <td>ID пользователя</td>
+    </tr>
+    <tr>
+    	<td>login</td>
+        <td>string</td>
+        <td></td>
+        <td>Логин пользователя</td>
+    </tr>
+    <tr>
+    	<td>password</td>
+        <td>string</td>
+        <td></td>
+        <td>Пароль пользователя</td>
+    </tr>
+    <tr>
+    	<td>firstName</td>
+        <td>string</td>
+        <td></td>
+        <td>Имя пользователя</td>
+    </tr>
+    <tr>
+    	<td>lastName</td>
+        <td>string</td>
+        <td></td>
+        <td>Фамилия пользователя</td>
+    </tr>
+    <tr>
+    	<td>role</td>
+        <td>int</td>
+        <td></td>
+        <td>Роль пользователя</td>
+    </tr>
+</table>
+
+
+
 
 # 3. Структура ответов
 

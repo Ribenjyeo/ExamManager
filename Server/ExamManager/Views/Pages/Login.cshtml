@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding;
+@using ExamManager.Models;
+@model ExamManager.Models.LoginEditModel;
+
+@{
+    ViewData["Title"] = "Авторизация";
+    //Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ExamManager</title>
+    <link rel="stylesheet" href="~/css/main-style.css" />
+
+</head>
+<body class="main">
+    <form id="form" class="auth-form" method="POST" action="@(Routes.Login)" autocomplete="off">
+        <div class="header">Авторизация</div>
+        <div id="input-form" class="body">
+            <input class="normal" type="text" placeholder="Логин" id="login" />
+            <input class="normal" type="password" placeholder="Пароль" id="password" />
+            <div id="default"></div>
+        </div>
+        <div class="footer">
+            <input type="submit" name="sumbitButton" value="Войти"/>
+        </div>
+    </form>
+</body>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/js.cookie.js"></script>
+<script src="~/js/jwt-decode.js"></script>
+<script src="~/js/request.js"></script>
+<script src="~/js/home/index.js"></script>
+</html>

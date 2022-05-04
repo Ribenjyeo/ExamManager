@@ -28,16 +28,14 @@ public class StudentTaskService : IStudentTaskService
     public async Task<StudentTask> CreateStudentTask(string title, string? description, string url, Guid authorId, Guid studentId)
     {
         var TaskSet = _dbContext.Set<StudentTask>();
-        var getAuthorTask = _userService.GetUser(authorId);
-        var getStudentTask = _userService.GetUser(studentId);
 
         var studentTask = new StudentTask
         {
             Title = title,
             Description = description,
             Url = url,
-            Author = await getAuthorTask,
-            Student = await getStudentTask
+            AuthorID = authorId,
+            StudentID = studentId
         };
 
         await TaskSet.AddAsync(studentTask);
@@ -96,9 +94,8 @@ public class StudentTaskService : IStudentTaskService
     public async Task<StudentTask> ChangeTaskStudent(Guid taskId, Guid studentId)
     {
         var studentTask = await GetStudentTask(taskId);
-        var student = await _userService.GetUser(studentId);
 
-        await UpdateTask(studentTask, task => task.Student = student);
+        await UpdateTask(studentTask, task => task.StudentID = studentId);
         return studentTask;
     }
 

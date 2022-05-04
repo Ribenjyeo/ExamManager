@@ -4,19 +4,85 @@ import SideBarAdmin from '../../components/SideBarAdmin'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
-// import React, {useState, useEffect} from "react";
-// import axios from 'axios'
+import {useState, useEffect} from "react";
+import axios from 'axios'
+import { useCookies } from "react-cookie";
+import cookie from "react-cookies";
 
 const UserList = () => {
+  const [cookies, setCookies, removeCookies] = useCookies(['user']);
+  const [fromData, setFromData] = useState({
+    id: '',
+    firstName: '',
+    lastName: '',
+    role: '',	
+    groupName: ''
+  })
 
+  let theArray = []
 
-  // const [data, setData] = useState()
+  const instance = axios.create({  //экземпляр запроса с использованием текущего токена
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer '+ cookies.AuthToken},
+  })
 
-  // const  TaskDataResponse = async () => { 
-  //   const result = await axios.get('./users')
-  //   console.log(result.data)
-  //   setData(result.data)
+  // let getusers = function () {
+  //   let data = JSON.stringify(
+  //     {
+  //       id : "",
+  //       firstName : "",
+  //       lastName :"",
+  //       groupName : ""
+  //     }
+  //   )
+
+  //   const xmlhttp = new XMLHttpRequest()
+  //   xmlhttp.open("GET", "/users")
+  //   xmlhttp.setRequestHeader('Accept', 'application/javascript')
+  //   xmlhttp.setRequestHeader('Content-Type', 'application/javascript')
+  //   xmlhttp.setRequestHeader('Authorization', 'Bearer ' + cookies.AuthToken)
+  //   xmlhttp.timeout = 1000
+
+  //   xmlhttp.onload = function() { 
+  //     onSccusess(JSON.parse(this.responseText))
+  //   }
+
+  //   xmlhttp.send(data)
   // }
+
+  // let onSccusess = function (data) {
+  //   console.log(data)
+  // }
+
+  const GetUsersRequest = async () => { 
+    try {
+      const response = await instance.get('/users', {
+        params: {
+        groupId: null,
+        taskStatus: null,
+        role: null
+      }})
+      .then( response => {
+        const newItems = {
+        id : response.data.id,
+        firstName : response.data.firstNamem,
+        lastName : response.data.lastName,
+        groupName : response.data.groupName
+      }
+      theArray.push(newItems)
+      })
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    GetUsersRequest()
+    // getusers()
+  }, [])
 
   // const handleDelete = async (id) => {
   //   const res = await axios.get(`./users/delete/${id}`)

@@ -13,6 +13,11 @@ namespace ExamManager.Filters;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class JwtAuthorizeAttribute : Attribute, IAuthorizationFilter
 {
+    string _redirectUrl { get; set; }
+    public JwtAuthorizeAttribute(string RedirectUrl = null)
+    {
+        _redirectUrl = RedirectUrl;
+    }
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         #region ATTRIBUTES_HANDLING
@@ -27,7 +32,16 @@ public class JwtAuthorizeAttribute : Attribute, IAuthorizationFilter
         var user = (User?)context.HttpContext.Items["User"];
 
         if (user is null)
-            context.Result = new JsonResult(ResponseFactory.CreateResponse("Пользователь не авторизован", System.Net.HttpStatusCode.Unauthorized));
+        {
+            if (string.IsNullOrEmpty(_redirectUrl))
+            {
+                context.Result = new JsonResult(ResponseFactory.CreateResponse("Пользователь не авторизован", System.Net.HttpStatusCode.Unauthorized));
+            }
+            else
+            {
+                context.Result = new RedirectResult(_redirectUrl);
+            }
+        }
 
     }
 }

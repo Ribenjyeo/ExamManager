@@ -17,7 +17,8 @@ namespace ExamManager.Middleware
                                  IUserService userService,
                                  IJwtUtils jwtUtils)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ?? 
+                context.Request.Cookies["token"];
             var principal = jwtUtils.ValidateToken(token);
 
             if (principal is not null)

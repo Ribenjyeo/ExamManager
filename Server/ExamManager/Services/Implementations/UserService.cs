@@ -108,7 +108,7 @@ public class UserService : IUserService
         if (!result.HasErrors)
         {
             user = entityManager.CopyInto(user).AllPropertiesFrom(tempUser).GetResult();
-            UserSet.Update(user);
+
             await _dbContext.SaveChangesAsync();
         }
 

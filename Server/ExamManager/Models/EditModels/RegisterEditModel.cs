@@ -20,5 +20,5 @@ public record RegisterEditModel
     public string FirstName { get; set; }
     [Required(ErrorMessage = "Введите фамилию")]
     public string LastName { get; set; }
-    public UserRole Role { get; set; }
+    public UserRole? Role { get; set; }
 }

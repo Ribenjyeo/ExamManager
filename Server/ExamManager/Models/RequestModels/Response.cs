@@ -13,6 +13,7 @@ public record JWTResponse : Response
 {
     public string token { get; set; }
     public Guid id { get; set; }
+    public bool isDefault { get; set; }
 }
 
 public record UserDataResponse : Response
@@ -21,6 +22,7 @@ public record UserDataResponse : Response
     public string? firstName { get; set; }
     public string? lastName { get; set; }
     public UserRole? role { get; set; }
+    public bool? isDefault { get; set; }
 }
 
 public record UsersDataResponse : Response

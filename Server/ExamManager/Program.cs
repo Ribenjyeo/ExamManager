@@ -21,6 +21,10 @@ builder.Services.AddControllers()
             "https://httpstatuses.com/404";
     });
 
+// Добавляем MVC
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
 var connectionString = configManager.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<DbContext, ApplicationDBContext>(
@@ -56,11 +60,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseRouting();

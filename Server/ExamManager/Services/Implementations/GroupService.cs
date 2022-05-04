@@ -144,8 +144,12 @@ public class GroupService : IGroupService
             return (options.Name is null ? true : g.Name.Contains(options.Name, StringComparison.CurrentCultureIgnoreCase)) &&
                    (options.MinStudentsCount is null ? true : studentsCount >= options.MinStudentsCount) &&
                    (options.MaxStudentsCount is null ? true : studentsCount <= options.MaxStudentsCount);
-        }).ToArray();
+        });
+        // if (options.Count is not null)
+        // {
+        //     groups = groups.Take(options.Count.Value);
+        // }
 
-        return groups;
+        return groups.ToArray();
     }
 }

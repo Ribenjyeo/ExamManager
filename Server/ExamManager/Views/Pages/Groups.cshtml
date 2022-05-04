@@ -1,0 +1,27 @@
+﻿@model ExamManager.Models.UserViewModel
+@{
+    ViewData["Title"] = "Администратор";
+    ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["IsAdmin"] = true;
+    Layout = "_AccountLayout";
+}
+
+<div class="container">
+    <div class="actions">
+        <div class="search-form">
+            <div class="nav">
+                <input type="text" placeholder="Найти" class="search-input" id="search-groups" autocomplete="off" />
+            </div>
+        </div>
+        <a href="#" class="btn-action" id="open-button">Добавить</a>
+    </div>
+</div>
+<dialog class="create-group-modal" id="create-group-modal">
+    <div class="container">
+        <input type="text" class="modal-input" id="group-name" placeholder="Название"  autocomplete="off" />
+        <div class="footer">
+            <input type="button" class="btn-action" id="create-group-btn" value="Добавить" />
+            <input type="button" class="btn-cancel" id="close-button" value="Отмена" />
+        </div>
+    </div>
+</dialog>

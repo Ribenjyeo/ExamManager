@@ -6,18 +6,14 @@ import User from "./pages/Admin/User"
 import GroupsList from "./pages/Admin/GroupsList";
 import TaskList from "./pages/Admin/TaskList"
 import NewUser from "./pages/Admin/NewUser";
-import { useCookies } from "react-cookie";
 
-const App = ({authToken}) => {
-  const [cookies, setCookies, removeCookies] = useCookies(['user']);
-
-  console.log("authToken: ", cookies.AuthToken)
+const App = () => {
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/auth' element={<Login/>}/>
+          <Route path='/auth' exact element={<Login/>}/>
           <Route path='/' element={<Home/>}/>        
           <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>
           <Route path='/admin/users' element={<UserList/>}/>

@@ -1,5 +1,5 @@
 import logo from "../img/MIREA_Gerb_Colour.png";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {useNavigate} from 'react-router-dom'
 import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
@@ -13,9 +13,6 @@ const Login = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   let navigate = useNavigate()
 
-
-  
-
   const handleSubmit = async (e) => {
       e.preventDefault()
       try{
@@ -24,8 +21,8 @@ const Login = () => {
           setCookies('UserId', response.data.id)
           setCookies('AuthToken', response.data.token)
 
-          console.log("cookies:", response.data)
-          console.log("cookies - token:", cookies.AuthToken)
+          // console.log("cookies:", response.data)
+          // console.log("cookies - token:", cookies.AuthToken)
 
           const success = response.status === 200
 
@@ -33,28 +30,34 @@ const Login = () => {
       }
       catch (error) {
         console.log(error)
-        axios.interceptors.response.use(
-          (response) => {
-            return response;
-          },
-          (error) => {
-            if (typeof error.response === "undefined") {
-              console.log("network error");
-              window.location.href = "/error-page";
-            }
-            if (error.response.status === 401) {
-              // Authorization error
-              window.location.href = "/signin";
-            } else if (error.response.status === 500) {
-              // Server error
-              window.location.href = "/500-error";
-            } else {
-              return Promise.reject(error);
-            }
-          }
-    );
+      //   axios.interceptors.response.use( //наработка обработчика ошибок
+      //     (response) => {
+      //       return response;
+      //     },
+      //     (error) => {
+      //       if (typeof error.response === "undefined") {
+      //         console.log("network error");
+      //         window.location.href = "/error-page";
+      //       }
+      //       if (error.response.status === 401) {
+      //         // Authorization error
+      //         window.location.href = "/signin";
+      //       } else if (error.response.status === 500) {
+      //         // Server error
+      //         window.location.href = "/500-error";
+      //       } else {
+      //         return Promise.reject(error);
+      //       }
+      //     }
+      // );
       }
   }
+
+  useEffect(() => { //автоматических переход на главную страницу если пользователь авторизирован
+    if(cookies.AuthToken !== undefined) {
+      navigate("/")
+    }
+  }, [])
 
   return (
     <div className="auth-modal">

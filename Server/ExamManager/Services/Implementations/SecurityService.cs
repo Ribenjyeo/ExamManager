@@ -7,6 +7,9 @@ namespace ExamManager.Services
     {
         public string Encrypt(string source)
         {
+            if (source is null)
+                return null;
+
             string? hash = null;
             using (SHA512 sha512Hash = SHA512.Create())
             {
