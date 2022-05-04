@@ -4,24 +4,29 @@ import SideBarAdmin from '../../components/SideBarAdmin'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
-// import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
+import { useCookies } from "react-cookie";
 // import axios from 'axios'
 
 const GroupList = () => {
+  const [cookies, setCookies, removeCookies] = useCookies(['user']);
+  let [groupList, setGroupList] = useState()
 
-      // const [data, setData] = useState()
+  const groups = async () => { //запрос на получение пользователей
+    const response = await fetch('/groups', {method: 'POST', headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    const json = await response.json()
+    const stringi = JSON.stringify(json)
+    const parse = JSON.parse(stringi)
+    setGroupList(parse.groups)
+  }
 
-  // const  GroupDataResponse = async () => { 
-  //   const result = await axios.get('./group/')
-  //   console.log(result.data)
-  //   setData(result.data)
-  // }
-
-
+  useEffect(() => {
+    groups()
+  }, [])
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 200},
-    { field: 'name', headerName: 'Название группы', width: 350},
+    { field: 'id', headerName: 'ID', width: 300},
+    { field: 'name', headerName: 'Название группы', width: 250},
     { field: 'studentsCount', headerName: 'Количество студентов, состоящих в группе', width: 500},
     {
       field: 'action',
@@ -37,19 +42,7 @@ const GroupList = () => {
           </>
         )
       }
-    }
-    
-  ];
-  
-  const rows = [
-    { id: 1, name: 'ИКБО-01-18', studentsCount: '30' },
-    { id: 2, name: 'ИКБО-02-18', studentsCount: '33'},
-    { id: 3, name: 'ИКБО-03-18', studentsCount: '20'},
-    { id: 4, name: 'ИКБО-04-18', studentsCount: '24'},
-    { id: 5, name: 'ИКБО-05-18', studentsCount: '15'},
-
-  ];
-
+    }]
 
     return(
         <>
@@ -59,7 +52,7 @@ const GroupList = () => {
                 <div className="others">  
                 <div style={{ height: '100%', width: '100%' }}>
                   <DataGrid
-                    rows={rows}
+                    rows={groupList}
                     disableSelectionOnClick
                     columns={columns}
                     pageSize={30}

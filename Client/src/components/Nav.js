@@ -24,6 +24,7 @@ const Nav = () => {
 
   const getUserName = async () => { // получить данные пользователя по его ID
     try {
+
       const response = await instance.get(`/${cookies.UserId}`)
       if(response.data.status === 401) { //если токен не подходит то редиркер на страницу авторизации
         alert("Erorr: " + response.data.status + " - " + response.data.message)

@@ -18,6 +18,14 @@ module.exports = function(app) {
     })
   );
   app.use(
+    '/groups',
+    createProxyMiddleware({
+      target: 'https://localhost:7242',
+      changeOrigin: true,
+      secure: false
+    })
+  );
+  app.use(
     '/users',
     createProxyMiddleware({
       target: 'https://localhost:7242',
@@ -25,4 +33,5 @@ module.exports = function(app) {
       secure: false
     })
   );
+  
 };

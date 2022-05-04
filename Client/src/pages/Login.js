@@ -5,7 +5,7 @@ import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
 
 const Login = () => {
-  
+  axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
   const rename = false
   const [login, setLogin] = useState(null)
   const [password, setPassword] = useState(null)

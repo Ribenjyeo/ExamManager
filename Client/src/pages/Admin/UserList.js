@@ -11,83 +11,32 @@ import cookie from "react-cookies";
 
 const UserList = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
-  const [fromData, setFromData] = useState({
-    id: '',
+
+  let [userList, setUserList] = useState({
+    id : '',
     firstName: '',
-    lastName: '',
-    role: '',	
-    groupName: ''
+    lastName : '',
+    groupName : ''
   })
 
-  let theArray = []
+  const users = async () => { //запрос на получение пользователей
+    const response = await fetch('/users', {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    const json = await response.json()
+    const stringi = JSON.stringify(json)
+    const parse = JSON.parse(stringi)
+    setUserList(parse.users)  
 
-  const instance = axios.create({  //экземпляр запроса с использованием текущего токена
-    timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': 'Bearer '+ cookies.AuthToken},
-  })
-
-  // let getusers = function () {
-  //   let data = JSON.stringify(
-  //     {
-  //       id : "",
-  //       firstName : "",
-  //       lastName :"",
-  //       groupName : ""
-  //     }
-  //   )
-
-  //   const xmlhttp = new XMLHttpRequest()
-  //   xmlhttp.open("GET", "/users")
-  //   xmlhttp.setRequestHeader('Accept', 'application/javascript')
-  //   xmlhttp.setRequestHeader('Content-Type', 'application/javascript')
-  //   xmlhttp.setRequestHeader('Authorization', 'Bearer ' + cookies.AuthToken)
-  //   xmlhttp.timeout = 1000
-
-  //   xmlhttp.onload = function() { 
-  //     onSccusess(JSON.parse(this.responseText))
-  //   }
-
-  //   xmlhttp.send(data)
-  // }
-
-  // let onSccusess = function (data) {
-  //   console.log(data)
-  // }
-
-  const GetUsersRequest = async () => { 
-    try {
-      const response = await instance.get('/users', {
-        params: {
-        groupId: null,
-        taskStatus: null,
-        role: null
-      }})
-      .then( response => {
-        const newItems = {
-        id : response.data.id,
-        firstName : response.data.firstNamem,
-        lastName : response.data.lastName,
-        groupName : response.data.groupName
-      }
-      theArray.push(newItems)
-      })
-    }
-    catch(error){
-      console.log(error)
-    }
   }
 
   useEffect(() => {
-    GetUsersRequest()
-    // getusers()
+    users()
   }, [])
 
   // const handleDelete = async (id) => {
   //   const res = await axios.get(`./users/delete/${id}`)
   //   console.log('Пользователь удален')
   // }
+
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 300},
@@ -129,7 +78,7 @@ const UserList = () => {
                 <div className="others">  
                 <div style={{ height: '100%', width: '100%' }}>
                   <DataGrid
-                    rows={rows}
+                    rows={userList}
                     disableSelectionOnClick
                     columns={columns}
                     pageSize={30}
