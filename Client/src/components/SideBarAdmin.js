@@ -17,19 +17,19 @@ const SideBarAdmin = () => {
                     <ul className="sidebarList">
                         <li className="sidebarListItem">
                             <HomeIcon className='sidebarIcon'/>
-                            <Link to="/" style={{ textDecoration: 'none' }}>Главная</Link>
+                            <Link to="/" style={{ textDecoration: 'none', color: "black" }}>Главная</Link>
                         </li>
                         <li className="sidebarListItem">
                             <PersonIcon className='sidebarIcon'/>
-                            <Link to="/admin/users" style={{ textDecoration: 'none' }}>Пользователи</Link>
+                            <Link to="/admin/users" style={{ textDecoration: 'none', color: "black" }}>Пользователи</Link>
                         </li>
                         <li className="sidebarListItem">
                             <GroupIcon className='sidebarIcon'/>
-                            <Link to="/admin/groups" style={{ textDecoration: 'none' }}>Группы</Link>
+                            <Link to="/admin/groups" style={{ textDecoration: 'none', color: "black" }}>Группы</Link>
                         </li>
                         <li className="sidebarListItem">
                             <TaskIcon className='sidebarIcon'/>
-                            <Link to="/admin/task" style={{ textDecoration: 'none' }}>Задания</Link>
+                            <Link to="/admin/task" style={{ textDecoration: 'none', color: "black" }}>Задания</Link>
                         </li>
                     </ul> 
                 </div>

@@ -1,0 +1,132 @@
+.groups-table {
+    margin-top: 1em;
+    border-spacing: 0;
+    max-width: 90%;
+    min-width: min(100%, 1200px);
+}
+
+    .groups-table .group-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        padding: 0.5rem 0;
+    }
+
+.group-nav > input.group-name {
+    font-size: 20px;
+    font-family: var(--font-Raleway);
+    padding: 0.5rem;
+    margin-right: .5rem;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+.groups-table th.header {
+    font-family: var(--font-Raleway);
+    overflow: wrap;
+    border-left: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+    .groups-table th.header:last-of-type {
+        border-right: 1px solid rgba(0, 0, 0, 0.4);
+    }
+
+.groups-table td {
+    border-left: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    padding: 0.5rem;
+}
+
+    .groups-table td:last-of-type {
+        border-right: 1px solid rgba(0, 0, 0, 0.4);
+    }
+
+    .groups-table td.group-name {
+        font-family: var(--font-Raleway);
+        font-weight: bold;
+        text-align: center;
+    }
+
+.groups-table > tr > td.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5%;
+}
+
+td.actions > .action {
+    display: flex;
+    flex-direction: row;
+}
+
+    td.actions > .action > a {
+        text-decoration: none;
+    }
+
+.btn-action, .btn-cancel {
+    padding: .7em 1.5em;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, .4);
+    font-size: 1rem;
+    font-family: var(--font-Raleway);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 200ms;
+}
+
+.btn-action {
+    background-color: rgb(24, 182, 37);
+    color: white;
+}
+
+    .btn-action:hover {
+        cursor: pointer;
+        background-color: rgb(17, 128, 27);
+    }
+
+.btn-cancel {
+    background-color: rgb(182, 24, 24);
+    color: white;
+}
+
+    .btn-cancel:hover {
+        cursor: pointer;
+        background-color: rgb(128, 17, 17);
+    }
+
+.create-group-modal {
+    min-width: max(30%, 50ch);
+    max-width: 75%;
+    border: 0;
+    border-radius: 5px;
+}
+
+    .create-group-modal > .container {
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+    }
+
+.modal-input {
+    font-family: var(--font-Raleway);
+    font-size: 22px;
+    padding: .5rem;
+    margin-bottom: 1em;
+    max-width: 30ch;
+    border: 2px solid rgba(1, 1, 1, .5);
+    border-radius: 10px;
+}
+
+    .modal-input:focus {
+        border: 2px solid rgba(36, 137, 204, 0.7);
+        outline: 0;
+    }
+
+.create-group-modal::backdrop {
+    background-color: rgba(1, 1, 1, .5);
+}

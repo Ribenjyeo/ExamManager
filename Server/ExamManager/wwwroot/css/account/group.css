@@ -1,0 +1,139 @@
+.student-search {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+}
+
+    .student-search > input.student-name {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        padding: .5rem;
+        font-family: var(--font-Raleway);
+        border: 1px solid rgba(0, 0, 0, .4);
+        border-radius: 10px;
+    }
+
+.btn-action, .btn-cancel {
+    padding: .7em 1.5em;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, .4);
+    font-size: 1rem;
+    font-family: var(--font-Raleway);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 200ms;
+}
+
+.btn-action {
+    background-color: rgb(24, 182, 37);
+    color: white;
+}
+
+    .btn-action:hover {
+        cursor: pointer;
+        background-color: rgb(17, 128, 27);
+    }
+
+.btn-cancel {
+    background-color: rgb(182, 24, 24);
+    color: white;
+}
+
+    .btn-cancel:hover {
+        cursor: pointer;
+        background-color: rgb(128, 17, 17);
+    }
+
+.students-table {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    margin-top: 1em;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, .4);
+}
+
+    .students-table > .students-list {
+        display: grid;
+        grid-template-rows: 9fr 1fr;
+        border-right: 1px solid rgba(0, 0, 0, .4);
+    }
+
+.students-list > .footer {
+    display: flex;
+    align-items: center;
+    padding-left: .5rem;
+    border-top: 1px solid rgba(0, 0, 0, .4);
+}
+
+.students-list .students {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .students-list .students > .student {
+        font-size: 1.5em;
+        font-family: var(--font-Raleway);
+        padding: .5rem;
+        transition: background-color 200ms;
+    }
+
+        .students-list .students > .student.hl {
+            background-color: rgb(36, 124, 224);
+        }
+
+        .students-list .students > .student:hover {
+            cursor: pointer;
+            background-color: rgba(36, 124, 224, 0.4);
+        }
+
+        .students-list .students > .student.hl:hover {
+            background-color: rgb(36, 124, 224);
+        }
+
+.students-table .student-info {
+    display: flex;
+    flex-direction: column;
+    padding: .5em;
+}
+
+.student-info > .name {
+    font-family: var(--font-Raleway);
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.student-info > .tasks {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: .5em;
+    width: min(100%, 500px);
+}
+
+.tasks > .task {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: end;
+}
+
+.task > .title {
+    text-decoration: none;
+    color: black;
+    font-family: var(--font-Roboto-Slab);
+    font-size: 1.2em;
+}
+
+.students-table .students::-webkit-scrollbar {
+    width: .7em;
+}
+
+.students-table .students::-webkit-scrollbar-thumb {
+    background-color: rgb(134, 138, 134);
+    border: 1px solid rgba(0, 0, 0, .4);
+    border-radius: 2em;
+}
+
+    .students-table .students::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(107, 105, 105);
+    }

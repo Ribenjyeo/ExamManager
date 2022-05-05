@@ -88,10 +88,6 @@ let handleBadResponse = function(response){
             let errorMessage = $(`<span class="field-validation-error">${errorText}</span>`);
             inputElement.after(errorMessage);
             inputElement.addClass("input-validation-error");
-            //inputElement.on('input', () => {
-            //    inputElement.removeClass("input-validation-error");
-            //    inputElement.on('input', null);
-            //});
         }
     }
 }

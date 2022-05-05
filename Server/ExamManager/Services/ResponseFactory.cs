@@ -81,7 +81,9 @@ public static class ResponseFactory
                 firstName = null,
                 lastName = null,
                 role = null,
-                isDefault = null
+                isDefault = null,
+                groupId = null,
+                tasks = null
             };
         }
 
@@ -92,7 +94,13 @@ public static class ResponseFactory
             firstName = user.FirstName,
             lastName = user.LastName,
             role = user.Role,
-            isDefault = user.IsDefault
+            isDefault = user.IsDefault,
+            groupId = user.StudentGroupID,
+            tasks = user.Tasks?.Select(task => new UserDataResponse.TaskView
+            {
+                id = task.ObjectID,
+                title = task.Title
+            }).ToArray()
         };
     }
 
@@ -136,7 +144,7 @@ public static class ResponseFactory
             new GroupsDataResponse.GroupView
             {
                 id = g.ObjectID,
-                studentsCount = g.Students?.Count(),
+                studentsCount = g.Students?.Count() ?? 0,
                 name = g.Name
             }).ToArray()
         };
@@ -168,7 +176,7 @@ public static class ResponseFactory
                 id = u.ObjectID.ToString(),
                 firstName = u.FirstName,
                 lastName = u.LastName,
-                groupName = groupName
+                groupName = groupName ?? u.StudentGroup?.Name
             }).ToArray()
         };
     }

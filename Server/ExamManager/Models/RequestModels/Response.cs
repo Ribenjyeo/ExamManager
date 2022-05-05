@@ -23,6 +23,14 @@ public record UserDataResponse : Response
     public string? lastName { get; set; }
     public UserRole? role { get; set; }
     public bool? isDefault { get; set; }
+    public Guid? groupId { get; set; }
+    public TaskView[]? tasks { get; set; }
+
+    public struct TaskView
+    {
+        public Guid id { get; set; }
+        public string title { get; set; }
+    }
 }
 
 public record UsersDataResponse : Response

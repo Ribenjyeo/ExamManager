@@ -52,6 +52,8 @@ public struct RemoveStudentsRequest
 
 public struct GetUsersRequest
 {
+    public string? firstName { get; set; }
+    public string? lastName { get; set; }
     public Guid? groupId { get; set; }
     public StudentTask.TaskStatus? taskStatus { get; set; }
     public UserRole? role { get; set; }
@@ -86,6 +88,7 @@ public struct GetGroupsRequest
     public string? name { get; set; }
     public int? minStudentsCount { get; set; }
     public int? maxStudentsCount { get; set; }
+    public int? count { get; set; }
 }
 
 public struct ModifyUserRequest

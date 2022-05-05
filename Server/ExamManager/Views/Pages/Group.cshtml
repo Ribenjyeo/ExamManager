@@ -1,0 +1,29 @@
+﻿@using ExamManager.Models;
+@model (User User, Group Group);
+@{
+    ViewData["Title"] = "Администратор";
+    //ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["IsAdmin"] = Model.User.Role == UserRole.ADMIN;
+    Layout = "_AccountLayout";
+}
+
+<div class="container">
+    <link rel="stylesheet" href="~/css/account/group.css" />
+    <script src="~/js/account/group.js"></script>
+    <div class="page-header">@Model.Group.Name</div>
+    <div class="student-search">
+        <input type="text" class="student-name" placeholder="Поиск" />
+    </div>
+    <div class="students-table" value="@(Model.Group.ObjectID)">
+        <div class="students-list">
+            <div id="students" class="students">
+                
+            </div>
+            <div class="footer">
+                <input type="button" class="btn-action" value="Добавить">
+            </div>
+        </div>
+        <div id="student-info" class="student-info">
+        </div>
+    </div>
+</div>

@@ -1,26 +1,88 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto+Slab&display=swap');
 
-:root{
+:root {
     --font-Roboto: 'Roboto Condensed', sans-serif;
-    --font-Roboto-Slab:'Roboto Slab', serif;
-    --normal-font-size: 18px; 
+    --font-Roboto-Slab: 'Roboto Slab', serif;
+    --normal-font-size: 18px;
     --font-Raleway: 'Raleway', sans-serif;
 }
 
-body{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    min-height: 100vh;
+body {
+    display: grid;
+    grid-template-columns: 2fr 15fr;
+    grid-template-rows: 100vh 0;
     margin: 0;
     padding: 0;
 }
 
-body > .container{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    flex-grow: 1;
-    padding-top: 4em;
+    body > .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-grow: 1;
+        padding: 2em;
+        overflow-y: auto;
+    }
+
+/*Page header*/
+
+.container > .page-header {
+    font-family: var(--font-Roboto);
+    font-size: 2em;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid black;
+}
+
+.btn-action, .btn-cancel, .btn-info {
+    padding: .5em 1.2em;
+    margin-right: .5rem;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, .4);
+    font-size: 1rem;
+    font-family: var(--font-Raleway);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 200ms;
+}
+
+.btn-action {
+    background-color: rgb(24, 182, 37);
+    color: white;
+}
+
+    .btn-action:hover {
+        cursor: pointer;
+        background-color: rgb(17, 128, 27);
+    }
+
+.btn-cancel {
+    background-color: rgb(182, 24, 24);
+    color: white;
+}
+
+    .btn-cancel:hover {
+        cursor: pointer;
+        background-color: rgb(128, 17, 17);
+    }
+
+.btn-info {
+    background-color: rgb(24, 106, 182);
+    color: white;
+}
+
+    .btn-info:hover {
+        cursor: pointer;
+        background-color: rgb(17, 56, 128);
+    }
+
+
+.input-standard {
+    font-size: 20px;
+    font-family: var(--font-Raleway);
+    font-weight: 700;
+    letter-spacing: 1px;
+    border: 2px solid rgba(1, 1, 1, .5);
+    border-radius: 10px;
+    padding: 8px;
 }

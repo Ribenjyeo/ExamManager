@@ -1,0 +1,54 @@
+﻿@using ExamManager.Models
+@model ExamManager.Models.User
+@{
+    ViewData["Title"] = "Студенты";
+    ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
+    Layout = "_AccountLayout";
+}
+
+<div class="container">
+    <div class="page-header">Студенты</div>
+    <table class="students-table">
+        <tbody>
+            <tr>
+                <th colspan="3">
+                    <div class="student-nav">
+                        <input id="student-name"
+                               class="student-name"
+                               type="text"
+                               placeholder="Поиск" />
+                        <input id="open-button"
+                               type="button"
+                               class="btn-action"
+                               value="Добавить" />
+                        <input id="reload-button"
+                               type="button"
+                               class="btn-info"
+                               value="Обновить" />
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th class="header">Фамилия, имя</th>
+                <th class="header">Группа</th>
+                <th class="header">Действия</th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<dialog class="create-student-modal" id="create-student-modal">
+    <div class="container">
+        <div class="header">Новый студент</div>
+        <input type="text" class="modal-input" id="firstname" placeholder="Имя" />
+        <input type="text" class="modal-input" id="lastname" placeholder="Фамилия" />
+        <input type="text" class="modal-input" id="login" placeholder="Логин" />
+        <input type="password" class="modal-input" id="password" placeholder="Пароль" />
+        <div class="footer">
+            <input id="create-student-button" type="button" class="btn-action" value="Добавить" />
+            <input type="button"
+                   class="btn-cancel"
+                   id="close-button"
+                   value="Отмена" />
+        </div>
+    </div>
+</dialog>

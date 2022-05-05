@@ -27,7 +27,7 @@ namespace ExamManager.Services
             var claims = new[] {
                 new Claim(ClaimKey.Login, user.Login),
                 new Claim(ClaimKey.FirstName, user.FirstName),
-                new Claim(ClaimKey.MiddleName, user.LastName),
+                new Claim(ClaimKey.LastName, user.LastName),
                 new Claim(ClaimKey.Id, user.ObjectID.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

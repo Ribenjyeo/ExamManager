@@ -1,8 +1,8 @@
-﻿@model ExamManager.Models.UserViewModel
+﻿@using ExamManager.Models
+@model ExamManager.Models.User
 @{
     ViewData["Title"] = "Администратор";
-    ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
-    ViewData["IsAdmin"] = true;
+    ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
 

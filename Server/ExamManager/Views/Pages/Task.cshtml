@@ -1,0 +1,41 @@
+﻿@using ExamManager.Models
+@model (User User, StudentTask Task)
+@{
+    ViewData["Title"] = Model.Task.Title;
+    //ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["IsAdmin"] = Model.User.Role == UserRole.ADMIN;
+    Layout = "_AccountLayout";
+}
+<link rel="stylesheet" href="~/css/account/task.css" />
+<div class="container">
+
+    @if (Model.User.Role == UserRole.STUDENT)
+    {
+        <div class="page-header">@Model.Task.Title</div>
+    }
+    else
+    {
+        <input id="task-title" class="input-standard" style="width: 70%; font-size: 25px" placeholder="Название задания" value="@Model.Task.Title" />
+    }
+    <div class="description">
+        @if (Model.User.Role == UserRole.STUDENT)
+        {
+            @Model.Task.Description
+        }
+        else
+        {
+            <textarea id="task-description" class="input-standard" style="resize: none" cols="100%" rows="10" placeholder="Описание">@Model.Task.Description</textarea>
+        }
+    </div>
+    <div class="footer">
+        @if (Model.User.Role == UserRole.STUDENT)
+        {
+            <a href="@Model.Task.Url" type="button" class="btn-info">Перейти</a>
+        }
+        else
+        {
+            <input id="task-url" type="text" class="input-standard" style="width: 50%" placeholder="URL ресурса" value="@Model.Task.Url" />
+            <input id="save-button" type="button" class="btn-action" value="Сохранить" />
+        }
+    </div>
+</div>

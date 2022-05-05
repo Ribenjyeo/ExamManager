@@ -1,0 +1,14 @@
+.container > .description{
+    margin: 2em 0;
+
+    font-size: 20px;
+    font-family: var(--font-Raleway);
+    line-height: 150%;
+}
+
+.container > .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: .5em;
+}

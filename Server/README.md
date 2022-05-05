@@ -137,8 +137,10 @@
 
 | Поле       | Тип данных | Обязательно | Описание                                                     |
 | ---------- | ---------- | ----------- | ------------------------------------------------------------ |
+| firstName  | string     |             | Имя пользователя                                             |
+| lastName   | string     |             | Фамилия пользователя                                         |
 | groupId    | guid       |             | ID группы, студенты которой будут добавлены в выборку        |
-| taskStatus | int        |             | Статус задания, при наличии которого (хотя бы одного задания<br />с таким статусом) студент будет добавлен в выборку |
+| taskStatus | int        |             | Статус задания, при наличии которого (хотя бы одного задания<br />с таким статусом) пользователь будет добавлен в выборку |
 | role       | int        |             | Роль, пользователи имеющие которую будут добавлены в выборку |
 
 
@@ -273,7 +275,14 @@
     	<td></td>
     	<td>Максимальное число студентов в группе</td>
     </tr>
+    <tr>
+    	<td>count</td>
+    	<td>int</td>
+    	<td></td>
+    	<td>Максимальное число групп в выборке</td>
+    </tr>
 </table>
+
 
 
 ## ModifyUserRequest
@@ -360,33 +369,36 @@
 </table>
 
 
-
-
 ## UserDataResponse
 
 <table>
     <tr>
-    	<th>Поле</th>
+    	<th colspan=2>Поле</th>
         <th>Тип данных</th>
         <th>Описание</th>
     </tr>
     <tr>
-    	<td>id</td>
+    	<td colspan=2>id</td>
         <td>guid</td>
         <td>ID пользователя</td>
     </tr>
     <tr>
-    	<td>firstName</td>
+    	<td colspan=2>firstName</td>
         <td>string</td>
         <td>Имя пользователя</td>
     </tr>
     <tr>
-    	<td>lastName</td>
+    	<td colspan=2>lastName</td>
         <td>string</td>
         <td>Фамилия пользователя</td>
     </tr>
     <tr>
-    	<td>role</td>
+    	<td colspan=2>groupId</td>
+        <td>guid</td>
+        <td>Группа, в которую входит пользователь</td>
+    </tr>
+    <tr>
+    	<td colspan=2>role</td>
         <td>int</td>
         <td>
             Роль пользователя<br/>
@@ -394,7 +406,25 @@
             <b>1</b> - студент
         </td>
     </tr>
+    <tr>
+    	<td colspan=2>tasks</td>
+        <td>array</td>
+        <td></td>
+    </tr>
+    <tr>
+    	<td></td>
+    	<td>id</td>
+        <td>guid</td>
+        <td>ID задания</td>
+    </tr>
+    <tr>
+    	<td></td>
+    	<td>title</td>
+        <td>string</td>
+        <td>Название задания</td>
+    </tr>
 </table>
+
 
 
 

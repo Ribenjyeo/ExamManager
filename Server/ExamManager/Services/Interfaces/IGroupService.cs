@@ -19,4 +19,5 @@ public struct GroupOptions
     public string? Name { get; set; }
     public int? MinStudentsCount { get; set; }
     public int? MaxStudentsCount { get; set; }
+    public int? Count { get; set; }
 }

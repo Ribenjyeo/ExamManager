@@ -25,13 +25,14 @@ const GroupList = () => {
   }, [])
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 300},
-    { field: 'name', headerName: 'Название группы', width: 250},
+    { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+    { field: 'name', headerName: 'Название группы', minWidth: 100, flex: 1},
     { field: 'studentsCount', headerName: 'Количество студентов, состоящих в группе', width: 500},
     {
       field: 'action',
       headerName: 'Изменить/Удалить',
-      width: 300,
+      minWidth: 100,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>

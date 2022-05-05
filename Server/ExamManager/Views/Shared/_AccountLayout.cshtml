@@ -1,4 +1,6 @@
-﻿@{
+﻿@using ExamManager.Models;
+
+@{
 
 }
 
@@ -10,30 +12,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/account/admin.css" />
     <link rel="stylesheet" href="~/css/account/navbar.css" />
-    <link rel="stylesheet" href="~/css/account/search/groups.css" />
+    @if (Context.Request.Path.Value.Equals(Routes.StudentsPage))
+    {
+        <link rel="stylesheet" href="~/css/account/students.css" />
+    }
+    @if (Context.Request.Path.Value.Equals(Routes.TasksPage))
+    {
+        <link rel="stylesheet" href="~/css/account/tasks.css" />
+    }
     <link rel="stylesheet" href="~/css/fontawesome/css/all.css" />
-    <title>Document</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/js.cookie.js"></script>
+    <script src="~/js/jwt-decode.js"></script>
+    <script src="~/js/requests.js"></script>
+    <title>@(ViewData["Title"].ToString() ?? "ExamManager")</title>
 </head>
 <body>
     <div class="nav">
-        <div class="nav-title">
-            <a href="#"><i class="fa fa-solid fa-user"></i>@ViewData["UserName"]</a>
+        <div id="user-name" class="nav-title">
+            <i class="fa fa-solid fa-user"></i>
+            <a href="@(Routes.HomePage)"></a>
         </div>
-        @if ((bool)ViewData["IsAdmin"])
+        @if ((bool?)ViewData["IsAdmin"] ?? false)
         {
-            <a href="#" class="nav-item">Главная</a>
-            <a href="/admin/groups" class="@(Context.Request.Path.Value.Equals("/admin/groups") ? "nav-item hl" : "nav-item" )">Группы</a>
-            <a href="#" class="nav-item">Студенты</a>
+            <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )">Студенты</a>
+            <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )">Группы</a>
         }
         else
         {
-            
+            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )">Задания</a>
         }
-        <a href="/logout" class="nav-exit">Выйти</a>
+        <a href="@(Routes.SettingsPage)" class="@(Context.Request.Path.Value.Equals(Routes.SettingsPage) ? "nav-item hl" : "nav-item" )">Настройки</a>
+        <a href="#" id="logout" class="nav-exit">Выйти</a>
     </div>
     <div class="container">
         @RenderBody()
     </div>
 </body>
-<script src="~/css/account/search/search.js"></script>
+<script src="~/js/account/index.js"></script>
+@if (Context.Request.Path.Value.Equals(Routes.GroupsPage))
+{
+    <script src="~/js/account/groups.js"></script>
+}
+@if (Context.Request.Path.Value.Equals(Routes.StudentsPage))
+{
+    <script src="~/js/account/students.js"></script>
+}
+@if (Context.Request.Path.Value.Equals(Routes.GroupPage))
+{
+    <script src="~/js/account/group.js"></script>
+}
+@if (Context.Request.Path.Value.Equals(Routes.TaskPage))
+{
+
+    <script src=~/js/account/task.js></script>
+}
 </html>

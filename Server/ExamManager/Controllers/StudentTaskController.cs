@@ -40,9 +40,17 @@ namespace ExamManager.Controllers
                 authorId = ((User)HttpContext.Items["User"]).ObjectID;
             }
 
-            var studentTask = await _studentTaskService.CreateStudentTask(request.title, request.description, request.url, authorId.Value, request.studentId);
+            try
+            {
+                var studentTask = await _studentTaskService.CreateStudentTask(request.title, request.description, request.url, authorId.Value, request.studentId);
 
-            return Ok(ResponseFactory.CreateResponse(studentTask));
+                return Ok(ResponseFactory.CreateResponse(studentTask));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex));
+            }
+
         }
 
         [HttpPost(Routes.DeleteTask)]

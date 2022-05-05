@@ -134,10 +134,21 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate)
+    public async Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate, bool includeGroup = false, bool includeTasks = false)
     {
         var UserSet = _dbContext.Set<User>();
-        return UserSet.Where(predicate);
+
+        IQueryable<User> request = UserSet.AsQueryable();
+        if (includeGroup)
+        {
+            request = request.Include(nameof(User.StudentGroup));
+        }
+        if (includeTasks)
+        {
+            request = request.Include(nameof(User.Tasks));
+        }
+
+        return request.Where(predicate);
     }
 
     public async Task<User> RegisterUser(User user)

@@ -45,13 +45,14 @@ namespace ExamManager.Controllers
             {
                 Name = request.name,
                 MinStudentsCount = request.minStudentsCount,
-                MaxStudentsCount = request.maxStudentsCount
+                MaxStudentsCount = request.maxStudentsCount,
+                Count = request.count
             };
 
             Group[] groups = null;
             try
             {
-                groups = await _groupService.GetGroups(options);
+                groups = await _groupService.GetGroups(options, includeStudents: true);
             }
             catch (Exception ex)
             {
@@ -90,24 +91,18 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.AddGroupStudent)]
         public async Task<IActionResult> AddGroupStudents([FromBody] AddStudentsRequest request)
         {
-            ParallelLoopResult? result = null;
-
             try
             {
-                result = Parallel.ForEach(request.students, (student, token) =>
+                foreach (var student in request.students)
                 {
-                    _groupService.AddStudent(request.groupId, student.id);
-                });
+                    await _groupService.AddStudent(request.groupId, student.id);
+                }
             }
             catch (Exception ex)
             {
                 return Ok(ResponseFactory.CreateResponse(ex));
             }
 
-            if (!result.Value.IsCompleted)
-            {
-                return Ok(ResponseFactory.CreateResponse(new Exception("Не удалось добавить студентов")));
-            }
             var group = await _groupService.GetGroup(request.groupId, true);
 
             return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
@@ -123,15 +118,19 @@ namespace ExamManager.Controllers
             }
 
             var groupId = (await _groupService.GetStudentGroup(request.students[0].id)).ObjectID;
-            var result = Parallel.ForEach(request.students, (student, token) =>
-            {
-                _groupService.RemoveStudent(groupId, student.id);
-            });
 
-            if (!result.IsCompleted)
+            try
             {
-                return Ok(ResponseFactory.CreateResponse(new Exception("Не удалось удалить студентов")));
+                foreach (var student in request.students)
+                {
+                    await _groupService.RemoveStudent(groupId, student.id);
+                }
             }
+            catch (Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(new Exception("Не удалось удалить студентов", ex)));
+            }
+
             var group = await _groupService.GetGroup(groupId, true);
 
             return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));

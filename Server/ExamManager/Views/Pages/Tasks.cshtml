@@ -1,11 +1,34 @@
-﻿@model ExamManager.Models.UserViewModel
+﻿@using ExamManager.Models
+@model ExamManager.Models.User
 @{
     ViewData["Title"] = "Администратор";
-    ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
-    ViewData["IsAdmin"] = true;
+    ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
 
 <div class="container">
-    
+    <div class="page-header">Задания</div>
+    <div class="tasks">
+        <div class="tasks-list">
+            <div class="task">
+                <div class="title">
+                    <a href="../AuthenticationPage/index.html">Задание 1</a>
+                    <div class="description">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos
+                        neque consectetur soluta sint sed facere labore magnam laborum
+                        saepe non!
+                    </div>
+                </div>
+                <div class="status"></div>
+            </div>
+            <div class="task">
+                <div class="title">Задание 2</div>
+                <div class="status"></div>
+            </div>
+            <div class="task">
+                <div class="title">Задание 3</div>
+                <div class="status"></div>
+            </div>
+        </div>
+    </div>
 </div>

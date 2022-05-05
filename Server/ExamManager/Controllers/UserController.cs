@@ -29,7 +29,7 @@ namespace ExamManager.Controllers
         [ValidateGuidFormat("id")]
         public async Task<IActionResult> GetUser(string id)
         {
-            var user = await _userService.GetUser(Guid.Parse(id));
+            var user = await _userService.GetUser(Guid.Parse(id), includeTasks: true, includeGroup: true);
 
             return Ok(ResponseFactory.CreateResponse(user));
         }

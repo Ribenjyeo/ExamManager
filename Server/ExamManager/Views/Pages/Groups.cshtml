@@ -1,26 +1,39 @@
-﻿@model ExamManager.Models.UserViewModel
+﻿@using ExamManager.Models
+@model ExamManager.Models.User
 @{
     ViewData["Title"] = "Администратор";
-    ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
-    ViewData["IsAdmin"] = true;
+    //ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
 
 <div class="container">
-    <div class="actions">
-        <div class="search-form">
-            <div class="nav">
-                <input type="text" placeholder="Найти" class="search-input" id="search-groups" autocomplete="off" />
-            </div>
-        </div>
-        <a href="#" class="btn-action" id="open-button">Добавить</a>
-    </div>
+    <link rel="stylesheet" href="~/css/account/groups.css" />
+    <div class="page-header">Группы</div>
+    <table class="groups-table">
+        <tr>
+            <th colspan="3">
+                <div class="group-nav">
+                    <input id="group-name" class="group-name" type="text" placeholder="Поиск" />
+                    <input id="open-button"
+                           type="button"
+                           class="btn-action"
+                           value="Добавить" />
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th class="header">Название группы</th>
+            <th class="header">Участники</th>
+            <th class="header">Действия</th>
+        </tr>
+    </table>
 </div>
 <dialog class="create-group-modal" id="create-group-modal">
     <div class="container">
-        <input type="text" class="modal-input" id="group-name" placeholder="Название"  autocomplete="off" />
+        <input type="text" class="modal-input" id="create-group-name" placeholder="Название" autocomplete="off" />
         <div class="footer">
-            <input type="button" class="btn-action" id="create-group-btn" value="Добавить" />
+            <input type="button" class="btn-action" id="create-group-button" value="Добавить" />
             <input type="button" class="btn-cancel" id="close-button" value="Отмена" />
         </div>
     </div>

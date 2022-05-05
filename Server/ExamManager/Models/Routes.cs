@@ -51,7 +51,19 @@ public static class Routes
 
     public const string HomePage = "/pages/home";
 
-    public const string GroupsPage = "pages/groups";
+    public const string GroupsPage = "/pages/groups";
+
+    public const string SettingsPage = "/pages/settings";
+
+    public const string GroupPage = "/pages/group/{id}";
+
+    public const string StudentsPage = "/pages/students";
+
+    public const string TaskPage = "/pages/task";
+
+    public const string NewTaskPage = "/pages/task/new";
+
+    public const string TasksPage = "/pages/tasks";
 
     #endregion
 }

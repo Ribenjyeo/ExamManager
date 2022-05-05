@@ -7,7 +7,7 @@ namespace ExamManager.Extensions
     {
         public static string Login { get; } = "Claim.Key.Login";
         public static string FirstName { get; } = "Claim.Key.FirstName";
-        public static string MiddleName { get; } = "Claim.Key.SecondName";
+        public static string MiddleName { get; } = "Claim.Key.MiddleName";
         public static string LastName { get; } = "Claim.Key.LastName";
         public static string Id { get; } = "Claim.Key.Id";
         public static string Role { get; } = "Claim.Key.Role";

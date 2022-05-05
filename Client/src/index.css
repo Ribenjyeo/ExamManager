@@ -339,6 +339,10 @@ nav .nav-button {
   color: red;
 }
 
+.dataGrid {
+  height: 100%;
+}
+
 
 
 /* ------ Admin Bar ------ */
@@ -350,6 +354,10 @@ nav .nav-button {
   position: sticky;
   top: 0px;
   z-index: 999;
+}
+
+.AdminBarIconsContainer {
+  margin-right: 20px;
 }
 
 .AdminBarWrapper {
@@ -373,12 +381,11 @@ nav .nav-button {
   align-items: center;
 }
 
-.AdminBarIconsContainer {
+.userUpdateInputconsContainer {
   position: relative;
-  margin-right: 10px;
+  margin-right: 20px;
   cursor: pointer;
   color: #555;
-
 }
 
 .topIconBadge {
@@ -457,7 +464,7 @@ nav .nav-button {
 
 .userTitleContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -470,10 +477,10 @@ nav .nav-button {
   cursor: pointer;
   color: white;
   font-size: 16px;
-  margin-right: 30px;
+  margin-right: 40px;
 }
 
-.userAddButton:hover {
+.AdButton:hover {
   background-color: rgb(2, 160, 160);
 }
 
@@ -565,10 +572,45 @@ nav .nav-button {
 }
 
 .userUpdateInput {
-  border: none;
-  width: 250px;
-  border-bottom: 1px solid gray;
+  min-height: 20px;
+  max-height: 22px;
   margin-left: 10px;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.userUpdateInput::placeholder {
+  color: #212529;
+  opacity: 0.5;
+}
+
+.userUpdateInput:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+
+.editUser {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.buttonEditUser {
+  max-height: 32px;
+  border: none;
+  padding: 5px;
+  background-color: teal;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  margin-right: 30px;
 }
 
 

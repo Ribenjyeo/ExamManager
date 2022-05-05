@@ -102,9 +102,14 @@ public class GroupService : IGroupService
 
         #endregion
     }
-    public Task RemoveStudent(Guid groupId, Guid studentId)
+    public async Task RemoveStudent(Guid groupId, Guid studentId)
     {
-        throw new NotImplementedException();
+        var UserSet = _dbContext.Set<User>();
+
+        var student = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == studentId);
+        student.StudentGroupID = null;
+
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Group> CreateGroup(string name)
@@ -138,17 +143,28 @@ public class GroupService : IGroupService
     public async Task<Group[]> GetGroups(GroupOptions options, bool includeStudents = false)
     {
         var GroupSet = _dbContext.Set<Group>();
-        var groups = GroupSet.AsEnumerable().Where(g =>
+        IEnumerable<Group>? groups;
+
+        if (includeStudents)
+        {
+            groups = GroupSet.Include(nameof(Group.Students)).AsEnumerable();
+        }
+        else
+        {
+            groups = GroupSet.AsEnumerable();
+        }
+        groups = groups.Where(g =>
         {
             var studentsCount = g.Students?.Count() ?? 0;
             return (options.Name is null ? true : g.Name.Contains(options.Name, StringComparison.CurrentCultureIgnoreCase)) &&
                    (options.MinStudentsCount is null ? true : studentsCount >= options.MinStudentsCount) &&
                    (options.MaxStudentsCount is null ? true : studentsCount <= options.MaxStudentsCount);
         });
-        // if (options.Count is not null)
-        // {
-        //     groups = groups.Take(options.Count.Value);
-        // }
+
+        if (options.Count is not null)
+        {
+            groups = groups.Take(options.Count.Value);
+        }
 
         return groups.ToArray();
     }
