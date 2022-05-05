@@ -22,7 +22,8 @@ const UserList = () => {
     const json = await response.json()
     const stringi = JSON.stringify(json)
     const parse = JSON.parse(stringi)
-    setUserList(parse.users)  
+    setUserList(parse.users)
+    removeCookies({"editUser" : cookies.editUser})
 
   }
 

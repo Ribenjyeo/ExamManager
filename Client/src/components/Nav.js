@@ -27,7 +27,6 @@ const Nav = () => {
 
       const response = await instance.get(`/${cookies.UserId}`)
       if(response.data.status === 401) { //если токен не подходит то редиркер на страницу авторизации
-        alert("Erorr: " + response.data.status + " - " + response.data.message)
         logout()
       }
       setCookies("firstName", response.data.firstName)

@@ -2,7 +2,7 @@ import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
 import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback} from 'react'
 import { useCookies } from "react-cookie";
 import axios from 'axios'
 
@@ -16,6 +16,12 @@ const User = () => {
         taskCounter: ''
     })
 
+   const [firstName, setFirstName] = useState()
+   const [lastName, setLastName] = useState()
+   const [role, setRole] = useState()
+   const [groupId, setGroupId] = useState()
+   const [taskCounter, setTaskCounter] = useState()
+
     const [forData, setForData] = useState({
         firstName : '',
         lastName : '',
@@ -23,6 +29,10 @@ const User = () => {
         groupId: '',
         taskCounter: ''
     })
+
+    console.log("edit user ", cookies.editUser)
+    console.log("cookies user", cookies.UserId)
+    console.log("location", window.location.href)
     
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
         baseURL: "/user",
@@ -34,7 +44,6 @@ const User = () => {
         try {
     
             const response = await instance.get(`/${cookies.editUser}`)
-            console.log(response.data)
         
             setFromData({
                 firstName : response.data.firstName,
@@ -49,12 +58,12 @@ const User = () => {
         }
       }
       
-
-      const handleClick = async (e) => {
+      const handleClick = async (e) => { //запрос на изменения пользователя
         e.preventDefault()
-        const response = await instance.post(`/${cookies.editUser}/modify`, {
-            firstName : forData.firstName,
-            lastName : forData.lastName
+        const response = await instance.post('/modify', {
+            id : cookies.editUser,
+            firstName : firstName,
+            lastName : lastName
         })
       }
 
@@ -111,7 +120,7 @@ const User = () => {
                                         <input
                                             type="text"
                                             name="firstName"
-                                            onChange={e => setForData({firstName : e.target.value})}
+                                            onChange={e => setFirstName(e.target.value)}
                                             placeholder={fromData.firstName}
                                             className="userUpdateInput"
                                         />
@@ -121,7 +130,7 @@ const User = () => {
                                         <input
                                             type="text"
                                             name="lastName"
-                                            onChange={e => setForData({lastName : e.target.value})}
+                                            onChange={e => setLastName(e.target.value)}
                                             placeholder={fromData.lastName}
                                             className="userUpdateInput"
                                         />
@@ -130,7 +139,7 @@ const User = () => {
                                         <label>Группа: </label>
                                         <input
                                             name="groupId"
-                                            onChange={e => setForData({groupId : e.target.value})}
+                                            onChange={e => setGroupId(e.target.value)}
                                             type="text"
                                             placeholder={fromData.groupId ? fromData.groupId : "Нет группы"}
                                             className="userUpdateInput"
@@ -140,7 +149,7 @@ const User = () => {
                                         <label>Количество выполненных заданий: </label>
                                         <input
                                             name="taskCounter"
-                                            onChange={e => setForData({taskCounter : e.target.value})}
+                                            onChange={e => setTaskCounter(e.target.value)}
                                             type="text"
                                             placeholder={fromData.taskCounter}
                                             className="userUpdateInput"

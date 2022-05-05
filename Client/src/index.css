@@ -221,6 +221,43 @@ nav .nav-button {
   padding-top: 2rem;
 }
 
+.error-message {
+  padding: 10px 35px 10px 14px;
+  border-radius: 4px;
+  position: relative;
+  background: #f6ddde;
+  border-color:#d4aaac;
+  color:#972a3d;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  opacity: 0;
+  animation: ani 3s forwards;
+}
+
+.error-message:hover{
+  animation-play-state: paused;
+  -webkit-animation-play-state:paused;
+  -moz-animation-play-state:paused;
+  -o-animation-play-state:paused; 
+}
+
+@keyframes ani {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes ane {
+  100% {opacity: 1;}
+  0% {opacity: 0;}
+}
+
 .header  .logo-container {
   margin: 0 10px 0 0;
 }
@@ -480,6 +517,10 @@ nav .nav-button {
   margin-right: 40px;
 }
 
+.userAddButton:hover {
+  background-color: rgb(15, 177, 177);
+}
+
 .AdButton:hover {
   background-color: rgb(2, 160, 160);
 }
@@ -611,6 +652,73 @@ nav .nav-button {
   color: white;
   font-size: 16px;
   margin-right: 30px;
+}
+
+.buttonEditUser:hover { 
+  background-color: rgb(15, 177, 177);
+}
+
+/* ------ NEW User ------ */
+
+.createUser {
+  display: flex;
+}
+
+.newUser {
+  flex: 4;
+}
+
+.newUserForm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+  margin-right: 20px;
+}
+
+.newUserItem {
+  max-width: 300px;
+  min-width: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.newUserItem > label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(151, 150, 150);
+}
+
+.newUserItem > input {
+  height: 20px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.newUserSelect{
+    height: 40px;
+    border-radius: 5px;
+}
+
+.newUserButton{
+    width: 200px;
+    border: none;
+    background-color: teal;
+    color: white;
+    padding: 7px 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.newUserButton:hover {
+  background-color: rgb(15, 177, 177);
 }
 
 
