@@ -297,8 +297,8 @@
     <tr>
     	<td>id</td>
         <td>guid</td>
+        <td>Да</td>
         <td>ID изменяемого пользователя</td>
-        <td>ID пользователя</td>
     </tr>
     <tr>
     	<td>login</td>
