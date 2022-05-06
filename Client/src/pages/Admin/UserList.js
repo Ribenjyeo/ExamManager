@@ -24,17 +24,28 @@ const UserList = () => {
     const parse = JSON.parse(stringi)
     setUserList(parse.users)
     removeCookies({"editUser" : cookies.editUser})
-
   }
 
   useEffect(() => {
     users()
   }, [])
 
-  // const handleDelete = async (id) => { //Удаление пользователя
-  //   const res = await axios.get(`./users/delete/${id}`)
-  //   console.log('Пользователь удален')
-  // }
+  const handleDelete = async (params) => { //Удаление пользователя
+    const deleteUser = {
+      'users' : [{
+        id: params,
+        onlyLogin: false
+        }]
+      }
+    const response = await fetch('/users/delete', {
+      method: "POST",
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization' : 'Bearer ' + cookies.AuthToken},
+        body: JSON.stringify(deleteUser)
+      })
+    users()
+  }
 
   function handleClick (params) { //получение ID изменяемого пользователя
     setCookies("editUser", params)
@@ -54,7 +65,7 @@ const UserList = () => {
         return (
           <>
             <Link to={"/admin/users/"+params.row.id}>
-              <button className="userListEdit" onClick={() => handleClick(params.row.id)}>Edit</button>
+              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>
@@ -71,11 +82,11 @@ const UserList = () => {
                 <div className="dataGrid">
                   <DataGrid
                     rows={userList}
-                    disableSelectionOnClick
-                    columns={columns}
-                    pageSize={30}
-                    rowsPerPageOptions={[5]}
                     checkboxSelection
+                    onSelectionModelChange={itm => console.log(itm)} 
+                    columns={columns}
+                    pageSize={10}
+                    rowsPerPageOptions={[5]}
                   />
                 </div>
                 </div>

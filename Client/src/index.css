@@ -452,6 +452,7 @@ nav .nav-button {
 .sidebarWrapper {
   padding: 20px;
   color: #555;
+  width: 220px;
 }
 
 .sidebarMenu {
@@ -479,6 +480,11 @@ nav .nav-button {
   text-decoration: none;
 }
 
+.sidebarListItem>a {
+  width: 200px;
+  text-align: initial;
+}
+
 .sidebarListItem:active, .sidebarListItem:hover {
   background-color: rgb(228, 228, 250);
 }
@@ -486,6 +492,12 @@ nav .nav-button {
 .sidebarIcon {
   margin-right: 5px;
   font-size: 20px !important;
+}
+
+.sidebarIconTransform {
+  margin-right: 5px;
+  font-size: 20px !important;
+  transform: scale(-1, 1)
 }
 
 /* ------ User ------ */
@@ -668,10 +680,14 @@ nav .nav-button {
   flex: 4;
 }
 
+.newUserTitle {
+  display: flex;
+}
+
 .newUserForm {
   display: flex;
   flex-wrap: wrap;
-  justify-content: right;
+  justify-content: space-between;
   margin-right: 20px;
 }
 
@@ -721,4 +737,149 @@ nav .nav-button {
   background-color: rgb(15, 177, 177);
 }
 
+.buttonForm {
+  margin-left: auto;
+}
+
+/* ------ NEW GROUP ------ */
+
+.createGroup {
+  display: flex;
+}
+
+.newGroup {
+  flex: 4;
+}
+
+.newGroupTitle {
+  display: flex;
+}
+
+.newGroupForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.newGroupItem {
+  max-width: 300px;
+  min-width: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.newGroupItem > label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(151, 150, 150);
+}
+
+.newGroupItem > input {
+  height: 20px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.newGroupSelect{
+    height: 40px;
+    border-radius: 5px;
+}
+
+.newGroupButton{
+    width: 200px;
+    border: none;
+    background-color: teal;
+    color: white;
+    padding: 7px 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.newGroupButton:hover {
+  background-color: rgb(15, 177, 177);
+}
+
+.buttonGroupForm {
+  margin-top: 10px;
+}
+
+/* ------ NEW TASK ------ */
+
+.createTask {
+  display: flex;
+}
+
+.newTask {
+  flex: 4;
+}
+
+.newTaskTitle {
+  display: flex;
+}
+
+.newTaskForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.newTaskItem {
+  max-width: 300px;
+  min-width: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.newTaskItem > label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(151, 150, 150);
+}
+
+.newTaskItem > input {
+  height: 20px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.newTaskSelect{
+    height: 40px;
+    border-radius: 5px;
+}
+
+.newTaskButton{
+    width: 200px;
+    border: none;
+    background-color: teal;
+    color: white;
+    padding: 7px 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.newTaskButton:hover {
+  background-color: rgb(15, 177, 177);
+}
+
+.buttonTaskForm {
+  margin-top: 10px;
+}
 

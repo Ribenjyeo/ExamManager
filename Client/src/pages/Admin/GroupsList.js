@@ -24,6 +24,10 @@ const GroupList = () => {
     groups()
   }, [])
 
+  // function handleClick (params) { //получение ID изменяемого пользователя
+  //   setCookies("editUser", params)
+  // }
+
   const columns = [
     { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
     { field: 'name', headerName: 'Название группы', minWidth: 100, flex: 1},
@@ -37,7 +41,7 @@ const GroupList = () => {
         return (
           <>
             <Link to={"/admin/task/"+params.row.id}>
-              <button className="userListEdit">Edit</button>
+              <button className="userListEdit">Изменить</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>

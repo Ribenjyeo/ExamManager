@@ -2,11 +2,13 @@ import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
 import { Link } from 'react-router-dom'
-import { useState, useEffect, useCallback} from 'react'
+import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 const User = () => {
+    let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
         firstName : '',
@@ -65,6 +67,7 @@ const User = () => {
             firstName : firstName,
             lastName : lastName
         })
+        getUserEdit()
       }
 
       useEffect(() => {
@@ -79,9 +82,9 @@ const User = () => {
                 <div className="userContainer">
                 <div className="userTitleContainer">
                     <h2 className="userTitle">Изменения пользователя</h2>
-                    <Link to="/admin/newUser">
+                    {/* <Link to="/admin/newUser">
                         <button className="userAddButton">Создать</button>
-                    </Link>
+                    </Link> */}
                 </div>
                 <div className="userShow">
                     <div className="userShowTop">
