@@ -11,11 +11,12 @@ const User = () => {
     let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
-        firstName : '',
-        lastName : '',
-        role: '',
-        groupId: '',
-        taskCounter: ''
+        firstName : null,
+        lastName : null,
+        role: null,
+        groupId: null,
+        groupName: null,
+        taskCounter: null
     })
 
    const [firstName, setFirstName] = useState()
@@ -37,23 +38,34 @@ const User = () => {
     console.log("location", window.location.href)
     
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
-        baseURL: "/user",
         timeout: 1000,
         headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
       });
     
       const getUserEdit = async () => { // получить данные пользователя по его ID
         try {
-    
-            const response = await instance.get(`/${cookies.editUser}`)
-        
-            setFromData({
-                firstName : response.data.firstName,
-                lastName : response.data.lastName,
-                groupId: response.data.groupName,
-                role : response.data.role,
-                groupName: response.data.groupNam
-            })
+            const response = await instance.get(`/user/${cookies.editUser}`)
+            if(response.data.role == 1 && response.data.groupId != null){
+                const res = await instance.get(`/group/${response.data.groupId}`)
+                setFromData({
+                    firstName : response.data.firstName,
+                    lastName : response.data.lastName,
+                    groupId: response.data.groupId,
+                    role : response.data.role,
+                    groupName: res.data.name
+                })
+            }
+            else{
+                setFromData({
+                    firstName : response.data.firstName,
+                    lastName : response.data.lastName,
+                    groupId: response.data.groupId,
+                    role : response.data.role,
+                })
+            }   
+
+            console.log(fromData)
+
         }
         catch(error) {
           console.log(error)
@@ -72,7 +84,17 @@ const User = () => {
 
       useEffect(() => {
           getUserEdit()
+          console.log(fromData)
       }, [])
+
+      function handleStatus () {
+          console.log(fromData)
+          if(fromData.role == 0) return "Администратор"
+          else if(fromData.role == 1) {
+              if(fromData.groupName != null) return fromData.groupName
+              else return "Нет группы"
+          }
+      }
 
     return (
         <>
@@ -95,9 +117,9 @@ const User = () => {
                                 className="userShowImg"
                             />
                             <span className="userShowUserName">{fromData.firstName + " " + fromData.lastName}</span>
-                            <span className="userShowUserTitle">{fromData.groupId ? fromData.groupId : "Нет группы"}</span>
+                            <span className="userShowUserTitle">{handleStatus()}</span>
                         </div>
-                    </div>
+                    </div> 
                     <div className="userDetails">
                         <div className="userShowButton">
                             <span className="userShowTitle"><b>Данные пользователя:</b></span> 
@@ -108,7 +130,7 @@ const User = () => {
                                 <span className="userShowInfoTitle"><b>Фамилия: </b>{fromData.lastName}</span>
                             </div>
                             <div className="userShowInfo">
-                                <span className="userShowInfoTitle"><b>Группа: </b>{fromData.groupId ? fromData.groupId : "Нет группы"}</span>
+                                <span className="userShowInfoTitle"><b>Группа: </b>{fromData.groupName ? fromData.groupName : "Нет группы"}</span>
                             </div>
                             <div className="userShowInfo">
                                 <span className="userShowInfoTitle"><b>Количество выполненных заданий: </b> 5</span>
@@ -144,7 +166,7 @@ const User = () => {
                                             name="groupId"
                                             onChange={e => setGroupId(e.target.value)}
                                             type="text"
-                                            placeholder={fromData.groupId ? fromData.groupId : "Нет группы"}
+                                            placeholder={fromData.groupName ? fromData.groupName : "Нет группы"}
                                             className="userUpdateInput"
                                         />
                                     </div>

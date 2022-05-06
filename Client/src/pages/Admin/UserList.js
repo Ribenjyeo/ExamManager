@@ -21,7 +21,7 @@ const UserList = () => {
     name: null
   })
   let [groupList, setGroupList] = useState([])
-  let [students, setStudents] = useState()
+  let [students, setStudents] = useState([])
 
   const users = async () => { //Получение всех пользователей
     const response = await fetch('/users', {method: "POST", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
@@ -42,6 +42,8 @@ const UserList = () => {
   useEffect(() => {
     users()
     removeCookies('editUser', {path:'/admin/users'})
+    removeCookies('editUser', {path:'/admin'})
+    removeCookies('editUser', {path:'/'})
     groups()
   }, [])
 
@@ -76,17 +78,23 @@ const UserList = () => {
       }
     }
 
-    console.log(check)
-
     if(check) {
+      let array = []
+      console.log(students)
+      for(let i = 0; i < students.length; i++){
+          array.push({id: students[i]})
+      }
+
+      console.log("aaray: ", array)
+
       let AddStudentsRequest = {
         groupId : currentGroupId,
-          'studens' : {students}
+        students : array
       }
 
       console.log(AddStudentsRequest)
 
-      const response = await fetch('/group/students/add', {
+      const response = fetch('/group/students/add', {
         method: "POST",
         headers: {
           'Content-Type' : 'application/json',
@@ -126,6 +134,8 @@ const UserList = () => {
       }
     }];
 
+    let a = []
+
     return(
         <>
         <AdminBar/>
@@ -141,7 +151,7 @@ const UserList = () => {
                   <DataGrid
                     rows={userList}
                     checkboxSelection
-                    onSelectionModelChange={itm => setStudents(itm)} 
+                    onSelectionModelChange={item => setStudents(item)}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[5]}
