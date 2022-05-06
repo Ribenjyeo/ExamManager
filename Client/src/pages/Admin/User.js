@@ -94,7 +94,7 @@ const User = () => {
                                 alt=""
                                 className="userShowImg"
                             />
-                            <span className="userShowUserName">{fromData.firstName + fromData.lastName}</span>
+                            <span className="userShowUserName">{fromData.firstName + " " + fromData.lastName}</span>
                             <span className="userShowUserTitle">{fromData.groupId ? fromData.groupId : "Нет группы"}</span>
                         </div>
                     </div>
