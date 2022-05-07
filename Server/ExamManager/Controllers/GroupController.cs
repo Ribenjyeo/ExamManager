@@ -10,7 +10,6 @@ using ExamManager.Filters;
 namespace ExamManager.Controllers
 {
 
-    [Route(Routes.Group)]
     [ApiController]
     [JwtAuthorize]
     public class GroupController : ControllerBase
@@ -62,6 +61,24 @@ namespace ExamManager.Controllers
             return Ok(ResponseFactory.CreateResponse(groups));
         }
 
+        [HttpGet(Routes.DeleteGroup)]
+        [ValidateGuidFormat("id")]
+        public async Task<IActionResult> DeleteGroup(string id)
+        {
+            var groupId = Guid.Parse(id);
+
+            try
+            {
+                await _groupService.DeleteGroup(groupId);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(new Exception("Не удалось удалить группу", ex)));
+            }
+
+            return Ok(ResponseFactory.CreateResponse());
+        }
+
         [HttpPost(Routes.CreateGroup)]
         public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
         {
@@ -88,15 +105,12 @@ namespace ExamManager.Controllers
             return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
         }
 
-        [HttpPost(Routes.AddGroupStudent)]
+        [HttpPost(Routes.AddGroupStudents)]
         public async Task<IActionResult> AddGroupStudents([FromBody] AddStudentsRequest request)
         {
             try
             {
-                foreach (var student in request.students)
-                {
-                    await _groupService.AddStudent(request.groupId, student.id);
-                }
+                await _groupService.AddStudentRange(request.groupId, request.students.Select(student => student.id));
             }
             catch (Exception ex)
             {
@@ -108,7 +122,7 @@ namespace ExamManager.Controllers
             return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
         }
 
-        [HttpPost(Routes.RemoveGroupStudent)]
+        [HttpPost(Routes.RemoveGroupStudents)]
         public async Task<IActionResult> RemoveGroupStudents([FromBody] RemoveStudentsRequest request)
         {
             if (request.students.Length == 0)
@@ -117,23 +131,20 @@ namespace ExamManager.Controllers
                 return Ok(ResponseFactory.CreateResponse(exception));
             }
 
-            var groupId = (await _groupService.GetStudentGroup(request.students[0].id)).ObjectID;
+            var studentIds = request.students.Select(student => student.id);
 
             try
             {
-                foreach (var student in request.students)
-                {
-                    await _groupService.RemoveStudent(groupId, student.id);
-                }
+                await _groupService.RemoveStudentRange(studentIds);
             }
             catch (Exception ex)
             {
                 return Ok(ResponseFactory.CreateResponse(new Exception("Не удалось удалить студентов", ex)));
             }
 
-            var group = await _groupService.GetGroup(groupId, true);
+            var students = await _userService.GetUsers(studentIds);
 
-            return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
+            return Ok(ResponseFactory.CreateResponse(students));
         }
     }
 }

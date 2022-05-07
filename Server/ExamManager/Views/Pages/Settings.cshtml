@@ -2,35 +2,38 @@
 @model ExamManager.Models.User
 @{
     ViewData["Title"] = "Администратор";
-    //ViewData["UserName"] = $"{Model!.LastName} {Model!.FirstName}";
+    ViewData["UserName"] = $"{Model.LastName} {Model.FirstName}";
     ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
 
-<div class="container">
     <link rel="stylesheet" href="~/css/account/settings.css" />
     <div class="page-header">Настройки</div>
-    <div class="page-body">
-        <div class="input-section">
-            <span class="label">Имя</span>
-            <input id="firstName" type="text" class="input" placeholder="Введите имя" value="@(Model.FirstName)" />
+    <div class="settings">
+        <div class="section" title="Личные данные">
+            <div class="row">
+                <div class="input-section">
+                    <label>Имя</label>
+                    <input type="text" id="firstname-input" value="@Model.FirstName" />
+                </div>
+                <div class="input-section">
+                    <label>Фамилия</label>
+                    <input type="text" id="lastname-input" value="@Model.LastName" />
+                </div>
+            </div>
         </div>
-        <div class="input-section">
-            <span class="label">Фамилия</span>
-            <input id="lastName" type="text" class="input" placeholder="Введите фамилию" value="@(Model.LastName)" />
+        <div class="section" title="Данные для входа">
+            <div class="input-section">
+                <label>Логин</label>
+                <input type="text" id="login-input" value="@Model.Login" />
+            </div>
+            <div class="input-section">
+                <label>Сменить пароль</label>
+                <input type="password" id="password-input" />
+                <input type="button" class="btn-info" id="change-password-button" value="Изменить" />
+            </div>
         </div>
-        <div class="input-section">
-            <span class="label">Логин</span>
-            <input id="login" type="text" class="input" placeholder="Введите логин" value="@(Model.Login)" />
-        </div>
-        <div class="input-section">
-            <span class="label">Новый пароль</span>
-            <input id="password" type="text" class="input" placeholder="Введите новый пароль" />
+        <div class="page-footer">
+            <input type="button" class="btn-action" id="save-button" value="Сохранить" />
         </div>
     </div>
-    <div class="page-footer">
-        <div class="button-section">
-            <input id="saveButton" type="button" class="button" value="Сохранить" />
-        </div>
-    </div>
-</div>

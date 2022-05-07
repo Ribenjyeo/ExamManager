@@ -2,11 +2,7 @@
 @model ExamManager.Models.User
 @{
     ViewData["Title"] = "Студент";
-    //ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["UserName"] = $"{Model.LastName} {Model.FirstName}";
     ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
-
-<div class="container">
-    
-</div>

@@ -9,6 +9,7 @@ public interface IUserService
     public Task<User> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false);
     public Task<ClaimsPrincipal> CreateUserPrincipal(User user);
     public Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate, bool includeGroup = false, bool includeTasks = false);
+    public Task<IEnumerable<User>> GetUsers(IEnumerable<Guid> userIds, bool includeGroup = false, bool includeTasks = false);
 
     /// <summary>
     /// Меняет значения свойств пользователя по его ObjectID

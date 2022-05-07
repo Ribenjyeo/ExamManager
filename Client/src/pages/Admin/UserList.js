@@ -82,6 +82,8 @@ const UserList = () => {
         students : array
       }
 
+      console.log(JSON.stringify(AddStudentsRequest))
+
       const response = fetch('/group/students/add', {
         method: "POST",
         headers: {
@@ -90,13 +92,15 @@ const UserList = () => {
           body: JSON.stringify(AddStudentsRequest)
         })
       users()
-      console.log(studentsList)
+      console.log(userList)
     }
   }
 
   function handleClick (params) { //получение ID изменяемого пользователя
     setCookies("editUser", params)
   }
+
+  console.log(userList)
 
   useEffect(() => {
     users()
@@ -113,7 +117,7 @@ const UserList = () => {
     { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
     {
       field: 'action',
-      headerName: 'Изменить/Удалить',
+      headerName: 'Изменить / Добавить задание / Удалить',
       minWidth: 100,
       flex: 1,
       renderCell: (params) => {
@@ -121,6 +125,9 @@ const UserList = () => {
           <>
             <Link to={"/admin/users/"+params.row.id}>
               <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
+            </Link>
+            <Link to={`/admin/${params.row.id}/newTask`}>
+              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Добавить задание</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>

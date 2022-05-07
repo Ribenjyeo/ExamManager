@@ -47,10 +47,6 @@ const SideBarAdmin = () => {
                             <GroupAddIcon className='sidebarIcon'/>
                             <Link to="/admin/newGroup" style={{ textDecoration: 'none', color: "black" }}>Создание группы</Link>
                         </li>
-                        <li className="sidebarListItem">
-                            <AddTaskIcon className='sidebarIcon'/>
-                            <Link to="/admin/newTask" style={{ textDecoration: 'none', color: "black" }}>Создать задание</Link>
-                        </li>
                     </ul> 
                 </div>
             </div>

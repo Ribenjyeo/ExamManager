@@ -30,8 +30,8 @@ namespace ExamManager.Controllers
         {
             var users = await _userService.GetUsers(user =>
             {
-                return ((request.firstName is null ? true : user.FirstName.Contains(request.firstName)) ||
-                       (request.lastName is null ? true : user.LastName.Contains(request.lastName))) &&
+                return ((request.firstName is null ? true : user.FirstName.Contains(request.firstName, StringComparison.CurrentCultureIgnoreCase)) ||
+                       (request.lastName is null ? true : user.LastName.Contains(request.lastName, StringComparison.CurrentCultureIgnoreCase))) &&
                        (request.groupId is null ? true : user.StudentGroupID == request.groupId) &&
                        (request.role is null ? true : user.Role == request.role) &&
                        (request.taskStatus is null ? true : user.Tasks.Any(t => t.Status == request.taskStatus));

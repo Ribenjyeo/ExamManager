@@ -16,13 +16,6 @@ const Group = () => {
     lastName : null,
     groupName : null
     })
-    // const [user_id, setUser_id] = useState(false)
-    // const [groupName, setGroupName] = useState({
-    // id: null,
-    // name: null
-    // })
-    // let [groupList, setGroupList] = useState([])
-    // let [students, setStudents] = useState([])
 
     const usersInGroup = async () => { //Получение всех пользователей в группе
         const response = await fetch(`/group/${cookies.editGroup}/students`, {
@@ -85,8 +78,6 @@ const Group = () => {
         )
         }
     }];
-
-
 
     return(
         <>

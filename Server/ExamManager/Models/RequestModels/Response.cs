@@ -38,7 +38,7 @@ public record UsersDataResponse : Response
     public UserView[] users { get; set; }
     public struct UserView
     {
-        public string id { get; set; }
+        public Guid id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string? groupName { get; set; }

@@ -2,7 +2,7 @@
 @model (User User, StudentTask Task)
 @{
     ViewData["Title"] = Model.Task.Title;
-    //ViewData["UserName"] = $"{Model!.MiddleName} {Model!.FirstName}";
+    ViewData["UserName"] = $"{Model.User.LastName} {Model.User.FirstName}";
     ViewData["IsAdmin"] = Model.User.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }

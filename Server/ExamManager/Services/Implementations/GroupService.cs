@@ -1,4 +1,6 @@
-﻿using ExamManager.Models;
+﻿using ExamManager.Extensions;
+using ExamManager.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamManager.Services;
@@ -62,51 +64,17 @@ public class GroupService : IGroupService
         student.StudentGroup = group;
 
         await _dbContext.SaveChangesAsync();
-
-        #region LOCAL_FUNCTIONS
-
-        ValidationResult ValidateStudent(User? student)
-        {
-            var result = new ValidationResult();
-
-            // Проверяем, что пользователь существует
-            if (student is null)
-            {
-                result.AddCommonMessage("Пользователь не существует");
-                return result;
-            }
-
-            // Прооеряем что пользователь является студентом
-            if (student is not { Role: UserRole.STUDENT })
-            {
-                result.AddCommonMessage("Пользователь не является студентом");
-                return result;
-            }
-
-            return result;
-        }
-
-        ValidationResult ValidateGroup(Group? group)
-        {
-            var result = new ValidationResult();
-
-            // Проверяем, что группа существует
-            if (group is null)
-            {
-                result.AddCommonMessage("Группа не существует");
-                return result;
-            }
-
-            return result;
-        }
-
-        #endregion
     }
-    public async Task RemoveStudent(Guid groupId, Guid studentId)
+    public async Task RemoveStudent(Guid studentId)
     {
         var UserSet = _dbContext.Set<User>();
 
         var student = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == studentId);
+        if (student == null)
+        {
+            throw new InvalidDataException($"Пользователя {studentId} не существует");
+        }
+
         student.StudentGroupID = null;
 
         await _dbContext.SaveChangesAsync();
@@ -167,5 +135,110 @@ public class GroupService : IGroupService
         }
 
         return groups.ToArray();
+    }
+
+    public async Task DeleteGroup(Guid groupId)
+    {
+        var GroupSet = _dbContext.Set<Group>();
+        var group = await GroupSet.FirstOrDefaultAsync(group => group.ObjectID == groupId);
+
+        if (group is null)
+        {
+            throw new InvalidOperationException($"Группы {groupId} не существует");
+        }
+
+        GroupSet.Remove(group);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task AddStudentRange(Guid groupId, IEnumerable<Guid> studentIds)
+    {
+        var UserSet = _dbContext.Set<User>();
+
+        // Проверяем группу
+        var group = await GetGroup(groupId, includeStudents: true);
+        (ValidationResult Result, Group Group) groupValidation = (ValidateGroup(group), group);
+
+        if (groupValidation.Result.HasErrors)
+        {
+            throw new Exception(groupValidation.Result.CommonMessages.First());
+        }
+
+        var students = new List<User>(studentIds.Count());
+        var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+        // Проверяем и добавляем пользователей
+        foreach (var studentId in studentIds)
+        {
+            var student = UserSet.FirstOrDefault(u => u.ObjectID == studentId);
+            (ValidationResult Result, User Student) studentValidation = (ValidateStudent(student), student);
+
+            if (studentValidation.Result.HasErrors)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(studentValidation.Result.CommonMessages.First());
+            }
+
+            student.StudentGroup = group;
+        }
+        await transaction.CommitAsync();
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private ValidationResult ValidateStudent(User? student)
+    {
+        var result = new ValidationResult();
+
+        // Проверяем, что пользователь существует
+        if (student is null)
+        {
+            result.AddCommonMessage("Пользователь не существует");
+            return result;
+        }
+
+        // Прооеряем что пользователь является студентом
+        if (student is not { Role: UserRole.STUDENT })
+        {
+            result.AddCommonMessage("Пользователь не является студентом");
+            return result;
+        }
+
+        return result;
+    }
+
+    private ValidationResult ValidateGroup(Group? group)
+    {
+        var result = new ValidationResult();
+
+        // Проверяем, что группа существует
+        if (group is null)
+        {
+            result.AddCommonMessage("Группа не существует");
+            return result;
+        }
+
+        return result;
+    }
+
+    public async Task RemoveStudentRange(IEnumerable<Guid> studentIds)
+    {
+        var UserSet = _dbContext.Set<User>();
+
+        var transaction = await _dbContext.Database.BeginTransactionAsync();
+        foreach (var studentId in studentIds)
+        {
+
+            var student = await UserSet.FirstOrDefaultAsync(user => user.ObjectID == studentId);
+            if (student == null)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidDataException($"Пользователя {studentId} не существует");
+            }
+
+            student.StudentGroupID = null;
+        }
+
+        await transaction.CommitAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

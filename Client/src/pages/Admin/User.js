@@ -6,9 +6,12 @@ import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
+import { DataGrid } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const User = () => {
     let navigate = useNavigate()
+    const [pageSize, setPageSize] = useState(5)
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
         firstName : '',
@@ -16,25 +19,22 @@ const User = () => {
         role: '',
         groupId: '',
         groupName: '',
-        taskCounter: ''
     })
-
-    console.log(fromData)
 
    const [firstName, setFirstName] = useState()
    const [lastName, setLastName] = useState()
    const [role, setRole] = useState()
    const [groupId, setGroupId] = useState()
-   const [taskCounter, setTaskCounter] = useState()
 
     const [forData, setForData] = useState({
         firstName : '',
         lastName : '',
         role: '',
         groupId: '',
-        taskCounter: ''
     })
-    
+
+    const [tasks, setTasks] = useState([])
+
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
         timeout: 1000,
         headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
@@ -43,6 +43,7 @@ const User = () => {
       const getUserEdit = async () => { // получить данные пользователя по его ID
         try {
             const response = await instance.get(`/user/${cookies.editUser}`)
+            setTasks(response.data.tasks) 
             if(response.data.role == 1 && response.data.groupId != null){
                 const res = await instance.get(`/group/${response.data.groupId}`)
                 setFromData({
@@ -51,7 +52,7 @@ const User = () => {
                     groupId: response.data.groupId,
                     role : response.data.role,
                     groupName: res.data.name
-                })
+                })           
             }
             else{
                 setFromData({
@@ -78,12 +79,26 @@ const User = () => {
         navigate("/admin/users")
       }
 
+      const handleDelete = async (params) => { //Удаление задания у пользователя
+        const deleteTask = {taskId: params}
+        console.log(deleteTask)
+        const response = await fetch('/task/delete', {
+            method: "POST",
+            headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + cookies.AuthToken},
+            body: JSON.stringify(deleteTask)
+        })
+        getUserEdit() //Обновить список пользователей на странице
+      }
+
       useEffect(() => {
         getUserEdit()
+        removeCookies('editUser', {path:'/admin/user/:userId'})
     }, [])
 
 
-    function handleStatus () {
+    function handleStatus () { //Отображение группы пользоватея / его роли
         if(fromData.role == 0) return "Администратор"
         else if(fromData.role == 1) {
             if(fromData.groupName != null) return fromData.groupName
@@ -91,6 +106,31 @@ const User = () => {
         }   
     }
 
+    function handleClickTask (params) { //получение ID изменяемого задания
+        setCookies("editTask", params)
+      }
+    
+
+    const columns = [
+        { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+        { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
+        {
+          field: 'action',
+          headerName: 'Изменить / Удалить',
+          minWidth: 100,
+          flex: 1,
+          renderCell: (params) => {
+            return (
+              <>
+                <Link to={"/admin/tasks/"+params.row.id}>
+                  <button className="userListEdit" onClick={(e) => handleClickTask(params.row.id)}>Изменить</button>
+                </Link>
+                <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
+              </>
+            )
+          }
+        }];
+ 
     return (
         <>
         <AdminBar/>
@@ -99,9 +139,6 @@ const User = () => {
                 <div className="userContainer">
                 <div className="userTitleContainer">
                     <h2 className="userTitle">Изменения пользователя</h2>
-                    {/* <Link to="/admin/newUser">
-                        <button className="userAddButton">Создать</button>
-                    </Link> */}
                 </div>
                 <div className="userShow">
                     <div className="userShowTop">
@@ -126,9 +163,6 @@ const User = () => {
                             </div>
                             <div className="userShowInfo">
                                 <span className="userShowInfoTitle"><b>Группа: </b>{fromData.groupName ? fromData.groupName : "Нет группы"}</span>
-                            </div>
-                            <div className="userShowInfo">
-                                <span className="userShowInfoTitle"><b>Количество выполненных заданий: </b> 5</span>
                             </div>
                         </div>
                         <div className="userUpdate">
@@ -165,16 +199,6 @@ const User = () => {
                                             className="userUpdateInput"
                                         />
                                     </div>
-                                    <div className="userUpdateItem">
-                                        <label>Количество выполненных заданий: </label>
-                                        <input
-                                            name="taskCounter"
-                                            onChange={e => setTaskCounter(e.target.value)}
-                                            type="text"
-                                            placeholder={fromData.taskCounter}
-                                            className="userUpdateInput"
-                                        />
-                                    </div>
                                 </div>
                                 <div className="editUser">
                                     <button className="buttonEditUser" onClick={(e) => {handleClick(e)}}>Внести изменения</button>
@@ -183,6 +207,17 @@ const User = () => {
                         </div>
                     </div>
                     </div>
+                    <div className="dataGridTask">
+                        <DataGrid
+                            rows={tasks}
+                            checkboxSelection
+                            // onSelectionModelChange={item => setStudents(item)}
+                            columns={columns}
+                            pageSize={pageSize}
+                            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                            rowsPerPageOptions={[5, 10, 20]}
+                        />
+                </div>
                 </div>
             </div>
         </>

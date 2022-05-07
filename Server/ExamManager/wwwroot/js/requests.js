@@ -33,7 +33,7 @@ let getUserTasks = function (userId, onResponse){
 }
 
 let modifyUser = function (body, onResponse){
-    handleRequest(`/user/${userId}/modify`, "POST", body, onResponse);
+    handleRequest(`/user/modify`, "POST", body, onResponse);
 }
 
 let getUsers = function (body, onResponse){

@@ -1,4 +1,5 @@
 .students-table {
+    align-self: center;
     margin-top: 1em;
     border-spacing: 0;
     max-width: 90%;
@@ -52,6 +53,11 @@
         text-align: center;
     }
 
+.students-table tr{
+    display: grid;
+    grid-template-columns: 3fr 2fr 2fr;
+}
+
 .students-table > tr > td.actions {
     display: flex;
     flex-direction: column;
@@ -76,48 +82,6 @@ td.actions > .action {
         td.actions > .action > a:hover {
             color: rgb(36, 67, 204)
         }
-
-.btn-action, .btn-cancel, .btn-info {
-    padding: .5em 1.2em;
-    margin-right: .5rem;
-    border-radius: 10px;
-    border: 2px solid rgba(0, 0, 0, .4);
-    font-size: 1rem;
-    font-family: var(--font-Raleway);
-    font-weight: bold;
-    text-decoration: none;
-    transition: 200ms;
-}
-
-.btn-action {
-    background-color: rgb(24, 182, 37);
-    color: white;
-}
-
-    .btn-action:hover {
-        cursor: pointer;
-        background-color: rgb(17, 128, 27);
-    }
-
-.btn-cancel {
-    background-color: rgb(182, 24, 24);
-    color: white;
-}
-
-    .btn-cancel:hover {
-        cursor: pointer;
-        background-color: rgb(128, 17, 17);
-    }
-
-.btn-info {
-    background-color: rgb(24, 106, 182);
-    color: white;
-}
-
-    .btn-info:hover {
-        cursor: pointer;
-        background-color: rgb(17, 56, 128);
-    }
 
 .create-student-modal {
     min-width: max(30%, 50ch);

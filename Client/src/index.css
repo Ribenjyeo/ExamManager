@@ -411,6 +411,10 @@ nav .nav-button {
   height: 90%;
 }
 
+.dataGridTask {
+  height: 52vh;
+}
+
 
 
 /* ------ Admin Bar ------ */
@@ -648,6 +652,16 @@ nav .nav-button {
 .userUpdateItem {
   display: flex;
   margin-top: 10px;
+}
+
+.userUpdateItemTask:first-child {
+  display: flex;
+  margin-top: 10px;
+}
+
+.userUpdateItemTask {
+  display: flex;
+  margin-top: 25px;
 }
 
 .userUpateItem>label {

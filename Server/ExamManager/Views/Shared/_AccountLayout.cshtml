@@ -20,7 +20,8 @@
     {
         <link rel="stylesheet" href="~/css/account/tasks.css" />
     }
-    <link rel="stylesheet" href="~/css/fontawesome/css/all.css" />
+    <link rel="stylesheet" href="~/css/fontawesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/css/fontawesome/css/solid.css" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/js.cookie.js"></script>
     <script src="~/js/jwt-decode.js"></script>
@@ -31,18 +32,18 @@
     <div class="nav">
         <div id="user-name" class="nav-title">
             <i class="fa fa-solid fa-user"></i>
-            <a href="@(Routes.HomePage)"></a>
+            <span>@(ViewData["UserName"].ToString())</span>
         </div>
         @if ((bool?)ViewData["IsAdmin"] ?? false)
         {
-            <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )">Студенты</a>
-            <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )">Группы</a>
+            <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-graduate"></i>Студенты</a>
+            <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-group"></i>Группы</a>
         }
         else
         {
-            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )">Задания</a>
+            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-book"></i>Задания</a>
         }
-        <a href="@(Routes.SettingsPage)" class="@(Context.Request.Path.Value.Equals(Routes.SettingsPage) ? "nav-item hl" : "nav-item" )">Настройки</a>
+        <a href="@(Routes.SettingsPage)" class="@(Context.Request.Path.Value.Equals(Routes.SettingsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-gear"></i> Настройки</a>
         <a href="#" id="logout" class="nav-exit">Выйти</a>
     </div>
     <div class="container">
@@ -64,7 +65,14 @@
 }
 @if (Context.Request.Path.Value.Equals(Routes.TaskPage))
 {
-
     <script src=~/js/account/task.js></script>
+}
+@if (Context.Request.Path.Value.Equals(Routes.SettingsPage))
+{
+    <script src=~/js/account/settings.js></script>
+}
+@if (Context.Request.Path.Value.Equals(Routes.TasksPage))
+{
+    <script src=~/js/account/tasks.js></script>
 }
 </html>

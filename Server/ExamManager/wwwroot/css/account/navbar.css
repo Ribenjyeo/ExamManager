@@ -19,7 +19,6 @@ body > .nav{
 
 .nav .nav-title{
     align-self: stretch;
-    font-size: 1.7em;
     font-family: var(--font-Roboto);
     margin-bottom: 20px;
     padding: 15px;
@@ -32,10 +31,11 @@ body > .nav{
     margin-right: .5em;
 }
 
-.nav .nav-title a{
-    text-decoration: none;
-    color: black;
-}
+    .nav .nav-title span {
+        text-decoration: none;
+        font-size: 1.2em;
+        color: black;
+    }
 
 
 /*Navigation items*/
@@ -63,6 +63,12 @@ body > .nav{
 .nav-item.hl {
     cursor: pointer;
     background-color: rgba(0, 0, 0, .4);
+}
+
+.nav-item > i{
+    margin-right: .2em;
+    width: 15%;
+    text-align: center;
 }
 
 .nav > .nav-exit {

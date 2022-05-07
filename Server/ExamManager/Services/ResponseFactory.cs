@@ -173,7 +173,7 @@ public static class ResponseFactory
             users = users.Select(u =>
             new UsersDataResponse.UserView
             {
-                id = u.ObjectID.ToString(),
+                id = u.ObjectID,
                 firstName = u.FirstName,
                 lastName = u.LastName,
                 groupName = groupName ?? u.StudentGroup?.Name

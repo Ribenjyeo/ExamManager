@@ -6,7 +6,7 @@
 |  **GET** */user/{id}*  |  Получить информацию о пользователе по его ID  |  id  |  UserDataResponse  |
 | **GET** */user/{id}/tasks* | Получить информацию о заданиях, которые имеются у пользователя ID | id | TasksDataResponse |
 | **POST** */user/modify* | Изменить данные пользователя | ModifyUserRequest | UserDataResponse |
-| **POST** */users* | Получить список информации о пользователях | GetUsersRequest | UsersDataResponse |
+| **GET** */users* | Получить список информации о пользователях | GetUsersRequest | UsersDataResponse |
 | **POST** */users/create* | Зарегистрировать пользователей | CreateUsersRequest | UsersDataResponse |
 | **POST** */users/delete* | Удалить пользователей | DeleteUsersRequest | Response |
 | **GET** */task/{id}* | Получить информацию о задании по его ID | id | TaskDataResponse |
@@ -15,6 +15,7 @@
 | **POST** */task/modify* | Изменить задание | ModifyTaskRequest | TaskDataResponse |
 | **GET** */group/{id}* | Получить информацию о группе по ее ID | id | GroupDataResponse |
 | **GET** */group/{id}/students* | Получить информацию о студентах, которые состоят в группе ID | id | UsersDataResponse |
+| **GET** */group/{id}/delete* | Удалить группу | id | Response |
 | **POST** */group/create* |  Создать группу студентов  |  CreateGroupRequest  |  GroupDataResponse  |
 | **POST** */group/students/add* | Добавить студентов к группе | AddStudentsRequest | UsersDataResponse |
 | **POST** */group/students/remove* | Удалить студентов из группы | RemoveStudentsRequest | UsersDataResponse |
@@ -297,8 +298,8 @@
     <tr>
     	<td>id</td>
         <td>guid</td>
-        <td>Да</td>
-        <td>ID изменяемого пользователя</td>
+        <td></td>
+        <td>ID пользователя</td>
     </tr>
     <tr>
     	<td>login</td>
