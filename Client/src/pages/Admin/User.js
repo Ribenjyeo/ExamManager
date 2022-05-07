@@ -11,13 +11,15 @@ const User = () => {
     let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
-        firstName : null,
-        lastName : null,
-        role: null,
-        groupId: null,
-        groupName: null,
-        taskCounter: null
+        firstName : '',
+        lastName : '',
+        role: '',
+        groupId: '',
+        groupName: '',
+        taskCounter: ''
     })
+
+    console.log(fromData)
 
    const [firstName, setFirstName] = useState()
    const [lastName, setLastName] = useState()
@@ -32,10 +34,6 @@ const User = () => {
         groupId: '',
         taskCounter: ''
     })
-
-    console.log("edit user ", cookies.editUser)
-    console.log("cookies user", cookies.UserId)
-    console.log("location", window.location.href)
     
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
         timeout: 1000,
@@ -64,8 +62,6 @@ const User = () => {
                 })
             }   
 
-            console.log(fromData)
-
         }
         catch(error) {
           console.log(error)
@@ -79,22 +75,21 @@ const User = () => {
             firstName : firstName,
             lastName : lastName
         })
-        getUserEdit()
+        navigate("/admin/users")
       }
 
       useEffect(() => {
-          getUserEdit()
-          console.log(fromData)
-      }, [])
+        getUserEdit()
+    }, [])
 
-      function handleStatus () {
-          console.log(fromData)
-          if(fromData.role == 0) return "Администратор"
-          else if(fromData.role == 1) {
-              if(fromData.groupName != null) return fromData.groupName
-              else return "Нет группы"
-          }
-      }
+
+    function handleStatus () {
+        if(fromData.role == 0) return "Администратор"
+        else if(fromData.role == 1) {
+            if(fromData.groupName != null) return fromData.groupName
+            else return "Нет группы"
+        }   
+    }
 
     return (
         <>

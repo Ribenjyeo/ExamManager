@@ -6,11 +6,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
-// import axios from 'axios'
 
 const GroupList = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
   let [groupList, setGroupList] = useState()
+  const [pageSize, setPageSize] = useState(10)
 
   const groups = async () => { //запрос на получение пользователей
     const response = await fetch('/groups', {method: 'POST', headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
@@ -20,13 +20,15 @@ const GroupList = () => {
     setGroupList(parse.groups)
   }
 
+  function handleClick (params) { //получение ID изменяемого пользователя
+    setCookies("editGroup", params)
+  }
+
   useEffect(() => {
     groups()
+    removeCookies('editGroup', {path:'/admin/groups'})
+    removeCookies('editGroup', {path:'/admin'})
   }, [])
-
-  // function handleClick (params) { //получение ID изменяемого пользователя
-  //   setCookies("editUser", params)
-  // }
 
   const columns = [
     { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
@@ -40,8 +42,8 @@ const GroupList = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/admin/task/"+params.row.id}>
-              <button className="userListEdit">Изменить</button>
+            <Link to={"/admin/groups/"+params.row.id}>
+              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>
@@ -55,16 +57,20 @@ const GroupList = () => {
             <div className="AdminContainer">
                 <SideBarAdmin/>
                 <div className="others">  
-                <div style={{ height: '100%', width: '100%' }}>
-                  <DataGrid
-                    rows={groupList}
-                    disableSelectionOnClick
-                    columns={columns}
-                    pageSize={30}
-                    rowsPerPageOptions={[4]}
-                    checkboxSelection
-                  />
+                <div className="userTitleContainer">
+                    <h2 className="userTitle">Список групп:</h2>
                 </div>
+                  <div className="dataGrid">
+                    <DataGrid
+                      rows={groupList}
+                      disableSelectionOnClick
+                      columns={columns}
+                      pageSize={pageSize}
+                      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                      rowsPerPageOptions={[10, 25, 50]}
+                      checkboxSelection
+                    />
+                  </div>
                 </div>
             </div>
         </>

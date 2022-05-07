@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 
+
 const UserList = () => {
+  const [pageSize, setPageSize] = useState(10)
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   let [userList, setUserList] = useState({
     id : null,
@@ -38,15 +40,6 @@ const UserList = () => {
     const parse = JSON.parse(stringi)
     setGroupList(parse.groups)
   }
- 
-  useEffect(() => {
-    users()
-    removeCookies('editUser', {path:'/admin/users'})
-    removeCookies('editUser', {path:'/admin'})
-    removeCookies('editUser', {path:'/'})
-    groups()
-  }, [])
-
 
   const handleDelete = async (params) => { //Удаление пользователя
     const deleteUser = {
@@ -66,12 +59,10 @@ const UserList = () => {
   }
 
   const handleAddStudents = async () => { //Добавление пользователей в группу
-    groups()
+    groups() //Получение списка групп
     let check = false
     let currentGroupId = null
-    console.log("Группы со старницы: ", groupName)
     for (let i = 0; i < groupList.length; i++){
-      console.log(groupList[i].name + " == " + groupName.name)
       if(groupList[i].name === groupName.name) {
         check = true
         currentGroupId = groupList[i].id
@@ -80,7 +71,6 @@ const UserList = () => {
 
     if(check) {
       let array = []
-      console.log(students)
       for(let i = 0; i < students.length; i++){
           array.push({id: students[i]})
       }
@@ -92,8 +82,6 @@ const UserList = () => {
         students : array
       }
 
-      console.log(AddStudentsRequest)
-
       const response = fetch('/group/students/add', {
         method: "POST",
         headers: {
@@ -102,15 +90,21 @@ const UserList = () => {
           body: JSON.stringify(AddStudentsRequest)
         })
       users()
+      console.log(studentsList)
     }
-
   }
 
   function handleClick (params) { //получение ID изменяемого пользователя
     setCookies("editUser", params)
   }
 
-
+  useEffect(() => {
+    users()
+    removeCookies('editUser', {path:'/admin/users'})
+    removeCookies('editUser', {path:'/admin'})
+    removeCookies('editUser', {path:'/'})
+    groups()
+  }, [])
   
   const columns = [
     { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
@@ -134,8 +128,6 @@ const UserList = () => {
       }
     }];
 
-    let a = []
-
     return(
         <>
         <AdminBar/>
@@ -145,7 +137,7 @@ const UserList = () => {
                 <div className="userTitleContainer">
                     <h2 className="userTitle">Список пользователей:</h2>
                     <input type="text" className="groupName" placeholder="Название группы" onChange={e => setGroupName({name : e.target.value || null})}/>
-                    <button className="userAddGroupButton" onClick={() => handleAddStudents()}>Добавить в группу</button>
+                    <button className="userAddGroupButton" onClick={(e) => handleAddStudents(e)}>Добавить в группу</button>
                 </div>
                 <div className="dataGrid">
                   <DataGrid
@@ -153,8 +145,9 @@ const UserList = () => {
                     checkboxSelection
                     onSelectionModelChange={item => setStudents(item)}
                     columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[5]}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[10, 25, 50]}
                   />
                 </div>
                 </div>
