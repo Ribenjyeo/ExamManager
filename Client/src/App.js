@@ -9,25 +9,27 @@ import NewUser from "./pages/Admin/NewUser";
 import NewGroup from "./pages/Admin/NewGroup";
 import NewTask from "./pages/Admin/NewTask"
 import Task from "./pages/Admin/Task"
+import { useCookies } from "react-cookie";
 
 const App = () => {
-
+  const [cookies, setCookies, removeCookies] = useCookies(['user']);
   return (
     <div>
       <BrowserRouter>
         <Routes>
           <Route path='/auth' exact element={<Login/>}/>
-          <Route path='/' element={<Home/>}/>        
-          <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>
-          <Route path='/admin/users' element={<UserList/>}/>
-          <Route path='/admin/users/:userId' element={<User/>}/>
-          <Route path='/admin/newUser' element={<NewUser/>}/>
-          <Route path='/admin/newGroup' element={<NewGroup/>}/>
-          <Route path='/admin/newGroup/:userId/students' element={<NewGroup/>}/>
-          <Route path='/admin/:userId/newTask' element={<NewTask/>}/>
-          <Route path='/admin/groups' element={<GroupsList/>}/>
-          <Route path='/admin/groups/:groupId' element={<Group/>}/>
-          <Route path='/admin/tasks/:taskId' element={<Task/>}/>
+          {cookies.userRole == undefined && <Route path='/' element={<Navigate replace to="/auth"/>}/>} 
+          {cookies.userRole != undefined && <Route path='/' element={<Home/>}/>}      
+          {cookies.userRole == 0 && <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>}
+          {cookies.userRole == 0 && <Route path='/admin/users' element={<UserList/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/users/:userId' element={<User/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/newUser' element={<NewUser/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/newGroup' element={<NewGroup/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/newGroup/:userId/students' element={<NewGroup/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/:userId/newTask' element={<NewTask/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/groups' element={<GroupsList/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/groups/:groupId' element={<Group/>}/>}
+          {cookies.userRole == 0 &&<Route path='/admin/tasks/:taskId' element={<Task/>}/>}
         </Routes>
       </BrowserRouter>
     </div>
