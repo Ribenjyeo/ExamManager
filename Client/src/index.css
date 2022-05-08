@@ -235,6 +235,23 @@ nav .nav-button {
   animation: ani 3s forwards;
 }
 
+.error-message-user {
+  padding: 10px 35px 10px 14px;
+    position: fixed;
+    color: #972a3d;
+    background: #f6ddde;
+    border-color: #d4aaac;
+    top: 0px;
+    opacity: 0;
+    width: 100%;
+    z-index: 9999;
+    animation: ani 5s  forwards;
+}
+
+.hidden {
+  display: none;
+}
+
 .error-message:hover{
   animation-play-state: paused;
   -webkit-animation-play-state:paused;
@@ -251,11 +268,6 @@ nav .nav-button {
     opacity: 0;
     visibility: hidden;
   }
-}
-
-@keyframes ane {
-  100% {opacity: 1;}
-  0% {opacity: 0;}
 }
 
 .header  .logo-container {

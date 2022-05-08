@@ -18,8 +18,8 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path='/auth' exact element={<Login/>}/>
-          {cookies.userRole == undefined && <Route path='/' element={<Navigate replace to="/auth"/>}/>} 
-          {cookies.userRole != undefined && <Route path='/' element={<Home/>}/>}      
+          {cookies.AuthToken == undefined && <Route path='/' element={<Navigate replace to="/auth"/>}/>} 
+          {cookies.AuthToken != undefined && <Route path='/' element={<Home/>}/>}      
           {cookies.userRole == 0 && <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>}
           {cookies.userRole == 0 && <Route path='/admin/users' element={<UserList/>}/>}
           {cookies.userRole == 0 &&<Route path='/admin/users/:userId' element={<User/>}/>}
