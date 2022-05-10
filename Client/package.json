@@ -10,6 +10,8 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "constants-browserify": "^1.0.0",
+    "graceful-fs": "^4.2.10",
     "ra-data-json-server": "^4.0.0",
     "react": "^17.0.2",
     "react-admin": "^4.0.1",

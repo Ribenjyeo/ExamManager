@@ -30,10 +30,10 @@ const SideBarAdmin = () => {
                             <GroupIcon className='sidebarIcon'/>
                             <Link to="/admin/groups" style={{ textDecoration: 'none', color: "black" }}>Группы</Link>
                         </li>
-                        <li className="sidebarListItem">
+                        {/* <li className="sidebarListItem">
                             <TaskIcon className='sidebarIcon'/>
                             <Link to="/admin/task" style={{ textDecoration: 'none', color: "black" }}>Задания</Link>
-                        </li>
+                        </li> */}
                     </ul> 
                 </div>
                 <div className="sidebarMenu">

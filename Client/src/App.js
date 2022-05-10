@@ -9,17 +9,20 @@ import NewUser from "./pages/Admin/NewUser";
 import NewGroup from "./pages/Admin/NewGroup";
 import NewTask from "./pages/Admin/NewTask"
 import Task from "./pages/Admin/Task"
+import Rename from "./components/Rename"
 import { useCookies } from "react-cookie";
 
 const App = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
+  console.log(cookies.userRole)
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter> 
         <Routes>
           <Route path='/auth' exact element={<Login/>}/>
           {cookies.AuthToken == undefined && <Route path='/' element={<Navigate replace to="/auth"/>}/>} 
-          {cookies.AuthToken != undefined && <Route path='/' element={<Home/>}/>}      
+          {cookies.AuthToken != undefined && <Route path='/' element={<Home/>}/>}
+           <Route path='/rename' element={<Rename/>}/>      
           {cookies.userRole == 0 && <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>}
           {cookies.userRole == 0 && <Route path='/admin/users' element={<UserList/>}/>}
           {cookies.userRole == 0 &&<Route path='/admin/users/:userId' element={<User/>}/>}

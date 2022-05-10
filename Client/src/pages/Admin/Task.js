@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const Task = () => {
+    let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
         title : '',

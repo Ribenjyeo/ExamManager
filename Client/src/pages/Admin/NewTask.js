@@ -3,9 +3,10 @@ import AdminBar from "../../components/AdminBar";
 import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
-import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 const NewTask = () => {
+    let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [title, setTitle] = useState(null)
     const [description, setDescription] = useState(null)
@@ -34,6 +35,7 @@ const NewTask = () => {
                 body: JSON.stringify(task)
               })
             }
+            navigate('/admin/users')
           }
         catch(error){
           console.log(error)

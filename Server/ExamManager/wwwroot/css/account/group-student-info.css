@@ -1,0 +1,164 @@
+.students-table .student-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+    overflow-y: auto;
+}
+
+.student-info > .name {
+    margin-bottom: 1em;
+}
+
+    .student-info > .name > span {
+        font-family: var(--font-Roboto);
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .student-info > .name #delete-user {
+        color: red;
+        font-size: 1.3em;
+        margin-left: 0.5em;
+    }
+
+        .student-info > .name #delete-user:hover {
+            cursor: pointer;
+            color: rgb(197, 15, 15);
+        }
+
+.student-info .tasks {
+    display: grid;
+    padding: 0 2em;
+    overflow-y: auto;
+    border-top: 1px solid rgba(0, 0, 0, .4);
+    border-bottom: 1px solid rgba(0, 0, 0, .4);
+    height: 100%;
+}
+
+.tasks .task {
+    display: grid;
+    grid-template-rows: calc(var(--symbol-height) * 3) calc( var(--symbol-height) * 16 ) calc(var(--symbol-height) * 3);
+    margin-top: 2em;
+    padding: 20px;
+    width: 80%;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 5px 5px rgb(161, 161, 161);
+}
+
+.task .title {
+    font-size: 25px;
+    font-family: var(--font-Roboto-Slab);
+}
+
+title * {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.task .title::before {
+    content: "\f02d";
+    color: black;
+    font-family: var(--fa-style-family, "Font Awesome 6 Free");
+    font-weight: var(--fa-style, 900);
+    margin-right: 0.5em;
+}
+
+.tasks .tasks-list {
+    position: relative;
+}
+
+.tasks-list > .title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    font-family: var(--font-Raleway);
+    color: rgba(0, 0, 0, .4)
+}
+
+.tasks-list .task[status="failed"] .title::before {
+    color: rgb(199, 2, 2);
+}
+
+.tasks-list .task[status="success"] .title::before {
+    color: rgb(2, 199, 12);
+}
+
+.task .description {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: calc(var(--symbol-height) * 1.5);
+    color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.task .footer {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    font-size: 1.4em;
+}
+
+    .task .footer > .edit {
+        color: rgb(36, 137, 204);
+    }
+
+    .task .footer > .delete {
+        color: rgb(204, 36, 36);
+    }
+
+    .task .footer > .edit,
+    .task .footer > .delete {
+        opacity: .7;
+    }
+
+        .task .footer > .edit:hover,
+        .task .footer > .delete:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+.student-info > .footer {
+    display: flex;
+    flex-direction: row;
+    padding: .7em;
+}
+
+    .student-info > .footer .create-task {
+        background-color: rgb(20, 141, 30);
+        opacity: .7;
+        width: 100%;
+        padding: .3em;
+        border-radius: 10px;
+        font-family: var(--font-Roboto);
+        font-size: 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        transition: background-color 500ms;
+    }
+
+        .student-info > .footer .create-task:hover {
+            opacity: 1;
+        }
+
+    .student-info > .footer i {
+        margin-right: .5rem;
+    }
+
+.student-info .tasks::-webkit-scrollbar {
+    width: 0.7em;
+}
+
+.student-info .tasks::-webkit-scrollbar-thumb {
+    background-color: rgb(134, 138, 134);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 2em;
+}
+
+    .student-info .tasks::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(107, 105, 105);
+    }

@@ -75,14 +75,14 @@ const UserList = () => {
           array.push({id: students[i]})
       }
 
-      console.log("aaray: ", array)
+      // console.log("aaray: ", array)
 
       let AddStudentsRequest = {
         groupId : currentGroupId,
         students : array
       }
 
-      console.log(JSON.stringify(AddStudentsRequest))
+      // console.log(JSON.stringify(AddStudentsRequest))
 
       const response = fetch('/group/students/add', {
         method: "POST",
@@ -92,7 +92,7 @@ const UserList = () => {
           body: JSON.stringify(AddStudentsRequest)
         })
       users()
-      console.log(userList)
+      // console.log(userList)
     }
   }
 
@@ -100,7 +100,7 @@ const UserList = () => {
     setCookies("editUser", params)
   }
 
-  console.log(userList)
+  // console.log(userList)
 
   useEffect(() => {
     users()

@@ -55,6 +55,7 @@ public record TasksDataResponse : Response
         public string description { get; set; }
         public StudentTask.TaskStatus taskStatus { get; set; }
         public Guid studentId { get; set; }
+        public string? url { get; set; }
     }
 }
 

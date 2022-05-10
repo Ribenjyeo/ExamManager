@@ -16,6 +16,8 @@ const Nav = () => {
     groupName: ''
   })
 
+  let userRole = cookies.userRole
+
   const instance = axios.create({  //экземпляр запроса с использованием текущего токена
     baseURL: "/user",
     timeout: 1000,
@@ -32,8 +34,6 @@ const Nav = () => {
       setCookies("firstName", response.data.firstName)
       setCookies("lastName", response.data.lastName)
       setCookies("userRole", response.data.role)
-      console.log(response.data)
-      // console.log(response.data.status)
     
       setFromData({
           id : response.data.id,
@@ -45,6 +45,7 @@ const Nav = () => {
     }
     catch(error) {
       console.log(error)
+      logout()
     }
   }
 
@@ -52,10 +53,6 @@ const Nav = () => {
       getUserName()
     }, [])
 
-
-  // console.log(fromData)
-
-  
   const logout = () => { //выход из аккаунта
     removeCookies("UserId", cookies.id);
     removeCookies("AuthToken", cookies.AuthToken);
@@ -63,6 +60,8 @@ const Nav = () => {
     removeCookies("lastName", cookies.lastName)
     removeCookies("userRole", cookies.userRole)
     navigate('/auth')
+
+    window.location.reload()
   };
 
   return (
@@ -83,9 +82,9 @@ const Nav = () => {
           <li>
             <a href="#">Настройки</a>
           </li>
-          <li>
-            <a href="#">Смена данных</a>
-          </li>
+          {userRole == 1 && <li>
+            <a href="/rename">Смена данных</a>
+          </li>}
         </ul>
       </div>
       <div className="account">

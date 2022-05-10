@@ -230,7 +230,8 @@ public static class ResponseFactory
                     title = t.Title,
                     description = t.Description,
                     studentId = t.StudentID,
-                    taskStatus = t.Status
+                    taskStatus = t.Status,
+                    url = t.Url
                 }
             ).ToArray()
         };

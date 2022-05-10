@@ -3,8 +3,10 @@ import AdminBar from "../../components/AdminBar";
 import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState} from 'react'
 import { useCookies } from "react-cookie";
+import {useNavigate} from 'react-router-dom'
 
 const NewUser = () => {
+  let navigate = useNavigate()
   const [error, setErorr] = useState(false)
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   const [login, setLogin] = useState(null)
@@ -46,7 +48,7 @@ const NewUser = () => {
             body: JSON.stringify(users)
           })
 
-          window.location.reload()
+          navigate('/admin/users')
         }
       }
     catch(error){

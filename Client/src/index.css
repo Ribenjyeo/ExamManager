@@ -125,13 +125,21 @@ nav .nav-button {
   .overlay {
     width: 100vw;
     height: 100vh;
-    position: fixed;
   }
 
   .home {
     margin: 0 auto;
-    max-width: 90em;
+    text-align: left;
+    max-width: 90vw;
     padding-top: 90px;
+  }
+
+  .home >h1 { 
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    
   }
 
   .reminder {
@@ -144,36 +152,10 @@ nav .nav-button {
     font-size: 15pt;
   }
 
-
-
-  .list-preview {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: justify;
-  }
-
   li {
     display: list-item;
     list-style-type: none;
     text-align: -webkit-match-parent;
-  }
-
-  article {
-    display: block;
-  }
-
-  .entry-header {
-    margin-bottom: 0.5em;
-    font-size: 1.3em;
-  }
-
-  .markdown p {
-    display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
   }
 
   .link-container{
@@ -190,24 +172,65 @@ nav .nav-button {
     padding: 0 10px;
 }
 
-.link{
-    width: 20%;
-    height: 100%;
-    line-height: 40px;
-    color: #000;
+.copy-text { 
+  margin-top: 20px;
+  position: relative;
+  width: fit-content;
+  padding: 1px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: flex;
 }
 
-.copy-btn{
-    position: absolute;
-    right: 0;
-    cursor: pointer;
-    background: #186bae;
-    color: rgb(255, 255, 255);
-    border: none;
-    height: 100%;
-    width: 40%;
-    text-transform: capitalize;
-    font-size: 14px;
+.copy-text input.text {
+  padding: 10px;
+  font-size: 14px;
+  color: #555;
+  border: none;
+  outline: none;
+}
+
+.btn-icon {
+  font-size: 15px !important;
+}
+
+.copy-text button {
+  padding: 10px;
+  background: #5784f5;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.copy-text button:active {
+  background: #809ce2;
+}
+
+.copy-text button::before {
+  content: "Скопировано";
+  position: absolute;
+  padding: 5px;
+  top: -45px;
+  right: 0px;
+  background-color: #5c81dc;
+  border-radius: 20px;
+  font-size: 15px;
+  display: none;
+}
+
+.copy-text button::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 15px;
+  width: 10px;
+  height: 10px;
+  background-color: #5c81dc;
+  transform: rotate(45deg);
+  display: none;
 }
 
 
@@ -336,7 +359,7 @@ nav .nav-button {
 }
 
 .modal-box form label {
-  width: 5rem;
+  width: 6rem;
   text-align: right;
   margin-right: 0.5rem;
   display: inline-block;
@@ -348,6 +371,14 @@ nav .nav-button {
 }
 
 .modal-box form input[name="password"] {
+  width: 12rem;
+}
+
+.modal-box form input[name="firstName"] {
+  width: 12rem;
+}
+
+.modal-box form input[name="lastName"] {
   width: 12rem;
 }
 
@@ -441,7 +472,18 @@ nav .nav-button {
 }
 
 .AdminBarIconsContainer {
+  display: flex;
   margin-right: 20px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.AdminBarIconsContainer>p {
+  margin-right: 10px;
+}
+
+.AdminBarIconsContainer:hover {
+  color: red
 }
 
 .AdminBarWrapper {
