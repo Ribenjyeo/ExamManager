@@ -4,12 +4,13 @@ using ExamManager.Mapping;
 using ExamManager.Middleware;
 using ExamManager.Services;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 var builder = WebApplication.CreateBuilder(args);
 var configManager = builder.Configuration;
 
 // Add services to the container.
-
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -39,6 +40,7 @@ builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<ISecurityService, SecurityService>();
 builder.Services.AddTransient<IStudentTaskService, StudentTaskService>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
+builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<SignInManager>((serviceProvider) => new SignInManager(serviceProvider));
 
 //builder.Services.AddClaimsAuthentication();

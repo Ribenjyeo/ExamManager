@@ -6,22 +6,14 @@
         tasksList.empty();
 
         for (let task of tasks) {
-            let taskTitleElement = $(`<div class="title"><a href="/pages/task?id=${task.id}&student=${userId}">${task.title}</a><div class="description">${task.description}</div></div>`);
-            let taskStatusElement = $(`<div class="status"></div>`);
+            let taskElement = $(`<div class="task" status="${task.taskStatus === 0 ? 'failed' : 'success'}"></div>`);
+            let taskTitle = $(`<div class="title">${task.title}</div>`);
+            let taskDescription = $(`<div class="description">${task.description.replace(/(?:\r\n|\r|\n)/g, '<br>')}</div>`);
+            let taskFooter = $(`<div class="footer"><a href="/pages/task?id=${task.id}&student=${userId}" class="btn-info">Открыть</a></div>`);
 
-            if (task.taskStatus == 0) {
-                let taskStatusIcon = $('<i class="fa fa-solid fa-face-frown"></i>');
-                taskStatusElement.append(taskStatusIcon);
-            }
-            else {
-                let taskStatusIcon = $('<i class="fa fa-solid fa-face-smile"></i>');
-                taskStatusElement.append(taskStatusIcon);
-            }
-
-            let taskElement = $('<div class="task"></div>');
-
-            taskElement.append(taskTitleElement);
-            taskElement.append(taskStatusElement);
+            taskElement.append(taskTitle);
+            taskElement.append(taskDescription);
+            taskElement.append(taskFooter);
 
             tasksList.append(taskElement);
         }

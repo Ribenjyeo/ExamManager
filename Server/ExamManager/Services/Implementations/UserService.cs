@@ -1,8 +1,10 @@
-﻿using ExamManager.Extensions;
+﻿using ExamManager.DAO;
+using ExamManager.Extensions;
 using ExamManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace ExamManager.Services;
@@ -128,17 +130,26 @@ public class UserService : IUserService
     private void CopyFields(User source, User target)
     {
         var userType = typeof(User);
-        foreach(var property in userType.GetProperties())
+        foreach (var property in userType.GetProperties())
         {
             property.SetValue(target, property.GetValue(source));
         }
     }
 
-    public async Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate, bool includeGroup = false, bool includeTasks = false)
+    public async Task<IEnumerable<User>> GetUsers(UserOptions options, bool includeGroup = false, bool includeTasks = false)
     {
         var UserSet = _dbContext.Set<User>();
 
-        IQueryable<User> request = UserSet.AsQueryable();
+        var query = $"SELECT * FROM `Users`";
+        var conditions = GetQueryConditions(options);
+        if (!string.IsNullOrEmpty(conditions))
+        {
+            query = query + " " + conditions;
+        }
+
+        var userIds = await UserSet.FromSqlRaw(query).Select(user => user.ObjectID).ToListAsync();
+
+        IQueryable<User> request = UserSet.AsNoTracking().AsQueryable();
         if (includeGroup)
         {
             request = request.Include(nameof(User.StudentGroup));
@@ -148,7 +159,9 @@ public class UserService : IUserService
             request = request.Include(nameof(User.Tasks));
         }
 
-        return request.Where(predicate);
+        var result = await request.Where(user => userIds.Contains(user.ObjectID)).ToListAsync();
+
+        return result;
     }
 
     public async Task<User> RegisterUser(User user)
@@ -159,16 +172,6 @@ public class UserService : IUserService
         await _dbContext.SaveChangesAsync();
 
         return user;
-    }
-
-    public async Task<List<User>> RegisterUsers(List<User> users)
-    {
-        var UserSet = _dbContext.Set<User>();
-        await UserSet.AddRangeAsync(users);
-
-        await _dbContext.SaveChangesAsync();
-
-        return users;
     }
 
     public async Task DeleteUser(Guid userId)
@@ -203,5 +206,110 @@ public class UserService : IUserService
         var users = UserSet.AsQueryable().Where(user => userIds.Contains(user.ObjectID));
 
         return users.AsEnumerable();
+    }
+
+    private string GetQueryConditions(UserOptions options)
+    {
+        var conditions = new List<string>(5);
+
+        if (options.Name is not null)
+        {
+            var nameParts = options.Name.Split(" ").Select(part => $"(LOWER(`FirstName`) like \"%{part.ToLower()}%\" OR LOWER(`LastName`) like \"%{part.ToLower()}%\")");
+            conditions.Add(String.Join(" AND ", nameParts));
+        }
+        else
+        {
+            if (options.FirstName is not null)
+            {
+                conditions.Add($"LOWER(`FirstName`) like \"%{options.FirstName.ToLower()}%\"");
+            }
+            if (options.LastName is not null)
+            {
+                conditions.Add($"LOWER(`LastName`) like \"%{options.LastName.ToLower()}%\"");
+            }
+        }
+        if (options.Role is not null)
+        {
+            conditions.Add($"`Role` = {(int)options.Role}");
+        }
+        if (options.WithoutGroups is not null)
+        {
+            conditions.Add($"`{nameof(User.StudentGroupID)}` IS NULL");
+        }
+        else
+        {
+            if (options.GroupIds is not null)
+            {
+                conditions.Add($"`{nameof(User.StudentGroupID)}` IN (\"{string.Join("\", \"", options.GroupIds)}\")");
+            }
+            if (options.ExcludeGroupIds is not null)
+            {
+                conditions.Add($"(`{nameof(User.StudentGroupID)}` NOT IN (\"{string.Join("\", \"", options.ExcludeGroupIds)}\") OR `{nameof(User.StudentGroupID)}` IS NULL)");
+            }
+        }
+        if (options.TaskStatus is not null)
+        {
+            conditions.Add($"EXISTS (SELECT 1 FROM `StudentTasks` AS t WHERE t.{nameof(StudentTask.StudentID)} = ObjectID AND t.{nameof(StudentTask.Status)} = {(int)options.TaskStatus})");
+        }
+
+        if (conditions.Count > 0)
+        {
+            return $"WHERE {string.Join(" AND ", conditions)}";
+        }
+
+        return string.Empty;
+    }
+
+    public async Task<ValidationResult> ValidateUser(User user)
+    {
+        var validationResult = new ValidationResult();
+        var UserSet = _dbContext.Set<User>();
+
+        if (await UserSet.AnyAsync(u => u.Login == user.Login))
+        {
+            validationResult.AddMessage("login", "Пользователь с таким логином уже существует");
+        }
+        if (string.IsNullOrEmpty(user.FirstName))
+        {
+            validationResult.AddMessage("firstname", "Введите имя");
+        }
+        if (string.IsNullOrEmpty(user.LastName))
+        {
+            validationResult.AddMessage("firstname", "Введите фамилию");
+        }
+
+        return validationResult;
+    }
+
+    public async Task RegisterUsers(IEnumerable<User> users)
+    {
+        var UserSet = _dbContext.Set<User>();
+        var existsUserLogins = new List<string>();
+
+        foreach (var user in users)
+        {
+            if (await UserSet.AnyAsync(u => u.Login == user.Login))
+            {
+                existsUserLogins.Add(user.Login);
+            }
+        }
+
+        if (existsUserLogins.Count > 0)
+        {
+            throw new InvalidDataException($"Пользователи с логинами {string.Join(", ", existsUserLogins)} уже существуют");
+        }
+
+        var transaction = await _dbContext.Database.BeginTransactionAsync();        
+        try
+        {
+            await UserSet.AddRangeAsync(users);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        await transaction.CommitAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

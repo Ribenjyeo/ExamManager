@@ -5,12 +5,12 @@ const closeModal = document.querySelector("#close-button");
 const createButton = document.querySelector("#create-group-button");
 
 openModal.addEventListener("click", () => {
-    modal.showModal();
-    
+    modal.showModal();    
 });
 
 closeModal.addEventListener("click", () => {
     modal.close();
+    $("#create-group-name").val("");
 });
 
 createButton.addEventListener("click", () => {
@@ -18,7 +18,6 @@ createButton.addEventListener("click", () => {
         window.location.reload();
     };
 
-    console.log("Имя новой группы " + $("#create-group-name").val());
     let data = JSON.stringify({
         name: $("#create-group-name").val()
     });
@@ -56,38 +55,43 @@ function updateGroups(e) {
 
 // Заполнение таблицы групп
 function fillGroups(data) {
-    let oldTableRows = $(".group");
-    if (oldTableRows) {
-        oldTableRows.remove();
+    let oldTable = $(".groups-table .body");
+    if (oldTable) {
+        oldTable.empty();
     }
 
-    let groupsTable = $(".groups-table");
+    let groupsTableBody = $(".groups-table>.body");
 
+    let index = 1;
     for (group of data.groups) {
-        let tableRow = $(`<tr class="group" value="${group.id}">` +
-                            `<td class="group-name">${group.name}</td>` +
-                            `<td class="description">Количество: ${group.studentsCount}</td >` +
-                            '<td class="actions"> ' +
-                                '<div class="action"> ' +
-                                    `<a href="/pages/group/${group.id}">Просмотр</a>` +
-                                '</div>' +
-                                '<div class="action">' +
-                                    '<a href="#">Удалить</a> ' +
-                                '</div>' +
-                            '</td>' +
-                        '</tr> ');
-        groupsTable.append(tableRow);
+
+        let tableRow = $(`<div class="row" group="${group.id}">` +
+                            `<div>${index}</div>` +
+                            `<div class="group-name">${group.name}</div>` +
+                            `<div class="description">Количество: ${group.studentsCount}</div >` +
+                         '</div> ');
+
+
+        let actionsColumn = $('<div class="actions"> ' +
+                                `<a class="edit" href="/pages/group/${group.id}">` +
+                                    '<i class="fa fa-solid fa-eye"></i>' +
+                                '</a>' +
+                             '</div>');
+
+        let deleteButton = $(`<a class="delete">` +
+                                 '<i class="fa fa-solid fa-trash"></i>' +
+                             '</a>');
+
+        deleteButton.on("click", function (e) {
+            deleteGroup(group.id, function (reponse) {
+                window.location.reload();
+            });
+        });
+
+        actionsColumn.append(deleteButton);
+        tableRow.append(actionsColumn);
+
+        groupsTableBody.append(tableRow);
+        index += 1;
     } 
-}
-
-// Создание группы
-const createGroupButton = $("#create-group-btn");
-createGroupButton.on("click", createGroup);
-
-function createNewGroup(e) {
-    let groupName = $("#group-name");
-
-    // Создать группу
-
-    groupName.value = "";
 }

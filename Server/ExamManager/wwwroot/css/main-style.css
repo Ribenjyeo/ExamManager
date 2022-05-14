@@ -23,15 +23,15 @@ span.danger {
 }
 
 span.field-validation-error {
-    margin-top: .5em;
-    align-self: start;
+    margin-top: .5rem;
     margin-left: 8px;
+    align-self: start;
     color: red;
     font-weight: bold;
 }
 
 input.input-validation-error {
-    outline: 1px solid red;
+    border: 2px solid red;
 }
 
 .auth-form {

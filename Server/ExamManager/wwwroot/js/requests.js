@@ -44,6 +44,10 @@ let createUsers = function (body, onResponse){
     handleRequest(`/users/create`, "POST", body, onResponse);
 }
 
+let createUsersFromFile = function (body, onResponse) {
+    handleRequest(`/users/create-from-file`, "POST", body, onResponse);
+}
+
 let deleteUsers = function (body, onResponse){
     handleRequest(`/users/delete`, "POST", body, onResponse);
 }
@@ -56,12 +60,20 @@ let createTask = function (body, onResponse){
     handleRequest(`/task/create`, "POST", body, onResponse);
 }
 
+let deleteTask = function (body, onResponse){
+    handleRequest(`/task/delete`, "POST", body, onResponse);
+}
+
 let modifyTask = function (body, onResponse){
     handleRequest(`/task/modify`, "POST", body, onResponse);
 }
 
 let getGroup = function (groupId, onResponse){
     handleRequest(`/group/${groupId}`, "GET", null, onResponse);
+}
+
+let deleteGroup = function (groupId, onResponse) {
+    handleRequest(`/group/${groupId}/delete`, "GET", null, onResponse);
 }
 
 let getGroupStudents = function (groupId, onResponse){
@@ -72,7 +84,7 @@ let createGroup = function (body, onResponse){
     handleRequest(`/group/create`, "POST", body, onResponse);
 }
 
-let addGroupStudents = function (body, onResponse){
+let addGroupStudents = function (body, onResponse) {
     handleRequest(`/group/students/add`, "POST", body, onResponse);
 }
 

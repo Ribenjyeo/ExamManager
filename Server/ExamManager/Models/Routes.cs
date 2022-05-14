@@ -37,10 +37,11 @@ public static class Routes
 
     #endregion
 
-    #region STUDENTS
+    #region USERS
 
     public const string GetUsers  = "/users";
     public const string CreateUsers  = "/users/create";
+    public const string CreateUsersFromFile  = "/users/create-from-file";
     public const string DeleteUsers  = "/users/delete";
 
     #endregion

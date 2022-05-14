@@ -21,8 +21,6 @@ const Home = () => {
     try {
         const response = await instance.get(`/user/${cookies.UserId}/tasks`)
         setTasks(response.data.tasks) 
-
-      
     } 
     catch(error) {
       console.log(error)

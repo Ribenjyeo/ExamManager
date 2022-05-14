@@ -8,19 +8,42 @@
 }
 
 <link rel="stylesheet" href="~/css/account/group.css" />
+<link rel="stylesheet" href="~/css/account/group-student-info.css" />
 <script src="~/js/account/group.js"></script>
 <div class="page-header">@Model.Group.Name</div>
 <div class="student-search">
-    <input type="text" class="student-name" placeholder="Поиск" />
+    <input type="text" class="student-name" id="search-student-name" placeholder="Поиск" />
 </div>
 <div class="students-table" value="@(Model.Group.ObjectID)">
     <div class="students-list">
         <div id="students" class="students">
+            <div class="loader"></div>
         </div>
         <div class="footer">
-            <input type="button" class="btn-action" value="Добавить">
+            <input id="open-modal" type="button" class="btn-action" value="Добавить">
         </div>
     </div>
     <div id="student-info" class="student-info">
     </div>
 </div>
+<dialog class="add-student-modal" id="add-student-modal">
+    <div class="container">
+        <div class="page-header">
+            Добавить студентов
+            <input id="search-add-students" class="search-student" type="text" placeholder="Поиск" autocomplete="off" />
+        </div>
+        <div class="students-list">
+            <div class="loader"></div>
+        </div>
+        <div class="footer">
+            <input type="button"
+                   class="btn-action"
+                   id="add-students-button"
+                   value="Добавить" />
+            <input type="button"
+                   class="btn-cancel"
+                   id="close-modal"
+                   value="Отмена" />
+        </div>
+    </div>
+</dialog>

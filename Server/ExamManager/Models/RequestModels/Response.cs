@@ -42,6 +42,13 @@ public record UsersDataResponse : Response
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string? groupName { get; set; }
+        public TaskView[] tasks { get; set; }
+    }
+
+    public struct TaskView
+    {
+        public string title { get; set; }
+        public StudentTask.TaskStatus status { get; set; }
     }
 }
 

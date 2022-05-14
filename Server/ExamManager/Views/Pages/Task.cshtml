@@ -20,7 +20,11 @@
     <div class="description">
         @if (Model.User.Role == UserRole.STUDENT)
         {
-            @Model.Task.Description
+            @foreach(var descriptionPart in Model.Task.Description.Split("\n"))
+            {
+                @descriptionPart
+                <br/>
+            }
         }
         else
         {
@@ -30,6 +34,7 @@
     <div class="footer">
         @if (Model.User.Role == UserRole.STUDENT)
         {
+
             <a href="@Model.Task.Url" type="button" class="btn-info">Перейти</a>
         }
         else

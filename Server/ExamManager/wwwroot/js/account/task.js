@@ -55,7 +55,7 @@ let saveTask = function () {
 
 $(document).ready(function () {
     const saveButton = $("#save-button");
-
+    console.log(taskType);
     if (taskType === "new") {
         saveButton.on("click", createNewTask);
     }

@@ -170,7 +170,7 @@ public class GroupService : IGroupService
         // Проверяем и добавляем пользователей
         foreach (var studentId in studentIds)
         {
-            var student = UserSet.FirstOrDefault(u => u.ObjectID == studentId);
+            var student = UserSet.Include(nameof(User.StudentGroup)).FirstOrDefault(u => u.ObjectID == studentId);
             (ValidationResult Result, User Student) studentValidation = (ValidateStudent(student), student);
 
             if (studentValidation.Result.HasErrors)
@@ -200,6 +200,13 @@ public class GroupService : IGroupService
         if (student is not { Role: UserRole.STUDENT })
         {
             result.AddCommonMessage("Пользователь не является студентом");
+            return result;
+        }
+
+        // Прооеряем что пользователь не состоит в другой группе
+        if (student.StudentGroup is not null)
+        {
+            result.AddCommonMessage($"Пользователь уже является участником группы {student.StudentGroup.Name}");
             return result;
         }
 

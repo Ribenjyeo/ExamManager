@@ -12,6 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/account/admin.css" />
     <link rel="stylesheet" href="~/css/account/navbar.css" />
+    <link rel="stylesheet" href="~/css/loader.css" />
+    <link rel="stylesheet" href="~/css/main-style.css" />
+    <link rel="stylesheet" href="~/css/input-file.css" />
+    <link rel="stylesheet" href="~/utils/notifications/css/simple-notify.min.css" />
     @if (Context.Request.Path.Value.Equals(Routes.StudentsPage))
     {
         <link rel="stylesheet" href="~/css/account/students.css" />
@@ -51,19 +55,22 @@
     </div>
 </body>
 <script src="~/js/account/index.js"></script>
+<script src="~/utils/notifications/ts/simple-notify.min.js"></script>
 @if (Context.Request.Path.Value.Equals(Routes.GroupsPage))
 {
+    <script src="~/js/pagination.js"></script>
     <script src="~/js/account/groups.js"></script>
 }
 @if (Context.Request.Path.Value.Equals(Routes.StudentsPage))
 {
+    <script src="~/js/pagination.js"></script>
     <script src="~/js/account/students.js"></script>
 }
 @if (Context.Request.Path.Value.Equals(Routes.GroupPage))
 {
     <script src="~/js/account/group.js"></script>
 }
-@if (Context.Request.Path.Value.Equals(Routes.TaskPage))
+@if (Context.Request.Path.Value.Equals(Routes.TaskPage) || Context.Request.Path.Value.Equals(Routes.NewTaskPage))
 {
     <script src=~/js/account/task.js></script>
 }

@@ -1,25 +1,20 @@
-﻿// Открытие/закрытие модального окна создания группы
-const modal = document.querySelector("#create-student-modal");
-const openModal = document.querySelector("#open-button");
-const closeModal = document.querySelector("#close-button");
-const createButton = document.querySelector("#create-student-button");
-const reloadButton = document.querySelector("#reload-button");
+﻿// Выбор всех уникальных элементов на странице
+let modal = document.querySelector("#create-student-modal");
 
-// Поиск групп (выпадающий список)
+// Поиск студента (выпадающий список)
 const searchInput = $("#student-name");
 searchInput.on("input", updateStudents);
 searchInput.val("").trigger("input");
 
-// При вводе названия группы
+// При вводе имени студента
 function updateStudents(e) {
     let studentName = e.target.value;
 
     let data = {
-        firstName: studentName,
-        lastName: studentName
+        name: studentName
     };
 
-    // Если строка пустая, то возвращаем все группы
+    // Если строка пустая, то возвращаем всех студентов
     if (studentName === "") {
         data.firstName = null;
         data.lastName = null;
@@ -32,32 +27,49 @@ function updateStudents(e) {
     getUsers(JSON.stringify(data), onResponse);
 }
 
-// Заполнение таблицы групп
+// Заполнение таблицы студентов
 function fillStudents(data) {
-    let oldTableRows = $(".student");
-    if (oldTableRows) {
-        oldTableRows.remove();
+    let oldTable = $(".students-table>.body");
+    if (oldTable) {
+        oldTable.empty();
     }
 
-    let studentsTable = $(".students-table");
+    let studentsTableBody = $(".students-table>.body");
 
+    let index = 1;
     for (user of data.users) {
+
         if (decoded["Claim.Key.Id"] == user.id) {
             continue;
         }
-        let tableRow = $(`<tr class="student" value="${user.id}">` +
-            `<td class="student-name">${user.lastName} ${user.firstName}</td>` +
-            `<td class="description">${user.groupName == null ? '' : user.groupName}</td >` +
-            '<td class="actions"> ' +
-            '<div class="action"> ' +
-            `<a href="/pages/student/${user.id}">Просмотр</a>` +
-            '</div>' +
-            '<div class="action">' +
-            `<a href="#" onclick="deleteUser('${user.id}')" >Удалить</a>` +
-            '</div>' +
-            '</td>' +
-            '</tr> ');
-        studentsTable.append(tableRow);
+
+        let tableRow = $(`<div class="row" student="${user.id}">` +
+            `<div class="number">${index}</div>` +
+            `<div class="student-name">${user.lastName} ${user.firstName}</div>` +
+            `<div class="description">${user.groupName == null ? "-" : user.groupName}</div >` +
+            `<div class="description">${user.tasks.length}</div >` +
+            '</div> ');
+
+
+        let actionsColumn = $(`<div class="actions"> 
+                               </div>`);
+
+        let deleteButton = $(`<a class="delete">` +
+            '<i class="fa fa-solid fa-trash"></i>' +
+            '</a>');
+
+        deleteButton.on("click", function (e) {
+            let id = $(this).closest(".row").attr("student");
+            deleteUser(id, function (reponse) {
+                window.location.reload();
+            });
+        });
+
+        actionsColumn.append(deleteButton);
+        tableRow.append(actionsColumn);
+
+        studentsTableBody.append(tableRow);
+        index += 1;
     }
 }
 
@@ -84,6 +96,8 @@ let createNewUser = function () {
     let lastName = $("#lastname").val();
     let login = $("#login").val();
     let password = $("#password").val();
+
+    reloadInputs();
 
     let errors = {};
     if (firstName === "") {
@@ -118,10 +132,153 @@ let createNewUser = function () {
     }
 
     let onResponse = function (response) {
-        window.location.reload();
+        let responseText = JSON.parse(response.responseText);
+
+        if (responseText.type === "BadResponse") {
+            handleErrors(responseText.errors);
+        }
+        else {
+            window.location.reload();
+        }
     }
 
     createUsers(JSON.stringify(data), onResponse);
+}
+
+let importFile = function (e) {
+    var input = document.getElementById(inputId);
+    var files = input.files;
+    var formData = new FormData();
+
+    for (var i = 0; i != files.length; i++) {
+        formData.append("files", files[i]);
+    }
+}
+
+let showCreateUser = function () {
+    let modalContainer = $('.create-student-modal > .container');
+
+    modalContainer.empty();
+    modalContainer.append(
+        `<div class="header">Новый студент</div>
+            <input type="text" class="modal-input" id="firstname" placeholder="Имя" autocomplete="off" />
+            <input type="text" class="modal-input" id="lastname" placeholder="Фамилия" autocomplete="off" />
+            <input type="text" class="modal-input" id="login" placeholder="Логин" autocomplete="off" />
+            <input type="password" class="modal-input" id="password" placeholder="Пароль" />
+            <div class="footer">
+                <input id="create-student-button" type="button" class="btn-action" value="Добавить" />
+                <input type="button"
+                    class="btn-cancel"
+                    id="close-button"
+                    value="Отмена" />
+        </div>`);
+}
+
+let reloadModal = function () {
+    let headerContainer = $(`<div class="header">Добавить студентов</div>
+    <div class="container">
+        <input type="button" id="new-user" class="btn-info" value="Новый студент" />
+        <input type="file" name="file" id="import" class="input-file" />
+        <label for="import" class="input-file">
+            <i class="icon fa fa-check"></i>
+            <span class="js-fileName">Загрузить файл</span>
+        </label>
+    </div>
+    <div class="footer">
+        <input type="button" id="close-button" class="btn-cancel" value="Закрыть">
+    </div>`);
+
+    modalElement = $(".create-student-modal");
+    modalElement.empty();
+    modalElement.append(headerContainer);
+
+    $("#close-button").on("click", () => {
+        modal.close();
+        reloadModal();
+    });
+
+    $("#new-user").on("click", showNewUser);
+
+    $("#import").on('change', function (e) {
+        let input = document.getElementById('import');
+        let files = input.files;
+
+        if (files.length > 0) {
+
+            // Добавить перечисление файлов
+            fillFiles(files);
+
+            // Добавить кнопку создания студентов
+            addCreateUsersButton();
+        }
+        else {
+            let createUsers = $(".create-student-modal .footer #create-users");
+            createUsers.remove();
+        }
+    });
+}
+
+// Показать окно с созданием нового пользователя
+let showNewUser = function () {
+    let headerContainer = $(`<div class="header">Новый студент</div>
+      <div class="container-width">
+        <input
+          type="text"
+          class="modal-input"
+          id="firstname"
+          placeholder="Имя"
+          autocomplete="off"
+        />
+        <input
+          type="text"
+          class="modal-input"
+          id="lastname"
+          placeholder="Фамилия"
+          autocomplete="off"
+        />
+        <input type="text" class="modal-input" id="login" placeholder="Логин" autocomplete="off" />
+        <input
+          type="text"
+          class="modal-input"
+          id="password"
+          placeholder="Пароль"
+        />
+      </div>
+      <div class="footer">
+        <input type="button" id="create-user" class="btn-action" value="Добавить" />
+        <input
+          type="button"
+          class="btn-cancel"
+          id="close-button"
+          value="Отмена"
+        />
+      </div>`);
+
+    let modalElement = $(".create-student-modal");
+    modalElement.empty();
+    modalElement.append(headerContainer);
+
+    $("#create-user").on("click", createNewUser);
+    $("#close-button").on("click", reloadModal);
+}
+
+let reloadInputs = function () {
+    $("#firstname").removeClass("input-validation-error");
+    $("#lastname").removeClass("input-validation-error");
+    $("#login").removeClass("input-validation-error");
+    $("#password").removeClass("input-validation-error");
+
+    $("#firstname+.field-validation-error").remove();
+    $("#lastname+.field-validation-error").remove();
+    $("#login+.field-validation-error").remove();
+    $("#password+.field-validation-error").remove();
+}
+
+let emptyInput = function () {
+    $("#firstname").val('');
+    $("#lastname").val('');
+    $("#login").val('');
+    $("#password").val('');
 }
 
 let handleErrors = function (errors) {
@@ -139,16 +296,44 @@ let handleErrors = function (errors) {
     }
 }
 
-openModal.addEventListener("click", () => {
+let createNotifications = function () {
+    new Notify({
+        status: 'error',
+        title: 'Ошибка',
+        text: '',
+        effect: 'fade',
+        speed: 1,
+        customClass: '',
+        customIcon: '',
+        showIcon: true,
+        showCloseButton: true,
+        autoclose: true,
+        autotimeout: 1,
+        gap: 20,
+        distance: 20,
+        type: 1,
+        position: 'right bottom',
+        customWrapper: '',
+    });
+    let notifications = $(".notifications-container");
+    notifications.remove();
+    $(".create-student-modal").append(notifications);
+}
+
+
+$("#open-button").on("click", () => {
     modal.showModal();
-
+    $("#new-user").on("click", showNewUser);
+    createNotifications();
 });
 
-closeModal.addEventListener("click", () => {
+$("#close-button").on("click", () => {
     modal.close();
+    reloadModal();
+    $(".notifications-container").remove();
 });
 
-reloadButton.addEventListener("click", () => {
+$("#reload-button").on("click", () => {
     let value = $("#student-name").val();
     updateStudents(
         {
@@ -158,8 +343,106 @@ reloadButton.addEventListener("click", () => {
         });
 });
 
-createButton.addEventListener("click", createNewUser);
+let fillFiles = function (files) {
+    let input = document.getElementById('import');
+    let modalContainer = $(".create-student-modal .container");
+    $(".create-student-modal .container .file").remove();
 
+    for (var i = 0; i != files.length; i++) {
+        console.log(files[i]);
+        let file = $(`<div class="file">
+                            <span class="file-name">${files[i].name}</span>                            
+                          </div>`);
+        let deleteFile = $(`<a href="#" class="delete-file">
+                                    <i class="fa fa-solid fa-xmark"></i>
+                                </a>`);
+        deleteFile.on('click', () => {
+            input.value = "";
+            fillFiles([]);
+            addCreateUsersButton();
+        });
+
+        file.append(deleteFile);
+        modalContainer.append(file);
+    }
+}
+
+let addCreateUsersButton = function () {
+    let modalFooter = $(".create-student-modal .footer");
+    let input = document.getElementById('import');
+    let files = input.files;
+    $(".create-student-modal .footer #create-users").remove();
+
+    if (files.length == 0) {
+        return;
+    }
+
+    let createUsersButton = $(`<input type="button" id="create-users" class="btn-action" value="Добавить"/>`);
+
+    createUsersButton.on('click', () => {
+
+        let formData = new FormData();
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+
+        $.ajax(
+            {
+                url: "/users/create-from-file",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+
+                    if (data.type === "UsersDataResponse") {
+                        window.location.reload();
+                    }
+                    else if (data.type === "ExceptionResponse") {
+                        new Notify({
+                            status: 'error',
+                            title: 'Ошибка',
+                            text: data.message,
+                            effect: 'fade',
+                            speed: 1000,
+                            customClass: '',
+                            customIcon: '',
+                            showIcon: true,
+                            showCloseButton: true,
+                            autoclose: true,
+                            autotimeout: 5000,
+                            gap: 20,
+                            distance: 20,
+                            type: 1,
+                            position: 'right bottom',
+                            customWrapper: '',
+                        });
+                    }
+                }
+            }
+        );
+    });
+    modalFooter.append(createUsersButton);
+}
+
+$("#import").on('change', function (e) {
+    let input = document.getElementById('import');
+    let files = input.files;
+
+    if (files.length > 0) {
+
+        // Добавить перечисление файлов
+        fillFiles(files);
+
+        // Добавить кнопку создания студентов
+        addCreateUsersButton();
+    }
+    else {
+        let createUsers = $(".create-student-modal .footer #create-users");
+        createUsers.remove();
+        fillFiles([]);
+    }
+});
 
 updateStudents(
     {

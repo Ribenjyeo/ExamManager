@@ -1,23 +1,30 @@
 body .tasks {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items: start;
     height: 100%;
+    overflow-y: auto;
+    position: relative;
 }
 
+    body .tasks .loader {
+        position: absolute;
+        top: calc(50% - 50px);
+        left: calc(50% - 50px);
+    }
+
 .tasks-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    --symbol-height: 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
     .tasks-list .task {
         display: grid;
-        grid-template-columns: 3fr 1fr;
+        grid-template-rows: calc(var(--symbol-height) * 3) calc(var(--symbol-height) * 16) calc(var(--symbol-height) * 3);
+        margin-top: 2em;
         padding: 20px;
         width: 80%;
         border: 1px solid rgba(0, 0, 0, .4);
+        box-shadow: .5em .5em .5em .5em rgba(0, 0, 0, .4);
     }
 
 .task .title {
@@ -31,38 +38,37 @@ title * {
     width: 100%;
 }
 
-.task .title a {
-    text-decoration: none;
+.task .title::before {
+    content: "\f02d";
     color: black;
+    font-family: var(--fa-style-family, "Font Awesome 6 Free");
+    font-weight: var(--fa-style, 900);
+    margin-right: .5em;
 }
 
-    .task .title a::before {
-        content: "\f02d";
-        color: black;
-        font-family: var(--fa-style-family, "Font Awesome 6 Free");
-        font-weight: var(--fa-style, 900);
-        margin-right: .5em;
-    }
+.tasks-list .task[status="failed"] .title::before {
+    color: rgb(199, 2, 2);
+}
 
-    .task .title a:hover {
-        color: rgb(24, 0, 163);
-    }
+.tasks-list .task[status="success"] .title::before {
+    color: rgb(2, 199, 12);
+}
 
-.task .title .description {
-    margin-top: 1%;
-    max-height: 2.8rem;
-    font-size: 15px;
+.task .description {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: calc(var(--symbol-height) * 1.6);
     color: rgba(0, 0, 0, .5);
     overflow: hidden;
 }
 
-.task > .status{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.task .footer {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, .3);
 }
 
-.fa-face-frown, .fa-face-smile{
+.fa-face-frown, .fa-face-smile {
     font-size: 2.5em;
 }
 
@@ -72,4 +78,18 @@ title * {
 
 .fa-face-smile {
     color: rgb(23, 159, 22);
+}
+
+@media(max-width: 1500px) {
+
+    .tasks-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width: 1000px) {
+
+    .tasks-list {
+        grid-template-columns: 1fr;
+    }
 }

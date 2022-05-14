@@ -1,9 +1,16 @@
+:root {
+    --table-border: 1px solid rgba(0, 0, 0, 0.2);
+    --row-height: 1rem;
+    --table-height: 40rem;
+}
+
 .students-table {
     align-self: center;
     margin-top: 1em;
     border-spacing: 0;
-    max-width: 90%;
-    min-width: min(100%, 1200px);
+    max-width: 80%;
+    min-width: min(70%, 1200px);
+    text-align: start;
 }
 
     .students-table .student-nav {
@@ -17,71 +24,95 @@
     font-size: 20px;
     font-family: var(--font-Raleway);
     padding: 0.5rem;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
     border: 1px solid rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
 
-.students-table th.header {
-    font-family: var(--font-Raleway);
-    overflow: wrap;
-    border-left: 1px solid rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-    border-top: 1px solid rgba(0, 0, 0, 0.4);
-    padding: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.2);
+.students-table .header {
+    margin-top: 2em;
 }
 
-    .students-table th.header:last-of-type {
-        border-right: 1px solid rgba(0, 0, 0, 0.4);
-    }
-
-.students-table td {
-    border-left: 1px solid rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-    border-top: 1px solid rgba(0, 0, 0, 0.4);
-    padding: 0.5rem;
+.students-table .body {
+    height: var(--table-height);
+    overflow-y: auto;
+    position: relative;
 }
 
-    .students-table td:last-of-type {
-        border-right: 1px solid rgba(0, 0, 0, 0.4);
+    .students-table .body .loader {
+        position: absolute;
+        top: calc(50% - 50px);
+        left: calc(50% - 50px);
     }
 
-    .students-table td.student-name {
-        font-family: var(--font-Raleway);
-        font-weight: bold;
-        text-align: center;
-    }
-
-.students-table tr{
+.students-table .row {
     display: grid;
-    grid-template-columns: 3fr 2fr 2fr;
+    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
+    border-bottom: var(--table-border);
 }
 
-.students-table > tr > td.actions {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+.students-table .header .row {
+    font-family: var(--font-Raleway);
+    font-weight: bold;
+    text-align: start;
+    overflow: wrap;
+    padding-bottom: 0.5em;
 }
 
-td.actions > .action {
-    display: flex;
-    flex-direction: row;
-    margin: .5em 0;
+.students-table .header .row div:first-of-type {
+    padding-left: .5rem;
 }
 
-    td.actions > .action > a {
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: bold;
-        font-family: var(--font-Raleway);
-        color: black;
-        transition: color 100ms;
+.students-table .body .row {
+    font-family: var(--font-Roboto);
+    padding: 1rem 0;
+    height: 1rem;
+}
+
+    .students-table .body .row:hover {
+        background-color: rgba(230, 219, 151, .3);
     }
 
-        td.actions > .action > a:hover {
-            color: rgb(36, 67, 204)
-        }
+    .students-table .body .row div:first-of-type {
+        padding-left: .5rem;
+    }
+
+    .students-table .body .row .student-name {
+        font-weight: bold;
+    }
+
+    .students-table .body .row .actions {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+    }
+
+.actions a {
+    text-decoration: none;
+    padding: 0 0.5em;
+    opacity: 0.7;
+}
+
+    .actions a.edit {
+        color: rgb(36, 137, 204);
+    }
+
+    .actions a.delete {
+        color: rgb(204, 36, 36);
+    }
+
+    .actions a:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+
+.students-table .footer {
+    justify-self: end;
+    bottom: 0;
+    border-top: var(--table-border);
+    padding: 1rem 0;
+    height: 1rem;
+}
 
 .create-student-modal {
     min-width: max(30%, 50ch);
@@ -90,45 +121,80 @@ td.actions > .action {
     border-radius: 5px;
 }
 
+    .create-student-modal > .container-width,
     .create-student-modal > .container {
         display: flex;
         flex-direction: column;
-        margin: 1em;
     }
 
-        .create-student-modal > .container > .header {
-            font-size: 2em;
-            font-family: var(--font-Raleway);
-            font-weight: bold;
-            margin-bottom: 1em;
-        }
+    .create-student-modal > .container-width {
+        margin: 0.5em;
+    }
 
-        .create-student-modal > .container > .footer {
-            margin-top: 1em;
-        }
+    .create-student-modal > .header {
+        font-size: 24px;
+        font-family: var(--font-Roboto);
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 1em 1em .5em 1em;
+    }
 
-.modal-input {
+    .create-student-modal > .container {
+        margin: 1em 1em 1em 1em;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .create-student-modal > .footer {
+        padding-top: 1em;
+        margin: 1em 0 1em 1em;
+    }
+
+.container-width > .modal-input {
     font-family: var(--font-Raleway);
     font-size: 22px;
-    padding: .5rem;
+    padding: 0.5rem;
     margin-top: 1em;
-    max-width: 30ch;
-    border: 2px solid rgba(1, 1, 1, .5);
+    width: calc(100% - 1em);
+    border: 2px solid rgba(1, 1, 1, 0.5);
     border-radius: 10px;
 }
 
-    .modal-input:focus {
-        border: 2px solid rgba(36, 137, 204, 0.7);
-        outline: 0;
-    }
-
-.create-student-modal::backdrop {
-    background-color: rgba(1, 1, 1, .5);
+.container > input[type="button"] {
+    width: 50%;
 }
 
-span.field-validation-error {
-    align-self: start;
-    margin-left: 8px;
-    color: red;
+.container > .btn-info {
+    width: 50%;
+    margin-right: 0;
+}
+
+.container > label.input-file {
+    background-color: rgb(24, 106, 182);
+    color: white;
+    font-family: var(--font-Raleway);
     font-weight: bold;
+    text-align: center;
+    border: 2px solid rgba(0, 0, 0, .4);
+    border-radius: 10px;
+    width: 45%;
+    transition: background-color 200ms;
+}
+
+    .container > label.input-file:hover {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background-color: rgb(17, 56, 128);
+    }
+
+.modal-input.input-validation-error {
+    border: 2px solid red;
+}
+
+.modal-input:focus {
+    border: 2px solid rgba(36, 137, 204, 0.7);
+    outline: 0;
+}
+
+.create-student-modal::backdrop {
+    background-color: rgba(1, 1, 1, 0.5);
 }

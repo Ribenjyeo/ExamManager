@@ -51,6 +51,7 @@ const Nav = () => {
 
   useEffect(() => {
       getUserName()
+
     }, [])
 
   const logout = () => { //выход из аккаунта
@@ -77,12 +78,12 @@ const Nav = () => {
       <div className="nav-items">
         <ul>
           <li>
-            <a href="#">Главная</a>
+            <a href="/">Главная</a>
           </li>
-          <li>
-            <a href="#">Настройки</a>
-          </li>
-          {userRole == 1 && <li>
+          {fromData.role === 2 && <li>
+            <a href="/admin">Админ панель</a>
+          </li>}
+          {fromData.role === 1 && <li>
             <a href="/rename">Смена данных</a>
           </li>}
         </ul>

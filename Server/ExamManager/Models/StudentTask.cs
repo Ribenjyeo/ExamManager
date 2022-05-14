@@ -21,8 +21,7 @@ public record StudentTask
     public Guid AuthorID { get; set; }
 
     public enum TaskStatus
-    {
-        CREATED,
+    {        
         FAILED,
         SUCCESSED
     }

@@ -15,7 +15,7 @@
 }
 
     .settings > .section::before {
-        content: attr(title);
+        content: attr(head);
         position: absolute;
         background-color: white;
         font-size: 25px;

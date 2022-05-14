@@ -9,27 +9,33 @@
 
 <link rel="stylesheet" href="~/css/account/groups.css" />
 <div class="page-header">Группы</div>
-<table class="groups-table">
-    <tr>
-        <th colspan="3">
-            <div class="group-nav">
-                <input id="group-name" class="group-name" type="text" placeholder="Поиск" />
-                <input id="open-button"
-                       type="button"
-                       class="btn-action"
-                       value="Добавить" />
-            </div>
-        </th>
-    </tr>
-    <tr>
-        <th class="header">Название группы</th>
-        <th class="header">Участники</th>
-        <th class="header">Действия</th>
-    </tr>
-</table>
+<div class="groups-table">
+    <div class="group-nav">
+        <input id="group-name"
+               class="group-name"
+               type="text"
+               placeholder="Поиск" />
+        <input id="open-button"
+               type="button"
+               class="btn-action"
+               value="Добавить" />
+    </div>
+    <div class="header">
+        <div class="row">
+            <div>№</div>
+            <div>Название группы</div>
+            <div>Участники</div>
+        </div>
+    </div>
+    <div class="body">
+        <div class="loader"></div>
+    </div>
+    <div class="footer"></div>
+</div>
 
 <dialog class="create-group-modal" id="create-group-modal">
     <div class="container">
+        <div class="header">Новая группа</div>
         <input type="text" class="modal-input" id="create-group-name" placeholder="Название группы" autocomplete="off" />
         <div class="footer">
             <input type="button" class="btn-action" id="create-group-button" value="Добавить" />

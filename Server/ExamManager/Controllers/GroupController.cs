@@ -102,6 +102,11 @@ namespace ExamManager.Controllers
             var groupId = Guid.Parse(id);
             var group = await _groupService.GetGroup(groupId, true);
 
+            if (group is null)
+            {
+                return Ok(ResponseFactory.CreateResponse($"Группы {id} не существует", System.Net.HttpStatusCode.BadRequest));
+            }
+
             return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
         }
 
@@ -125,7 +130,7 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.RemoveGroupStudents)]
         public async Task<IActionResult> RemoveGroupStudents([FromBody] RemoveStudentsRequest request)
         {
-            if (request.students.Length == 0)
+            if ((request.students?.Length ?? 0) == 0)
             {
                 var exception = new InvalidDataException("В запросе не указаны пользователи");
                 return Ok(ResponseFactory.CreateResponse(exception));
