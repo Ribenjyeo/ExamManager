@@ -471,6 +471,10 @@ nav .nav-button {
   z-index: 999;
 }
 
+.adminbarIcons:hover {
+  color: red;
+}
+
 .AdminBarIconsContainer {
   display: flex;
   margin-right: 20px;
@@ -478,12 +482,70 @@ nav .nav-button {
   align-items: center;
 }
 
-.AdminBarIconsContainer>p {
+.AdminBarIconsContainer> p {
   margin-right: 10px;
 }
 
-.AdminBarIconsContainer:hover {
-  color: red
+
+.AdminBarIconsContainer > ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.AdminBarIconsContainer > li {
+  color: #fff;
+  background: #e2e2e2;;
+  display: block;
+  float: left;
+  padding: 1rem;
+  position: relative;
+  text-decoration: none;
+  transition-duration: 0.5s;
+}
+  
+.AdminBarIconsContainer > li {
+  color: #fff;
+}
+
+ul.dropdown > li:hover {
+  text-decoration: none;
+  color: teal;
+  cursor: pointer;
+}
+
+.AdminBarIconsContainer > ul li ul {
+  background: #e7e7e7;
+  border: 1px solid #d3d3d3;
+  border-radius: 10px;
+  visibility: hidden;
+  opacity: 0;
+  min-width: 5rem;
+  margin-right: 60px;
+  position: absolute;
+  transition: all 0.5s ease;
+  right: 0;
+  display: none;
+}
+
+.AdminBarIconsContainer > ul li:hover > ul,
+ul li:focus-within > ul,
+ul li ul:hover,
+ul li ul:focus {
+  visibility: visible;
+  opacity: 1;
+  display: block
+}
+
+.AdminBarIconsContainer > ul li ul li {
+  margin: 10px 10px 10px 0px;
+  border-bottom: ridge;
+  clear: both;
+  width: 100%;
+}
+
+ul.dropdown {
+  padding: 10px;
 }
 
 .AdminBarWrapper {
@@ -492,7 +554,6 @@ nav .nav-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
 
 .logo {
@@ -504,7 +565,7 @@ nav .nav-button {
 
 .topRight {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .userUpdateInputconsContainer {
