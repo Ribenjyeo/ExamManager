@@ -471,6 +471,10 @@ nav .nav-button {
   z-index: 999;
 }
 
+input[type="file"] {
+  
+}
+
 .adminbarIcons:hover {
   color: red;
 }
