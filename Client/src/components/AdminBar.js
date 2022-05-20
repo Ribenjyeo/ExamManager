@@ -65,7 +65,7 @@ const AdminBar = () => {
             'Content-Type' : 'application/json',
             'Authorization' : 'Bearer ' + cookies.AuthToken}})
 
-        window.location.reload()
+        // window.location.reload()
     }
 
     useEffect(() => {

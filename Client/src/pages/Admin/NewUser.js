@@ -16,16 +16,17 @@ const NewUser = () => {
   const [role, setRole] = useState(null)
 
   console.log(error)
+
+  console.log(role)
   
   const handleClick = async (e) => { //запрос на добавление пользователя
     e.preventDefault()
     try {
-      if(login == null ||
-        password == null ||
-        firstName == null ||
-        lastName == null ||
-        role == null ) {
-          console.log("Один из элементов NuLL!", login, password, firstName, lastName, role)
+      if(login.trim().length === 0 ||
+        password.trim().length === 0 ||
+        firstName.trim().length === 0 ||
+        lastName.trim().length === 0 ||
+        role === null ) {
           setErorr(true)
         }
         else {
@@ -58,11 +59,13 @@ const NewUser = () => {
 
   return (
     <>
-      <div className={error ? "error-message-user" : "hidden"}>
-        <p>
-          <strong>Ошибка!</strong> Вы пытались отправить пустые данные
-        </p>
-      </div>
+      {error && (
+        <div className="error-message">
+          <p>
+            <strong>Ошибка!</strong> Заполните все поля
+          </p>
+        </div>
+      )}
       <AdminBar />
       <div className="createUser">
         <SideBarAdmin />

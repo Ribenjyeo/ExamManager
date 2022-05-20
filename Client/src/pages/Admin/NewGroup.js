@@ -3,30 +3,34 @@ import AdminBar from "../../components/AdminBar";
 import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState} from 'react'
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router";
 
 
 const NewGroup = () => {
     const [name, setName] = useState(null)
+    const [error, setError] = useState(false);
+    let navigate = useNavigate()
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const handleClick = async (e) => { //запрос на добавление пользователя
         e.preventDefault()
         try {
-          if(name == null) {
-              console.log("Вы не ввели название группы:", name)
+          if(name.trim().length === 0) {
+            setError(true)
+          }
+          else {
+            let group = {
+                name : name
             }
-            else {
-              let group = {
-                  name : name
-              }
-              console.log(group)
-              const response = await fetch('/group/create', {
-              method: "POST",
-              headers: {
-                'Content-Type' : 'application/json',
-                'Authorization' : 'Bearer ' + cookies.AuthToken},
-                body: JSON.stringify(group)
-              })
-            }
+            console.log(group)
+            const response = await fetch('/group/create', {
+            method: "POST",
+            headers: {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'Bearer ' + cookies.AuthToken},
+              body: JSON.stringify(group)
+            })
+            navigate('/admin/groups')
+          }
           }
         catch(error){
           console.log(error)
@@ -35,6 +39,13 @@ const NewGroup = () => {
 
     return (
         <>
+          {error && (
+            <div className="error-message">
+              <p>
+                <strong>Ошибка!</strong> Вы не ввели название группы
+              </p>
+            </div>
+          )}
          <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>

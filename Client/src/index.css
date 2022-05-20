@@ -245,52 +245,14 @@ nav .nav-button {
 }
 
 .error-message {
-  padding: 10px 35px 10px 14px;
+  padding: 10px 0px 10px 0px;
   border-radius: 4px;
   position: relative;
   background: #f6ddde;
   border-color:#d4aaac;
   color:#972a3d;
-  position: fixed;
   top: 0px;
   width: 100%;
-  opacity: 0;
-  animation: ani 3s forwards;
-}
-
-.error-message-user {
-  padding: 10px 35px 10px 14px;
-    position: fixed;
-    color: #972a3d;
-    background: #f6ddde;
-    border-color: #d4aaac;
-    top: 0px;
-    opacity: 0;
-    width: 100%;
-    z-index: 9999;
-    animation: ani 5s  forwards;
-}
-
-.hidden {
-  display: none;
-}
-
-.error-message:hover{
-  animation-play-state: paused;
-  -webkit-animation-play-state:paused;
-  -moz-animation-play-state:paused;
-  -o-animation-play-state:paused; 
-}
-
-@keyframes ani {
-  0% {
-    opacity: 1;
-    visibility: visible;
-  }
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 .header  .logo-container {
@@ -695,6 +657,10 @@ ul.dropdown {
   padding: 20px;
 }
 
+span.userShowInfoTitle {
+  margin-left: 5px;
+}
+
 .userUpdate {
   flex: 1;
   padding: 20px;
@@ -819,15 +785,14 @@ ul.dropdown {
 }
 
 .buttonEditUser {
-  max-height: 32px;
+  width: 100%;
   border: none;
   padding: 5px;
   background-color: teal;
-  border-radius: 5px;
+  border-radius: 0 0 10px 10px;
   cursor: pointer;
   color: white;
   font-size: 16px;
-  margin-right: 30px;
 }
 
 .buttonEditUser:hover { 

@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
+import axios from "axios";
 
 const GroupList = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
@@ -22,6 +23,15 @@ const GroupList = () => {
 
   function handleClick (params) { //получение ID изменяемого пользователя
     setCookies("editGroup", params)
+  }
+
+  console.log(groupList)
+
+  const handleDelete = async (params) => {  //удаление группы
+    // const res = await axios.get(`/group/${params}`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    // console.log(res.data)
+    const response = await axios.get(`/group/${params}/delete`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    window.location.reload()
   }
 
   useEffect(() => {

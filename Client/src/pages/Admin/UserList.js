@@ -55,7 +55,7 @@ const UserList = () => {
         'Authorization' : 'Bearer ' + cookies.AuthToken},
         body: JSON.stringify(deleteUser)
       })
-    users()
+    window.location.reload()
   }
 
   const handleAddStudents = async () => { //Добавление пользователей в группу
@@ -91,7 +91,7 @@ const UserList = () => {
           'Authorization' : 'Bearer ' + cookies.AuthToken},
           body: JSON.stringify(AddStudentsRequest)
         })
-      users()
+      window.location.reload()
       // console.log(userList)
     }
   }
