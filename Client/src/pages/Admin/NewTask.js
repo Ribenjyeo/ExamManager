@@ -13,16 +13,20 @@ const NewTask = () => {
     const [idMachine, setIdMachine] = useState(null)
     const [titleMachine, setTitleMachine] = useState(null)
     const [order, setOrder] = useState(null)
+    const [error, setError] = useState(false)
+
+
 
     const handleClick = async (e) => { //запрос на добавление задания в систему
         e.preventDefault()
         try {
-          if(title == null ||
-            description == null ||
-            idMachine == null) {
-              console.log("Вы ввели не все данные")
+          if(title.trim().length === 0 ||
+            description.trim().length === 0 ||
+            idMachine.trim().length === 0) {
+              setError(true)
             }
             else {
+              setError(false)
               let task = {
                   title : title,
                   description : description,
@@ -50,6 +54,13 @@ const NewTask = () => {
 
     return (
         <>
+        {error && (
+        <div className="error-message">
+          <p>
+            <strong>Ошибка!</strong> Заполните все поля
+          </p>
+        </div>
+      )}
          <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>
@@ -74,7 +85,7 @@ const NewTask = () => {
                             <input type="text" placeholder="Название виртуальной машины" onChange={e => setTitleMachine(e.target.value)} required/>
                         </div>
                         <div className="newTaskItem">
-                            <label>Порядковый номер виртуальной машины</label>
+                            <label>Номер виртуальной машины</label>
                             <input type="text" placeholder="Порядковый номер виртуальной машины" onChange={e => setOrder(e.target.value)} required/>
                         </div>
                         <div className="buttonTaskForm">

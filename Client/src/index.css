@@ -847,6 +847,7 @@ span.userShowInfoTitle {
 .newUserSelect{
     height: 40px;
     border-radius: 5px;
+    padding: 10px;
 }
 
 .newUserButton{
@@ -957,7 +958,8 @@ span.userShowInfoTitle {
 
 .newTaskForm {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  justify-content: space-between;
   align-items: center;
   margin-right: 20px;
 }
@@ -1009,6 +1011,7 @@ span.userShowInfoTitle {
 }
 
 .buttonTaskForm {
-  margin-top: 10px;
+  order: 999;
+  margin-left: auto;
 }
 

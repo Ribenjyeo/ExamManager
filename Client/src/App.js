@@ -32,7 +32,7 @@ const App = () => {
           {cookies.userRole == 2 &&<Route path='/admin/newTask' element={<NewTask/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/groups' element={<GroupsList/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/groups/:groupId' element={<Group/>}/>}
-          {/* {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<Task/>}/>} */}
+          {/* {cookies.userRole == 2 &&<Route path='/admin/task' element={<Task/>}/>} */}
           {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<TaskList/>}/>}
         </Routes>
       </BrowserRouter>

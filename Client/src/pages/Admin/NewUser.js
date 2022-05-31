@@ -15,9 +15,9 @@ const NewUser = () => {
   const [lastName, setLastName] = useState(null)
   const [role, setRole] = useState(null)
 
-  console.log(error)
+  // console.log(error)
 
-  console.log(role)
+  // console.log(role)
   
   const handleClick = async (e) => { //запрос на добавление пользователя
     e.preventDefault()
@@ -98,7 +98,7 @@ const NewUser = () => {
                 </select>
               </div>
               <div className="buttonForm">
-              <button className="newUserButton" onClick={(e) => {handleClick(e)}}>Create</button>
+              <button className="newUserButton" onClick={(e) => {handleClick(e)}}>Создать</button>
               </div>
             </form>
           </div>

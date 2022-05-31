@@ -24,6 +24,25 @@ const TaskList = () => {
         setTaskList(parse.tasks)
     }
 
+    const handleDelete = async (params) => { //Удаление задания
+      const deleteUser = {
+        taskId : params
+        }
+      const response = await fetch('/task/delete', {
+        method: "POST",
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization' : 'Bearer ' + cookies.AuthToken},
+          body: JSON.stringify(deleteUser)
+        })
+      window.location.reload()
+    }
+  
+
+    function handleClick (params) { //получение ID изменяемого пользователя
+      setCookies("editTask", params)
+    }
+
     useEffect(() => {
       tasks()
     }, [])
