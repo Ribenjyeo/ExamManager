@@ -22,7 +22,7 @@ $(document).ready(function () {
             window.location.reload();
         }
 
-        modifyUser(JSON.stringify(data), onResponse);
+        modifyUser(data, onResponse);
     }
 
     let changePassword = function (e) {
@@ -39,7 +39,7 @@ $(document).ready(function () {
             window.location.reload();
         }
 
-        modifyUser(JSON.stringify(data), onResponse);
+        modifyUser(data, onResponse);
     }
 
     saveButton.on("click", saveChanges);

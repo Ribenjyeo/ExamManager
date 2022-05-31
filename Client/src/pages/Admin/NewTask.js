@@ -10,21 +10,27 @@ const NewTask = () => {
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [title, setTitle] = useState(null)
     const [description, setDescription] = useState(null)
-    const [url, setUrl] = useState(null)
+    const [idMachine, setIdMachine] = useState(null)
+    const [titleMachine, setTitleMachine] = useState(null)
+    const [order, setOrder] = useState(null)
 
-    const handleClick = async (e) => { //запрос на добавление задания пользователю
+    const handleClick = async (e) => { //запрос на добавление задания в систему
         e.preventDefault()
         try {
           if(title == null ||
-            url == null) {
+            description == null ||
+            idMachine == null) {
               console.log("Вы ввели не все данные")
             }
             else {
               let task = {
                   title : title,
                   description : description,
-                  url : url,
-                  studentId : cookies.editUser
+                  virtualMachines : [{
+                    id : idMachine,
+                    title : titleMachine,
+                    order: parseInt(order)
+                  }]
               }
 
               const response = await fetch('/task/create', {
@@ -35,7 +41,7 @@ const NewTask = () => {
                 body: JSON.stringify(task)
               })
             }
-            navigate('/admin/users')
+            navigate('/admin/tasks')
           }
         catch(error){
           console.log(error)
@@ -49,7 +55,7 @@ const NewTask = () => {
                 <SideBarAdmin/>
                 <div className="others">
                 <div className="newTask">
-                    <h2 className="newTaskTitle">Создание задания</h2>
+                    <h2 className="newTaskTitle">Создание задания:</h2>
                     <form className="newTaskForm">
                         <div className="newTaskItem">
                             <label>Название задания</label>
@@ -60,8 +66,16 @@ const NewTask = () => {
                             <input type="text" placeholder="Описание задания" onChange={e => setDescription(e.target.value)} required/>
                         </div>
                         <div className="newTaskItem">
-                            <label>URL</label>
-                            <input type="text" placeholder="URL для перехода к ресурсу задания" onChange={e => setUrl(e.target.value)} required/>
+                            <label>Идентификатор виртуальной машины</label>
+                            <input type="text" placeholder="Идентификатор виртуальной машины" onChange={e => setIdMachine(e.target.value)} required/>
+                        </div>
+                        <div className="newTaskItem">
+                            <label>Название виртуальной машины</label>
+                            <input type="text" placeholder="Название виртуальной машины" onChange={e => setTitleMachine(e.target.value)} required/>
+                        </div>
+                        <div className="newTaskItem">
+                            <label>Порядковый номер виртуальной машины</label>
+                            <input type="text" placeholder="Порядковый номер виртуальной машины" onChange={e => setOrder(e.target.value)} required/>
                         </div>
                         <div className="buttonTaskForm">
                             <button className="newTaskButton" onClick={(e) => {handleClick(e)}}>Создать</button>

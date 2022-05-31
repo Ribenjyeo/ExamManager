@@ -1,15 +1,34 @@
 ﻿@using ExamManager.Models
 @model ExamManager.Models.User
 @{
-    ViewData["Title"] = "Администратор";
+    ViewData["Title"] = "Задания";
     ViewData["UserName"] = $"{Model.LastName} {Model.FirstName}";
     ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
     Layout = "_AccountLayout";
 }
 
 <div class="page-header">Задания</div>
-<div class="tasks">
-    <div class="tasks-list">
+<div class="table">
+    <div class="bar">
+        <input id="task-number"
+               class="search"
+               type="text"
+               placeholder="Поиск" />
+        <input id="open-button"
+               type="button"
+               class="btn-action"
+               value="Добавить" />
+    </div>
+    <div class="header">
+        <div class="row">
+            <div size="1">№</div>
+            <div size="2">Название</div>
+            <div size="3">Описание</div>
+            <div size="2">Студенты</div>
+            <div size="2"></div>
+        </div>
+    </div>
+    <div class="body">
         <div class="loader"></div>
     </div>
 </div>

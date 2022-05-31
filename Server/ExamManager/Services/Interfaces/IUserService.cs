@@ -5,9 +5,9 @@ namespace ExamManager.Services;
 
 public interface IUserService
 {
-    public Task<User> GetUser(Guid userId, bool includeGroup = false, bool includeTasks = false);
-    public Task<User> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false);
-    public Task<ClaimsPrincipal> CreateUserPrincipal(User user);
+    public Task<User?> GetUser(Guid userId, bool includeGroup = false, bool includeTasks = false);
+    public Task<User?> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false);
+    public ClaimsPrincipal? CreateUserPrincipal(User user);
     public Task<IEnumerable<User>> GetUsers(UserOptions options, bool includeGroup = false, bool includeTasks = false);
     public Task<IEnumerable<User>> GetUsers(IEnumerable<Guid> userIds, bool includeGroup = false, bool includeTasks = false);
 
@@ -24,6 +24,8 @@ public interface IUserService
     public Task DeleteUser(Guid userId);
     public Task DeleteUsers(HashSet<Guid> userIds);
     public Task<ValidationResult> ValidateUser(User user);
+    public Task<IEnumerable<PersonalTask>> AddUserTasks(Guid userId, Guid[] taskIds);
+    public Task RemoveUserTasks(Guid[] personalTaskIds);
 }
 
 public struct UserOptions
@@ -34,6 +36,6 @@ public struct UserOptions
     public bool? WithoutGroups { get; set; }
     public Guid[]? GroupIds { get; set; }
     public Guid[]? ExcludeGroupIds { get; set; }
-    public StudentTask.TaskStatus? TaskStatus { get; set; }
+    public Models.TaskStatus? TaskStatus { get; set; }
     public UserRole? Role { get; set; }
 }

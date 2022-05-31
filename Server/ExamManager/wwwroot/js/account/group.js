@@ -23,7 +23,7 @@ let fillUserInfo = function (userInfo) {
             ]
         }
 
-        removeGroupStudents(JSON.stringify(data), (response) => {
+        removeGroupStudents(data, (response) => {
             fillUserInfo(null);
             let groupId = $(".students-table").attr('value');
             getGroupStudents(groupId, onStudentsInfoResponse);
@@ -74,7 +74,7 @@ let fillUserTasks = function (userTasks) {
 let onStudentsInfoResponse = function (response) {
     let studentsList = $("#students");
 
-    let students = JSON.parse(response.responseText).users;
+    let students = response.users;
     studentsList.empty();
 
     for (let student of students) {
@@ -92,12 +92,11 @@ let onStudentsInfoResponse = function (response) {
 
             getUser(student['id'], function (response) {
                 // Передаем ответ в функцию заполнения информаци
-                fillUserInfo(JSON.parse(response.responseText));
+                fillUserInfo(response);
                 getUserTasks(student['id'], function (response) {
 
-                    let responseText = JSON.parse(response.responseText)
-                    if (responseText.type != "ExceptionResponse") {
-                        fillUserTasks(responseText.tasks);
+                    if (response.type != "ExceptionResponse") {
+                        fillUserTasks(response.tasks);
                     }
                     else {
                         fillUserTasks([]);
@@ -121,7 +120,7 @@ let deleteStudentTask = function (taskId) {
         window.location.reload();
     }
 
-    deleteTask(JSON.stringify(data), onResponse);
+    deleteTask(data, onResponse);
 }
 
 // При вводе имени студента
@@ -141,7 +140,7 @@ function updateStudents(e) {
         data.lastName = null;
     }
 
-    getUsers(JSON.stringify(data), onStudentsInfoResponse);
+    getUsers(data, onStudentsInfoResponse);
 }
 
 let updateStudentsToAdd = function (e) {
@@ -160,13 +159,13 @@ let updateStudentsToAdd = function (e) {
         data.lastName = null;
     }
 
-    getUsers(JSON.stringify(data), onStudentsToAddInfoResponse);
+    getUsers(data, onStudentsToAddInfoResponse);
 }
 
 let onStudentsToAddInfoResponse = function (response) {
     let studentsList = $(".add-student-modal .students-list");
 
-    let students = JSON.parse(response.responseText).users;
+    let students = response.users;
     studentsList.empty();
 
     if (students === null) {
@@ -215,8 +214,8 @@ let addStudents = function () {
         window.location.reload();
     }
 
-    console.log(JSON.stringify(data));
-    addGroupStudents(JSON.stringify(data), onResponse);
+    console.log(data);
+    addGroupStudents(data, onResponse);
 }
 
 window.onload = function () {

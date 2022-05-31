@@ -1,0 +1,324 @@
+﻿using ExamManager.DAO;
+using ExamManager.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+
+namespace ExamManager.Services;
+
+
+public class StudyTaskService : IStudyTaskService
+{
+    ExamManagerDBContext _dbContext;
+    IVirtualMachineService _vMachineService;
+
+    public StudyTaskService(
+        ExamManagerDBContext context, IVirtualMachineService vMachineService)
+    {
+        _dbContext = context;
+        _vMachineService = vMachineService;
+    }
+
+    public async Task<StudyTask> CreateStudyTaskAsync(string? title, string description, VirtualMachineImage[] virtualMachines)
+    {
+        var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+        StudyTask task;
+        try
+        {
+            var random = new Random();
+            task = new StudyTask
+            {
+                Title = title,
+                Description = description,
+                Number = (ushort)random.Next(100, 100_000)
+            };
+
+            await _dbContext.Tasks!.AddAsync(task);
+
+            foreach(var vMachine in virtualMachines)
+            {
+                vMachine.Task = task;
+            }
+
+            await _dbContext.VMImages!.AddRangeAsync(virtualMachines);
+        }
+        catch(Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw new InvalidDataException($"Не удалось создать задание {title}", ex);
+        }
+
+        await transaction.CommitAsync();
+        await _dbContext.SaveChangesAsync();
+
+        return task;
+    }
+    public async Task CreateStudyTaskAsync(StudyTask task)
+    {
+        await _dbContext.Tasks.AddAsync(task);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteStudyTaskAsync(Guid taskId)
+    {
+        var task = await _dbContext.Tasks.FirstOrDefaultAsync(task => task.ObjectID == taskId);
+        var personalTasks = _dbContext.UserTasks.Where(pTask => pTask.TaskID == task.ObjectID);
+        // Удалить связанные задания у пользователей
+        _dbContext.UserTasks.RemoveRange(personalTasks);
+
+        _dbContext.Tasks.Remove(task ?? throw new InvalidDataException($"Задания {taskId} не существует"));
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<StudyTask> GetStudyTaskAsync(Guid taskId)
+    {
+        var task = await _dbContext.Tasks
+            .AsNoTracking()
+            .Include(nameof(StudyTask.PersonalTasks))
+            .FirstOrDefaultAsync(task => task.ObjectID == taskId);
+
+        return task ?? throw new InvalidDataException($"Задания {taskId} не существует");
+    }
+
+    public async Task<IEnumerable<StudyTask>> GetStudyTasksAsync(params Guid[] taskIds)
+    {
+        var tasks = await _dbContext.Tasks
+            .Where(task => taskIds.Contains(task.ObjectID))
+            .ToListAsync();
+
+        return tasks;
+    }
+
+    public async Task<IEnumerable<StudyTask>> GetStudyTasksAsync(StudyTaskOptions options)
+    {
+        var query = $"SELECT * FROM {nameof(ExamManagerDBContext.Tasks)} t ";
+        var conditions = GetQueryConditions(options);
+
+        query += conditions.Condition;        
+
+        var tasks = await _dbContext.Tasks
+            .FromSqlRaw(query, conditions.Parameters)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return tasks;
+    }
+
+    public async Task<IEnumerable<PersonalTask>> GetPersonalTasksAsync(params Guid[] studentIds)
+    {
+        var personalTasks = await _dbContext.UserTasks
+            .Include(pTask => pTask.Task)
+            .ThenInclude(task => task.VirtualMachines)
+            .Where(pTask => studentIds.Contains(pTask.StudentID))
+            .ToListAsync();
+
+        return personalTasks;
+    }
+
+    public async Task<StudyTask> ModifyTaskAsync(Guid taskId, StudyTask newTask)
+    {
+        var currentTask = await _dbContext.Tasks!.FirstOrDefaultAsync(task => task.ObjectID == taskId);
+
+        if (currentTask is null)
+        {
+            throw new InvalidDataException($"Задания {taskId} не существует");
+        }
+
+        var entityManager = new EntityManager();
+        entityManager
+            .Modify(currentTask)
+            .BasedOn(newTask);
+
+        await _dbContext.SaveChangesAsync();
+
+        throw new NotImplementedException();
+    }
+
+    public async Task<PersonalTask> AssignTaskToStudentAsync(Guid taskId, Guid studentId)
+    {
+        var existedTask = await _dbContext.UserTasks
+            .Include(nameof(PersonalTask.Task))
+            .Include(nameof(PersonalTask.Student))
+            .FirstOrDefaultAsync(task => task.TaskID == taskId && task.StudentID == studentId);
+
+        if (existedTask is not null)
+        {
+            throw new Exception($"Задание '{existedTask.Task.Title}' уже привязано к пользователю {existedTask.Student.FirstName}");
+        }
+
+        var personalTask = new PersonalTask
+        {
+            StudentID = studentId,
+            TaskID = taskId,
+            Status = Models.TaskStatus.FAILED
+        };
+
+        await _dbContext.UserTasks.AddAsync(personalTask);
+        await _dbContext.SaveChangesAsync();
+
+        return personalTask;
+    }
+
+    public async Task<IEnumerable<PersonalTask>> AssignTasksToStudentAsync(Guid[] taskIds, Guid studentId)
+    {
+        var existedTasks = await _dbContext.UserTasks!
+            .Include(nameof(PersonalTask.Task))
+            .Include(nameof(PersonalTask.Student))
+            .Where(task => taskIds.Contains(task.TaskID) && task.StudentID == studentId)
+            .ToListAsync();
+
+        if (existedTasks is not null && existedTasks.Count() > 0)
+        {
+            throw new Exception($"Задания '{string.Join("', '", existedTasks.Select(task => task.Task.Title))}' уже привязаны к пользователю {existedTasks.First().Student.FirstName}");
+        }
+
+        var personalTasks = taskIds.Select(id => new PersonalTask
+        {
+            StudentID = studentId,
+            TaskID = id,
+            Status = Models.TaskStatus.FAILED
+        });
+
+        await _dbContext.UserTasks!.AddRangeAsync(personalTasks);
+        await _dbContext.SaveChangesAsync();
+
+        return personalTasks;
+    }
+
+    public async Task WithdrawTaskFromStudentAsync(Guid personalTaskId)
+    {
+        var personalTask = await _dbContext.UserTasks!.FirstOrDefaultAsync(pTask => pTask.ObjectID == personalTaskId);
+
+        if (personalTask is null)
+        {
+            throw new InvalidDataException($"Не удалось найти индивидуальное задание {personalTaskId}");
+        }
+
+        _dbContext.Remove(personalTask);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async  Task WithdrawTasksFromStudentAsync(Guid[] personalTaskIds)
+    {
+        var personalTasks = await _dbContext.UserTasks!
+            .Where(pTask => personalTaskIds.Contains(pTask.ObjectID))
+            .ToListAsync();
+
+        if (personalTasks is null || personalTasks.Count() == 0)
+        {
+            throw new InvalidDataException($"Не удалось найти индивидуальные задания {string.Join(", ", personalTaskIds)}");
+        }
+
+        _dbContext.RemoveRange(personalTasks);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public Task CheckStudyTaskAsync(Guid taskId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<string> StartTaskVirtualMachine(string vmImageId, Guid personalTaskId, Guid ownerId)
+    {
+        var virtualMachine = await _vMachineService.StartVirtualMachine(vmImageId, personalTaskId, ownerId);
+
+        if (virtualMachine is null)
+        {
+            throw new InvalidDataException($"Не удалось запустить виртуальную машину {vmImageId}");
+        }
+
+        return virtualMachine.Name;
+    }
+
+    public async Task StopTaskVirtualMachine(string vMachineId)
+    {
+        try
+        {
+            await _vMachineService.StopVirtualMachine(vMachineId);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private (string Condition, MySqlParameter[] Parameters) GetQueryConditions(StudyTaskOptions options)
+    {
+        var conditions = new List<(string Condition, MySqlParameter Parameter)>(5);
+
+        #region CREATE_CONDITIONS
+
+        if (options.Title is not null)
+        {
+            conditions.Add((
+                $"LOWER({nameof(StudyTask.Title)}) LIKE @title", 
+                new MySqlParameter("title", options.Title.ToLower())
+                ));
+        }
+        if (options.Number is not null)
+        {
+            conditions.Add((
+                $"{nameof(StudyTask.Number)} = @number",
+                new MySqlParameter("number", options.Number)
+                ));
+        }
+        if (options.StudentIds is not null)
+        {
+            conditions.Add((
+                $"EXISTS (SELECT 1 FROM {nameof(ExamManagerDBContext.UserTasks)} WHERE {nameof(PersonalTask.TaskID)} = t.ObjectID AND {nameof(PersonalTask.StudentID)} IN (@students))", 
+                new MySqlParameter("students", string.Join(", ", options.StudentIds))
+                ));
+        }
+
+        #endregion
+
+        if (conditions.Count > 0)
+        {
+            return ($"WHERE {string.Join(" AND ", conditions.Select(cond => cond.Condition))}", conditions.Select(cond => cond.Parameter).ToArray());
+        }
+
+        return (string.Empty, new MySqlParameter[0]);
+    }
+
+    public async Task WithdrawTaskFromStudentAsync(Guid taskId, Guid studentId)
+    {
+        var personalTask = await _dbContext.UserTasks!.FirstOrDefaultAsync(pTask => pTask.TaskID == taskId && pTask.StudentID == studentId);
+
+        if (personalTask is null)
+        {
+            var taskNumber = (await _dbContext.Tasks!.FirstOrDefaultAsync(task => task.ObjectID == taskId))?.Number;
+            var studentName = (await _dbContext.Users!.FirstOrDefaultAsync(user => user.ObjectID == studentId))?.FirstName;
+
+            if (taskNumber is null)
+            {
+                throw new InvalidDataException($"Не удалось найти задание {taskId}");
+            }
+            if (studentName is null)
+            {
+                throw new InvalidDataException($"Не удалось найти пользователя {studentId}");
+            }
+
+            throw new InvalidDataException($"Не удалось найти задание {taskNumber} у пользователя {studentName}");
+        }
+
+        _dbContext.Remove(personalTask);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task WithdrawTasksFromStudentAsync(Guid[] taskId, Guid studentId)
+    {
+        var personalTasks = await _dbContext.UserTasks!
+            .Where(pTask => taskId.Contains(pTask.TaskID) && pTask.StudentID == studentId)
+            .ToListAsync();
+
+        if (personalTasks is null || personalTasks.Count() == 0)
+        {
+            throw new InvalidDataException($"Не удалось найти задания {string.Join(", ", taskId)} у пользователя {studentId}");
+        }
+
+        _dbContext.RemoveRange(personalTasks);
+        await _dbContext.SaveChangesAsync();
+    }
+
+}

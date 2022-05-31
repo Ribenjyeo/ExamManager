@@ -21,7 +21,7 @@ public class UserService : IUserService
         _securityService = securityService;
     }
 
-    public async Task<ClaimsPrincipal?> CreateUserPrincipal(User user)
+    public ClaimsPrincipal? CreateUserPrincipal(User user)
     {
         if (user is null)
             return null;
@@ -36,7 +36,7 @@ public class UserService : IUserService
         // Создаем объект ClaimsIdentity
         var claimId = new ClaimsIdentity(claims, "AppCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-        return await Task.FromResult(new ClaimsPrincipal(claimId));
+        return new ClaimsPrincipal(claimId);
     }
 
     public async Task<User?> GetUser(Guid userId, bool includeGroup = false, bool includeTasks = false)
@@ -57,7 +57,7 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<User> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false)
+    public async Task<User?> GetUser(string login, string password, bool includeGroup = false, bool includeTasks = false)
     {
         var UserSet = _dbContext.Set<User>();
         var passwordHash = _securityService.Encrypt(password);
@@ -91,7 +91,10 @@ public class UserService : IUserService
         var entityManager = new EntityManager();
         // Создаем временного пользователя и копируем значения свойств из user
         var tempUser = new User();
-        tempUser = entityManager.CopyInto(tempUser).AllPropertiesFrom(user).GetResult();
+        tempUser = entityManager
+            .CopyInto(tempUser)
+            .AllPropertiesFrom(user)
+            .GetResult();
 
         // Для изменяемых свойств временного пользователя присваиваем переданные значения
         var userCopyManager = entityManager.CopyInto(tempUser);
@@ -109,7 +112,10 @@ public class UserService : IUserService
 
         if (!result.HasErrors)
         {
-            user = entityManager.CopyInto(user).AllPropertiesFrom(tempUser).GetResult();
+            user = entityManager
+                .CopyInto(user)
+                .AllPropertiesFrom(tempUser)
+                .GetResult();
 
             await _dbContext.SaveChangesAsync();
         }
@@ -205,7 +211,65 @@ public class UserService : IUserService
 
         var users = UserSet.AsQueryable().Where(user => userIds.Contains(user.ObjectID));
 
-        return users.AsEnumerable();
+        return await users.ToListAsync();
+    }
+    
+    public async Task<ValidationResult> ValidateUser(User user)
+    {
+        var validationResult = new ValidationResult();
+        var UserSet = _dbContext.Set<User>();
+        var GroupSet = _dbContext.Set<Group>();
+
+        if (await UserSet.AnyAsync(u => u.Login == user.Login))
+        {
+            validationResult.AddMessage("login", "Пользователь с таким логином уже существует");
+        }
+        if (string.IsNullOrEmpty(user.FirstName))
+        {
+            validationResult.AddMessage("firstname", "Введите имя");
+        }
+        if (string.IsNullOrEmpty(user.LastName))
+        {
+            validationResult.AddMessage("firstname", "Введите фамилию");
+        }
+        if (user.StudentGroupID is not null && ! await GroupSet.AnyAsync(group => group.ObjectID == user.StudentGroupID))
+        {
+            validationResult.AddMessage("group", "Группа не существует");
+        }
+
+        return validationResult;
+    }
+
+    public async Task RegisterUsers(IEnumerable<User> users)
+    {
+        var UserSet = _dbContext.Set<User>();
+        var existsUserLogins = new List<string>();
+
+        foreach (var user in users)
+        {
+            if (await UserSet.AnyAsync(u => u.Login == user.Login))
+            {
+                existsUserLogins.Add(user.Login);
+            }
+        }
+
+        if (existsUserLogins.Count > 0)
+        {
+            throw new InvalidDataException($"Пользователи с логинами {string.Join(", ", existsUserLogins)} уже существуют");
+        }
+
+        var transaction = await _dbContext.Database.BeginTransactionAsync();        
+        try
+        {
+            await UserSet.AddRangeAsync(users);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        await transaction.CommitAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     private string GetQueryConditions(UserOptions options)
@@ -249,7 +313,7 @@ public class UserService : IUserService
         }
         if (options.TaskStatus is not null)
         {
-            conditions.Add($"EXISTS (SELECT 1 FROM `StudentTasks` AS t WHERE t.{nameof(StudentTask.StudentID)} = ObjectID AND t.{nameof(StudentTask.Status)} = {(int)options.TaskStatus})");
+            conditions.Add($"EXISTS (SELECT 1 FROM `StudentTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = ObjectID AND t.{nameof(PersonalTask.Status)} = {(int)options.TaskStatus})");
         }
 
         if (conditions.Count > 0)
@@ -260,56 +324,49 @@ public class UserService : IUserService
         return string.Empty;
     }
 
-    public async Task<ValidationResult> ValidateUser(User user)
+    public async Task<IEnumerable<PersonalTask>> AddUserTasks(Guid userId, Guid[] taskIds)
     {
-        var validationResult = new ValidationResult();
         var UserSet = _dbContext.Set<User>();
+        var StudyTaskSet = _dbContext.Set<StudyTask>();
 
-        if (await UserSet.AnyAsync(u => u.Login == user.Login))
+        var user = await UserSet.FirstOrDefaultAsync(u => u.ObjectID == userId);
+
+        if (user is null)
         {
-            validationResult.AddMessage("login", "Пользователь с таким логином уже существует");
-        }
-        if (string.IsNullOrEmpty(user.FirstName))
-        {
-            validationResult.AddMessage("firstname", "Введите имя");
-        }
-        if (string.IsNullOrEmpty(user.LastName))
-        {
-            validationResult.AddMessage("firstname", "Введите фамилию");
+            throw new InvalidDataException($"Пользователь {userId} не существует");
         }
 
-        return validationResult;
+        var PersonalTaskSet = _dbContext.Set<PersonalTask>();
+        var studyTasks = await StudyTaskSet.Where(task => taskIds.Contains(task.ObjectID)).ToListAsync();
+        var personalTasks = new List<PersonalTask>(studyTasks.Count);
+
+        foreach (var task in studyTasks)
+        {
+            personalTasks.Add(new PersonalTask
+            {
+                Student = user,
+                Task = task,
+                Status = Models.TaskStatus.FAILED
+            });
+
+        }
+
+        await PersonalTaskSet.AddRangeAsync(personalTasks);
+        await _dbContext.SaveChangesAsync();
+
+        return personalTasks;
     }
 
-    public async Task RegisterUsers(IEnumerable<User> users)
+    public async Task RemoveUserTasks(Guid[] personalTaskIds)
     {
-        var UserSet = _dbContext.Set<User>();
-        var existsUserLogins = new List<string>();
+        var PersonalTaskSet = _dbContext.Set<PersonalTask>();
 
-        foreach (var user in users)
-        {
-            if (await UserSet.AnyAsync(u => u.Login == user.Login))
-            {
-                existsUserLogins.Add(user.Login);
-            }
-        }
+        var tasks = await PersonalTaskSet
+            .Where(task => personalTaskIds.Contains(task.ObjectID))
+            .ToListAsync();
 
-        if (existsUserLogins.Count > 0)
-        {
-            throw new InvalidDataException($"Пользователи с логинами {string.Join(", ", existsUserLogins)} уже существуют");
-        }
+        PersonalTaskSet.RemoveRange(tasks);
 
-        var transaction = await _dbContext.Database.BeginTransactionAsync();        
-        try
-        {
-            await UserSet.AddRangeAsync(users);
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-        await transaction.CommitAsync();
         await _dbContext.SaveChangesAsync();
     }
 }

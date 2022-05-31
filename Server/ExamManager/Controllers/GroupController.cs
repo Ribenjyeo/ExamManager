@@ -48,7 +48,7 @@ namespace ExamManager.Controllers
                 Count = request.count
             };
 
-            Group[] groups = null;
+            var groups = new Group[0];
             try
             {
                 groups = await _groupService.GetGroups(options, includeStudents: true);
@@ -124,7 +124,7 @@ namespace ExamManager.Controllers
 
             var group = await _groupService.GetGroup(request.groupId, true);
 
-            return Ok(ResponseFactory.CreateResponse(group.Students, group.Name));
+            return Ok(ResponseFactory.CreateResponse(group?.Students, group?.Name));
         }
 
         [HttpPost(Routes.RemoveGroupStudents)]
@@ -136,7 +136,7 @@ namespace ExamManager.Controllers
                 return Ok(ResponseFactory.CreateResponse(exception));
             }
 
-            var studentIds = request.students.Select(student => student.id);
+            var studentIds = request.students?.Select(student => student.id) ?? new Guid[0];
 
             try
             {

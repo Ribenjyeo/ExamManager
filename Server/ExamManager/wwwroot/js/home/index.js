@@ -33,14 +33,13 @@ if (jwt_token) {
     let decoded = jwt_decode(jwt_token);
 
     let onResponse = function (response) {
-        let resp = JSON.parse(response.responseText);
 
-        if (resp["isDefault"]) {
+        if (response["isDefault"]) {
             changeInputSection();
         }
         else {
             let write = function (response) {
-                console.log(response.responseText);
+                console.log(response);
             }
             handleRequest("/pages/home", "GET", null, write);
         }
@@ -57,14 +56,14 @@ let handleLogin = function (event) {
     event.preventDefault();
     submitButton.disabled = true;
 
-    let data = JSON.stringify(
-        {
-            login: this.login.value,
-            password: this.password.value
-        });
+    let data =
+    {
+        login: this.login.value,
+        password: this.password.value
+    };
 
     let onResponse = function(response) {
-        onSuccess(JSON.parse(response.responseText));
+        onSuccess(response);
     };
     handleRequest("/login", "POST", data, onResponse);
 }
@@ -122,16 +121,16 @@ let handleDefault = function () {
         return;
     }
 
-    let data = JSON.stringify(
-        {
-            id: jwt_decode(Cookies.get("token"))["Claim.Key.Id"],
-            login: this.login.value,
-            password: this.new.value,
-            isDefault: false
-        });
+    let data = 
+    {
+        id: jwt_decode(Cookies.get("token"))["Claim.Key.Id"],
+        login: this.login.value,
+        password: this.new.value,
+        isDefault: false
+    };
 
     let onResponse = function (response) {
-        let data = JSON.parse(response.responseText);
+        let data = response;
         if (data.type === "BadResponse") {
             handleBadResponse(data);
         }

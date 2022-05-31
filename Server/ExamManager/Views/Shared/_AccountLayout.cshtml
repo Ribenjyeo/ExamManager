@@ -24,12 +24,14 @@
     {
         <link rel="stylesheet" href="~/css/account/tasks.css" />
     }
+    <link rel="stylesheet" href="~/css/tables/tables.css" />
     <link rel="stylesheet" href="~/css/fontawesome/css/fontawesome.css" />
     <link rel="stylesheet" href="~/css/fontawesome/css/solid.css" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/js.cookie.js"></script>
     <script src="~/js/jwt-decode.js"></script>
     <script src="~/js/requests.js"></script>
+    <script src="~/css/tables/tables.js"></script>
     <title>@(ViewData["Title"].ToString() ?? "ExamManager")</title>
 </head>
 <body>
@@ -42,6 +44,7 @@
         {
             <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-graduate"></i>Студенты</a>
             <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-group"></i>Группы</a>
+            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-list-check"></i>Задания</a>
         }
         else
         {
@@ -53,6 +56,7 @@
     <div class="container">
         @RenderBody()
     </div>
+    <script>applyTableTemplate()</script>
 </body>
 <script src="~/js/account/index.js"></script>
 <script src="~/utils/notifications/ts/simple-notify.min.js"></script>
@@ -80,6 +84,13 @@
 }
 @if (Context.Request.Path.Value.Equals(Routes.TasksPage))
 {
-    <script src=~/js/account/tasks.js></script>
+    @if ((bool)ViewData["IsAdmin"])
+    {
+        <script src=~/js/account/tasks/admin.js></script>
+    }
+    else
+    {
+        <script src=~/js/account/tasks/student.js></script>
+    }
 }
 </html>

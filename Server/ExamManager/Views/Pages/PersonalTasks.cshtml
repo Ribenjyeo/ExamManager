@@ -1,0 +1,15 @@
+﻿@using ExamManager.Models
+@model ExamManager.Models.User
+@{
+    ViewData["Title"] = "Администратор";
+    ViewData["UserName"] = $"{Model.LastName} {Model.FirstName}";
+    ViewData["IsAdmin"] = Model.Role == UserRole.ADMIN;
+    Layout = "_AccountLayout";
+}
+
+<div class="page-header">Задания</div>
+<div class="tasks">
+    <div class="tasks-list">
+        <div class="loader"></div>
+    </div>
+</div>

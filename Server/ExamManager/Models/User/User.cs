@@ -23,7 +23,8 @@ public class User : IUserValidationModel
     [ForeignKey(nameof(StudentGroupID))]
     public Group? StudentGroup { get; set; }
     public Guid? StudentGroupID { get; set; }
-    public List<StudentTask> Tasks { get; set; }
+    public ICollection<PersonalTask>? Tasks { get; set; }
+    public ICollection<VirtualMachine>? VirtualMachines { get; set; }
 
     public string GetFirstName() => FirstName;
     public string GetLogin() => Login;
@@ -34,5 +35,6 @@ public class User : IUserValidationModel
 public enum UserRole
 {
     STUDENT = 1 << 0,
-    ADMIN = 1 << 1
+    ADMIN = 1 << 1,
+    TEACHER = 1 << 2
 }

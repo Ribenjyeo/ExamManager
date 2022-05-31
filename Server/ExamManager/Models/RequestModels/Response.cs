@@ -18,7 +18,7 @@ public record JWTResponse : Response
 
 public record UserDataResponse : Response
 {
-    public Guid? id{ get; set; }
+    public Guid? id { get; set; }
     public string? firstName { get; set; }
     public string? lastName { get; set; }
     public UserRole? role { get; set; }
@@ -42,13 +42,13 @@ public record UsersDataResponse : Response
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string? groupName { get; set; }
-        public TaskView[] tasks { get; set; }
+        public TaskView[]? tasks { get; set; }
     }
 
     public struct TaskView
     {
         public string title { get; set; }
-        public StudentTask.TaskStatus status { get; set; }
+        public Models.TaskStatus status { get; set; }
     }
 }
 
@@ -58,11 +58,8 @@ public record TasksDataResponse : Response
     public struct TaskView
     {
         public Guid id { get; set; }
-        public string title { get; set; }
+        public string? title { get; set; }
         public string description { get; set; }
-        public StudentTask.TaskStatus taskStatus { get; set; }
-        public Guid studentId { get; set; }
-        public string? url { get; set; }
     }
 }
 
@@ -71,9 +68,25 @@ public record TaskDataResponse : Response
     public Guid? id { get; set; }
     public string? title { get; set; }
     public string? description { get; set; }
-    public StudentTask.TaskStatus? taskStatus { get; set; }
-    public Guid? authorId { get; set; }
-    public string? url { get; set; }
+}
+
+public record PersonalTasksDataResponse : Response
+{
+    public PersonalTaskView[]? personalTasks { get; set; }
+    public struct PersonalTaskView
+    {
+        public Guid studentId { get; set; }
+        public TaskView[] tasks { get; set; }
+        public struct TaskView
+        {
+            public Guid id { get; set; }
+            public string title { get; set; }
+            public string? description { get; set; }
+            public ushort number { get; set; }
+            public Models.TaskStatus status { get; set; }
+            public string[]? vMachines { get; set; }
+        }
+    }
 }
 
 public record GroupDataResponse : Response
@@ -94,12 +107,12 @@ public record GroupsDataResponse : Response
     }
 }
 
-public record BadResponse : Response
+public record ErrorsResponse : Response
 {
     public Dictionary<string, List<string>>? errors { get; set; }
 }
 
-public record ExceptionResponse : Response
+public record BadResponse : Response
 {
     public string exceptionType { get; set; }
     public string message { get; set; }

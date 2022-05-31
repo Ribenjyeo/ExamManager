@@ -1,0 +1,121 @@
+:root {
+    --table-border: 1px solid rgba(0, 0, 0, .2);
+    --row-height: 1rem;
+    --table-height: 40rem;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin-top: 1em;
+    border-spacing: 0;
+    max-width: 80%;
+    min-width: min(70%, 1200px);
+    text-align: start;
+    overflow-y: hidden;
+}
+
+    .table .bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: stretch;
+        padding: 0.5rem 0;
+    }
+
+    .table > .bar > * {
+        margin: 0 0.2rem;
+    }
+
+    .table > .bar > input[type="text"] {
+        font-size: 1.2em;
+        font-family: var(--font-Roboto-Slab);
+        padding: 0.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+    }
+
+    .table > .bar > input[type="button"] {
+        align-self: center;
+    }
+
+    .table > .header {
+        margin-top: 2em;
+    }
+
+    .table .body {
+        height: var(--table-height);
+        overflow-y: auto;
+        position: relative;
+    }
+
+        .table .body .loader {
+            position: absolute;
+            top: calc(50% - 50px);
+            left: calc(50% - 50px);
+        }
+
+    .table .row {
+        display: grid;
+        border-bottom: var(--table-border);
+    }
+
+    .table .header .row {
+        font-family: var(--font-Raleway);
+        font-weight: bold;
+        text-align: start;
+        overflow: wrap;
+        padding-bottom: 0.5em;
+    }
+
+    .table .body .row {
+        font-family: var(--font-Roboto);
+        padding: 1rem 0;
+        overflow-y: hidden;
+    }
+
+        .table .body .row.m {
+            height: 2.5em;
+        }
+
+        .table .body .row.s {
+            height: 1em;
+        }
+
+        .table .body .row .bold {
+            font-weight: bold;
+        }
+
+        .table .body .row .actions {
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+        }
+
+            .table .body .row .actions a {
+                text-decoration: none;
+                padding: 0 0.5em;
+                opacity: 0.7;
+            }
+
+                .table .body .row .actions a.edit {
+                    color: rgb(36, 137, 204);
+                }
+
+                .table .body .row .actions a.delete {
+                    color: rgb(204, 36, 36);
+                }
+
+                .table .body .row .actions a:hover {
+                    cursor: pointer;
+                    opacity: 1;
+                }
+
+        .table .body .row .students-table .footer {
+            justify-self: end;
+            bottom: 0;
+            border-top: var(--table-border);
+            padding: 1rem 0;
+            height: 1rem;
+        }

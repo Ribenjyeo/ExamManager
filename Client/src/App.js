@@ -8,6 +8,7 @@ import Group from "./pages/Admin/Group";
 import NewUser from "./pages/Admin/NewUser";
 import NewGroup from "./pages/Admin/NewGroup";
 import NewTask from "./pages/Admin/NewTask"
+import TaskList from "./pages/Admin/TaskList";
 import Task from "./pages/Admin/Task"
 import Rename from "./components/Rename"
 import { useCookies } from "react-cookie";
@@ -28,10 +29,11 @@ const App = () => {
           {cookies.userRole == 2 &&<Route path='/admin/newUser' element={<NewUser/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/newGroup' element={<NewGroup/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/newGroup/:userId/students' element={<NewGroup/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/:userId/newTask' element={<NewTask/>}/>}
+          {cookies.userRole == 2 &&<Route path='/admin/newTask' element={<NewTask/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/groups' element={<GroupsList/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/groups/:groupId' element={<Group/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/tasks/:taskId' element={<Task/>}/>}
+          {/* {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<Task/>}/>} */}
+          {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<TaskList/>}/>}
         </Routes>
       </BrowserRouter>
     </div>

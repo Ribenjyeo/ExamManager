@@ -1,5 +1,5 @@
 ﻿@using ExamManager.Models
-@model (User User, StudentTask Task)
+@model (User User, StudyTask Task)
 @{
     ViewData["Title"] = Model.Task.Title;
     ViewData["UserName"] = $"{Model.User.LastName} {Model.User.FirstName}";
@@ -35,11 +35,11 @@
         @if (Model.User.Role == UserRole.STUDENT)
         {
 
-            <a href="@Model.Task.Url" type="button" class="btn-info">Перейти</a>
+            //<a href="@Model.Task.Url" type="button" class="btn-info">Перейти</a>
         }
         else
         {
-            <input id="task-url" type="text" class="input-standard" style="width: 50%" placeholder="URL ресурса" value="@Model.Task.Url" />
+            //<input id="task-url" type="text" class="input-standard" style="width: 50%" placeholder="URL ресурса" value="@Model.Task.Url" />
             <input id="save-button" type="button" class="btn-action" value="Сохранить" />
         }
     </div>

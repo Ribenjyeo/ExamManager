@@ -15,6 +15,11 @@ public class EntityManager
         return new();
     }
 
+    public ModifyManager<TEntity> Modify<TEntity>(TEntity entity)
+    {
+        return new(entity);
+    }
+
     public class CopyManager<T>
     {
         private T _target { get; set; }
@@ -23,6 +28,10 @@ public class EntityManager
             _target = target;
         }
 
+        /// <summary>
+        /// Копирование значений свойств из <i>source</i>
+        /// </summary>
+        /// <param name="source">Объект, значения свойств которого будут скопированы</param>
         public CopyManager<T> AllPropertiesFrom(T source)
         {
             var properties = typeof(T).GetProperties();
@@ -34,6 +43,11 @@ public class EntityManager
             return this;
         }
 
+        /// <summary>
+        /// Присвоить значение свойству
+        /// </summary>
+        /// <param name="propertyName">Название свойства</param>
+        /// <param name="value">Присваиваемое значение</param>
         public CopyManager<T> Property(string propertyName, object value)
         {
             typeof(T).GetProperty(propertyName)?.SetValue(_target, value);
@@ -56,6 +70,7 @@ public class EntityManager
             _sourceType = typeof(TSource);
             _targetType = typeof(TTarget);
         }
+
 
         public string PropertyName(string propertyName)
         {
@@ -85,12 +100,42 @@ public class EntityManager
             }
             else
             {
-                targetPropertyName = (string)attribute.NamedArguments.FirstOrDefault(arg => arg.MemberName.Equals(nameof(MapPropertyNameAttribute.PropertyName))).TypedValue.Value;
+                targetPropertyName = (string?)attribute
+                    .NamedArguments
+                    .FirstOrDefault(arg => arg.MemberName.Equals(nameof(MapPropertyNameAttribute.PropertyName)))
+                    .TypedValue
+                    .Value;
             }
 
-            return string.IsNullOrEmpty(targetPropertyName) ? string.Empty : targetPropertyName;
+            return targetPropertyName ?? string.Empty;
         }
     
+    }
+
+    public class ModifyManager<TEntity>
+    {
+        TEntity _entity { get; set; }
+
+        public ModifyManager(TEntity entity)
+        {
+            _entity = entity;
+        }
+
+        public ModifyManager<TEntity> BasedOn(TEntity baseEntity)
+        {
+            var properties = baseEntity.GetType().GetProperties();
+
+            foreach(var property in properties)
+            {
+                var value = property.GetValue(baseEntity);
+                if (value is not null)
+                {
+                    property.SetValue(_entity, value);
+                }
+            }
+
+            return this;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]

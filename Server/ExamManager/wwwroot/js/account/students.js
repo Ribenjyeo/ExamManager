@@ -21,20 +21,20 @@ function updateStudents(e) {
     }
 
     let onResponse = function (response) {
-        fillStudents(JSON.parse(response.responseText));
+        fillStudents(response);
     };
 
-    getUsers(JSON.stringify(data), onResponse);
+    getUsers(data, onResponse);
 }
 
 // Заполнение таблицы студентов
 function fillStudents(data) {
-    let oldTable = $(".students-table>.body");
+    let oldTable = $(".table>.body");
     if (oldTable) {
         oldTable.empty();
     }
 
-    let studentsTableBody = $(".students-table>.body");
+    let studentsTableBody = $(".table>.body");
 
     let index = 1;
     for (user of data.users) {
@@ -43,9 +43,9 @@ function fillStudents(data) {
             continue;
         }
 
-        let tableRow = $(`<div class="row" student="${user.id}">` +
+        let tableRow = $(`<div class="row s" student="${user.id}">` +
             `<div class="number">${index}</div>` +
-            `<div class="student-name">${user.lastName} ${user.firstName}</div>` +
+            `<div class="bold">${user.lastName} ${user.firstName}</div>` +
             `<div class="description">${user.groupName == null ? "-" : user.groupName}</div >` +
             `<div class="description">${user.tasks.length}</div >` +
             '</div> ');
@@ -71,6 +71,7 @@ function fillStudents(data) {
         studentsTableBody.append(tableRow);
         index += 1;
     }
+    applyTableTemplate();
 }
 
 let deleteUser = function (id) {
@@ -87,7 +88,7 @@ let deleteUser = function (id) {
         window.location.reload();
     }
 
-    deleteUsers(JSON.stringify(data), onResponse);
+    deleteUsers(data, onResponse);
 }
 
 // Добавить нового студента
@@ -132,17 +133,16 @@ let createNewUser = function () {
     }
 
     let onResponse = function (response) {
-        let responseText = JSON.parse(response.responseText);
 
-        if (responseText.type === "BadResponse") {
-            handleErrors(responseText.errors);
+        if (response.type === "BadResponse") {
+            handleErrors(response.errors);
         }
         else {
             window.location.reload();
         }
     }
 
-    createUsers(JSON.stringify(data), onResponse);
+    createUsers(data, onResponse);
 }
 
 let importFile = function (e) {
@@ -398,7 +398,7 @@ let addCreateUsersButton = function () {
                     if (data.type === "UsersDataResponse") {
                         window.location.reload();
                     }
-                    else if (data.type === "ExceptionResponse") {
+                    else if (data.type === "BadResponse") {
                         new Notify({
                             status: 'error',
                             title: 'Ошибка',
@@ -443,10 +443,3 @@ $("#import").on('change', function (e) {
         fillFiles([]);
     }
 });
-
-updateStudents(
-    {
-        target: {
-            value: ""
-        }
-    });

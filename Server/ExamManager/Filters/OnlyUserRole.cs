@@ -19,7 +19,7 @@ namespace ExamManager.Filters
 
             if (user is not null)
             {
-                if ((user.Role & _role) != _role)
+                if ((user.Role & _role) != user.Role)
                 {
                     context.Result = new RedirectResult(_redirectUrl);
                     return;

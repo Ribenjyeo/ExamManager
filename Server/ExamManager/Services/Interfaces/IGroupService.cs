@@ -4,8 +4,8 @@ namespace ExamManager.Services;
 
 public interface IGroupService
 {
-    public Task<Group> GetGroup(string groupName, bool includeStudents = false);
-    public Task<Group> GetGroup(Guid groupId, bool includeStudents = false);
+    public Task<Group?> GetGroup(string groupName, bool includeStudents = false);
+    public Task<Group?> GetGroup(Guid groupId, bool includeStudents = false);
     public Task DeleteGroup(Guid groupId);
     public Task<Group[]> GetGroups(GroupOptions options, bool includeStudents = false);
     public Task<Group> GetStudentGroup(Guid studentId, bool includeStudents = false);

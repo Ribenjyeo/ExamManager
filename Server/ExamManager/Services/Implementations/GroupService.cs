@@ -15,7 +15,7 @@ public class GroupService : IGroupService
         _userService = userService;
     }
 
-    public async Task<Group> GetGroup(string groupName, bool includeStudents = false)
+    public async Task<Group?> GetGroup(string groupName, bool includeStudents = false)
     {
         var GroupSet = _dbContext.Set<Group>();
 
@@ -27,7 +27,7 @@ public class GroupService : IGroupService
         return group;
     }
 
-    public async Task<Group> GetGroup(Guid groupId, bool includeStudents = false)
+    public async Task<Group?> GetGroup(Guid groupId, bool includeStudents = false)
     {
         var GroupSet = _dbContext.Set<Group>();
 
@@ -119,7 +119,7 @@ public class GroupService : IGroupService
         }
         else
         {
-            groups = GroupSet.AsEnumerable();
+            groups = await GroupSet.ToListAsync();
         }
         groups = groups.Where(g =>
         {
@@ -157,7 +157,7 @@ public class GroupService : IGroupService
 
         // Проверяем группу
         var group = await GetGroup(groupId, includeStudents: true);
-        (ValidationResult Result, Group Group) groupValidation = (ValidateGroup(group), group);
+        (ValidationResult Result, Group? Group) groupValidation = (ValidateGroup(group), group);
 
         if (groupValidation.Result.HasErrors)
         {

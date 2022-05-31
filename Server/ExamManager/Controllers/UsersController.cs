@@ -22,7 +22,7 @@ namespace ExamManager.Controllers
         IMapper _mapper { get; set; }
         public UsersController(IUserService userService,
             IMapper mapper,
-            IGroupService groupService, 
+            IGroupService groupService,
             IFileService fileService)
         {
             _userService = userService;
@@ -99,8 +99,15 @@ namespace ExamManager.Controllers
             var users = new List<User>();
             foreach (var file in files)
             {
-                var newUsers = await _fileService.ParseExcelUsers(file, cancellationToken);
-                users.AddRange(newUsers);
+                try
+                {
+                    var newUsers = await _fileService.ParseUsersFromFile(file, cancellationToken);
+                    users.AddRange(newUsers);
+                }
+                catch (Exception ex)
+                {
+                    return Ok(ResponseFactory.CreateResponse(ex));
+                }
             }
 
             try

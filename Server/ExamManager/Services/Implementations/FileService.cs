@@ -19,40 +19,40 @@ public class FileService : IFileService
             { "Пароль", 4 }
         };
         _mapper = mapper;
+    }    
+
+    public async Task<IEnumerable<User>> ParseUsersFromFile(IFormFile file, CancellationToken cancellationToken)
+    {
+        var extension = Path.GetExtension(file.FileName);
+        var newUsers = extension switch
+        {
+            ".xlsx" or ".xls" => await ParseExcelUsers(file, cancellationToken),
+            ".csv" => await ParseCsvUsers(file, cancellationToken),
+            _ => throw new InvalidDataException($"Файл с расширением .{extension} не поддерживается")
+        };
+
+        return newUsers;
     }
 
-    public async Task<IEnumerable<RegisterEditModel>> ParseExcelRegisterModels(IFormFile file, CancellationToken cancellationToken)
+    private Dictionary<string, int> GenerateFieldColumns(ExcelWorksheet worksheet)
     {
-        var users = new List<RegisterEditModel>();
+        var fieldColumns = new Dictionary<string, int>();        
+        var columnCount = worksheet.Dimension.Columns;
 
-        using (var stream = new MemoryStream())
+        for (int i = 1; i <= columnCount; i++)
         {
-            await file.CopyToAsync(stream, cancellationToken);
-
-            using (var package = new ExcelPackage(stream))
-            {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                var rowCount = worksheet.Dimension.Rows;
-                var fieldColumns = GenerateFieldColumns(worksheet);
-
-                for (int row = 2; row <= rowCount; row++)
-                {
-                    users.Add(new RegisterEditModel
-                    {
-                        FirstName = worksheet.Cells[row, fieldColumns["Имя"]].Value.ToString().Trim(),
-                        LastName = worksheet.Cells[row, fieldColumns["Фамилия"]].Value.ToString().Trim(),
-                        Login = worksheet.Cells[row, fieldColumns["Логин"]].Value.ToString().Trim(),
-                        Password = worksheet.Cells[row, fieldColumns["Пароль"]].Value.ToString().Trim(),
-                        Role = UserRole.STUDENT
-                    });
-                }
-            }
+            fieldColumns.Add(worksheet.Cells[1, i].Value.ToString(), i);
         }
 
-        return users;
+        if (fieldColumns.Keys.Except(_allowedColumnNames.Keys).Count() == 0)
+        {
+            return fieldColumns;
+        }
+
+        return _allowedColumnNames;
     }
 
-    public async Task<IEnumerable<User>> ParseExcelUsers(IFormFile file, CancellationToken cancellationToken)
+    private async Task<IEnumerable<User>> ParseExcelUsers(IFormFile file, CancellationToken cancellationToken)
     {
         var users = new List<User>();
 
@@ -85,22 +85,8 @@ public class FileService : IFileService
 
         return users;
     }
-
-    private Dictionary<string, int> GenerateFieldColumns(ExcelWorksheet worksheet)
+    private async Task<IEnumerable<User>> ParseCsvUsers(IFormFile file, CancellationToken cancellationToken)
     {
-        var fieldColumns = new Dictionary<string, int>();        
-        var columnCount = worksheet.Dimension.Columns;
-
-        for (int i = 1; i <= columnCount; i++)
-        {
-            fieldColumns.Add(worksheet.Cells[1, i].Value.ToString(), i);
-        }
-
-        if (fieldColumns.Keys.Except(_allowedColumnNames.Keys).Count() == 0)
-        {
-            return fieldColumns;
-        }
-
-        return _allowedColumnNames;
+        throw new NotImplementedException();
     }
 }

@@ -20,7 +20,7 @@
     }
 
     let onResponse = function (response) {
-        let tasks = JSON.parse(response.responseText).tasks;
+        let tasks = response.tasks;
         fillTasksList(tasks);
     }
 

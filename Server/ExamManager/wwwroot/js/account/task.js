@@ -22,14 +22,13 @@ let createNewTask = function () {
     let onResponse = function (response) {
 
         let onUserResponse = function (userResponse) {
-            let user = JSON.parse(userResponse.responseText);
-            window.location.replace(`/pages/group/${user.groupId}`);
+            window.location.replace(`/pages/group/${userResponse.groupId}`);
         }
 
         getUser(studentId, onUserResponse);
     }
 
-    createTask(JSON.stringify(data), onResponse);
+    createTask(data, onResponse);
 }
 
 let saveTask = function () {
@@ -43,14 +42,13 @@ let saveTask = function () {
     let onResponse = function (response) {
 
         let onUserResponse = function (userResponse) {
-            let user = JSON.parse(userResponse.responseText);
-            window.location.replace(`/pages/group/${user.groupId}`);
+            window.location.replace(`/pages/group/${userResponse.groupId}`);
         }
 
         getUser(studentId, onUserResponse);
     }
 
-    modifyTask(JSON.stringify(data), onResponse);
+    modifyTask(data, onResponse);
 }
 
 $(document).ready(function () {

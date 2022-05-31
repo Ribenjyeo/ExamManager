@@ -12,8 +12,8 @@ namespace ExamManager.Controllers
         IMapper _mapper { get; set; }
         IGroupService _groupService { get; set; }
         IUserService _userService { get; set; }
-        IStudentTaskService _taskService { get; set; }
-        public PagesController(IMapper mapper, IGroupService groupService, IUserService userService, IStudentTaskService taskService)
+        IStudyTaskService _taskService { get; set; }
+        public PagesController(IMapper mapper, IGroupService groupService, IUserService userService, IStudyTaskService taskService)
         {
             _mapper = mapper;
             _groupService = groupService;
@@ -32,9 +32,9 @@ namespace ExamManager.Controllers
         [HttpGet(Routes.LoginPage)]
         public IActionResult LoginPageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
             // Если пользователь не авторизован
-            if (user is null)
+            if (user is null || user.IsDefault)
             {
                 return View("Login");
             }
@@ -46,18 +46,12 @@ namespace ExamManager.Controllers
         [JwtAuthorize(RedirectUrl: "/pages/login")]
         public IActionResult HomePageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
 
             if (user.IsDefault)
             {
                 RedirectToAction(nameof(LoginPageIndex));
             }
-            //// Если пользователь не администратор
-            //var view = user.Role switch
-            //{
-            //    UserRole.ADMIN => View("Admin", user),
-            //    UserRole.STUDENT => View("User", user)
-            //};
 
             var view = user.Role switch
             {
@@ -73,7 +67,7 @@ namespace ExamManager.Controllers
         [OnlyUserRole(UserRole.ADMIN)]
         public IActionResult GroupsPageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
 
             return View("Groups", user);
         }
@@ -82,7 +76,7 @@ namespace ExamManager.Controllers
         [JwtAuthorize(RedirectUrl: "/pages/login")]
         public IActionResult SettingsPageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
 
             return View("Settings", user);
         }
@@ -94,7 +88,7 @@ namespace ExamManager.Controllers
         public async Task<IActionResult> GroupPageIndex(string id)
         {
             var groupId = Guid.Parse(id);
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
             var group = await _groupService.GetGroup(groupId);
 
             return View("Group", (user, group));
@@ -105,7 +99,7 @@ namespace ExamManager.Controllers
         [OnlyUserRole(UserRole.ADMIN, "/pages/login")]
         public async Task<IActionResult> StudentsPageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
             return View("Students", user);
         }
 
@@ -114,10 +108,10 @@ namespace ExamManager.Controllers
         [JwtAuthorize(RedirectUrl: "/pages/login")]
         public async Task<IActionResult> TaskPageIndex([FromQuery] string id, [FromQuery] string student)
         {
-            var user = (User)HttpContext.Items["User"];
+            var user = (User?)HttpContext.Items["User"];
             var taskId = Guid.Parse(id);
 
-            var task = await _taskService.GetStudentTask(taskId);
+            var task = await _taskService.GetStudyTasksAsync(taskId);
             return View("Task", (user, task));
         }
 
@@ -132,15 +126,13 @@ namespace ExamManager.Controllers
                 return RedirectToAction(nameof(HomePageIndex));
             }
 
-            var user = (User)HttpContext.Items["User"];
-            var task = new StudentTask
+            var user = (User?)HttpContext.Items["User"];
+            var task = new StudyTask
             {
-                AuthorID = user.ObjectID,
-                StudentID = Guid.Parse(student),
-                Status = StudentTask.TaskStatus.FAILED,
                 Title = string.Empty,
                 Description = string.Empty,
-                Url = string.Empty
+                Number = 0,
+                VirtualMachines = new VirtualMachineImage[0]
             };
             
             return View("Task", (user, task));
@@ -148,12 +140,18 @@ namespace ExamManager.Controllers
 
         [HttpGet(Routes.TasksPage)]
         [JwtAuthorize(RedirectUrl: "/pages/login")]
-        [OnlyUserRole(UserRole.STUDENT)]
         public async Task<IActionResult> TasksPageIndex()
         {
-            var user = (User)HttpContext.Items["User"];
+            User user = (User?)HttpContext.Items["User"]!;
 
-            return View("Tasks", user);
+            IActionResult view = user.Role switch
+            {
+                UserRole.STUDENT => View("PersonalTasks", user),
+                UserRole.ADMIN => View("Tasks", user),
+                _ => Ok(ResponseFactory.CreateResponse(new Exception("")))
+            };
+
+            return view;
         }
     }
 }

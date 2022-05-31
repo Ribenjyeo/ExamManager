@@ -28,7 +28,7 @@ builder.Services.AddRazorPages();
 
 var connectionString = configManager.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<DbContext, ApplicationDBContext>(
+builder.Services.AddDbContext<DbContext, ExamManagerDBContext>(
     dbContextOptions => dbContextOptions
         .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
         .LogTo(Console.WriteLine, LogLevel.Information)
@@ -38,10 +38,12 @@ builder.Services.AddDbContext<DbContext, ApplicationDBContext>(
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<ISecurityService, SecurityService>();
-builder.Services.AddTransient<IStudentTaskService, StudentTaskService>();
+builder.Services.AddTransient<IStudyTaskService, StudyTaskService>();
+builder.Services.AddTransient<IVirtualMachineService, VirtualMachineService>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<SignInManager>((serviceProvider) => new SignInManager(serviceProvider));
+builder.Services.AddScriptManager(builder.Environment);
 
 //builder.Services.AddClaimsAuthentication();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

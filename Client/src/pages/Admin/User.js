@@ -43,33 +43,33 @@ const User = () => {
       });
     
     const getUserEdit = async () => { // получить данные пользователя по его ID
-    try {
-        const response = await instance.get(`/user/${cookies.editUser}`)
-        console.log(response.data)
-        setTasks(response.data.tasks) 
-        if(response.data.role == 1 && response.data.groupId != null){
-            const res = await instance.get(`/group/${response.data.groupId}`)
-            setFromData({
-                firstName : response.data.firstName,
-                lastName : response.data.lastName,
-                groupId: response.data.groupId,
-                role : response.data.role,
-                groupName: res.data.name
-            })           
+        try {
+            const response = await instance.get(`/user/${cookies.editUser}`)
+            console.log(response.data)
+            setTasks(response.data.tasks) 
+            if(response.data.role == 1 && response.data.groupId != null){
+                const res = await instance.get(`/group/${response.data.groupId}`)
+                setFromData({
+                    firstName : response.data.firstName,
+                    lastName : response.data.lastName,
+                    groupId: response.data.groupId,
+                    role : response.data.role,
+                    groupName: res.data.name
+                })           
+            }
+            else{
+                setFromData({
+                    firstName : response.data.firstName,
+                    lastName : response.data.lastName,
+                    groupId: response.data.groupId,
+                    role : response.data.role,
+                    groupName : null
+                })
+            }   
         }
-        else{
-            setFromData({
-                firstName : response.data.firstName,
-                lastName : response.data.lastName,
-                groupId: response.data.groupId,
-                role : response.data.role,
-                groupName : null
-            })
-        }   
-    }
-    catch(error) {
-        console.log(error)
-    }
+        catch(error) {
+            console.log(error)
+        }
     }
 
     const groups = async () => { //запрос на получение групп
@@ -127,7 +127,7 @@ const User = () => {
             firstName : firstName,
             lastName : lastName,
         })
-        window.location.reload()
+        // window.location.reload()
     }
 
     const handleDelete = async (params) => { //Удаление задания у пользователя
