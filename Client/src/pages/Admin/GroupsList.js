@@ -1,7 +1,14 @@
 import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
-import { DataGrid } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarExport,
+  GridToolbarDensitySelector
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
@@ -10,7 +17,13 @@ import axios from "axios";
 
 const GroupList = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
-  let [groupList, setGroupList] = useState()
+  const [groupList, setGroupList] = useState(
+    {
+      id: null,
+      name: null,
+      studentCount: null
+    }
+  )
   const [pageSize, setPageSize] = useState(10)
 
   const groups = async () => { //запрос на получение пользователей
@@ -25,11 +38,9 @@ const GroupList = () => {
     setCookies("editGroup", params)
   }
 
-  console.log(groupList)
+  // console.log(groupList)
 
   const handleDelete = async (params) => {  //удаление группы
-    // const res = await axios.get(`/group/${params}`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
-    // console.log(res.data)
     const response = await axios.get(`/group/${params}/delete`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
     window.location.reload()
   }
@@ -61,6 +72,22 @@ const GroupList = () => {
       }
     }]
 
+    function CustomToolbar() {
+      return (
+        <GridToolbarContainer>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarDensitySelector />
+          <GridToolbarExport csvOptions={{
+            fileName: 'Group_list_MIREA',
+            delimiter: ';',
+            utf8WithBom: true,
+            }}
+          />
+        </GridToolbarContainer>
+      );
+    }
+
     return(
         <>
         <AdminBar/>
@@ -73,12 +100,15 @@ const GroupList = () => {
                   <div className="dataGrid">
                     <DataGrid
                       rows={groupList}
-                      disableSelectionOnClick
+                      checkboxSelection
+                      onSelectionModelChange={item => setStudents(item)}
                       columns={columns}
                       pageSize={pageSize}
+                      components={{
+                        Toolbar: CustomToolbar,
+                      }}
                       onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                       rowsPerPageOptions={[10, 25, 50]}
-                      checkboxSelection
                     />
                   </div>
                 </div>

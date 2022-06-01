@@ -87,7 +87,7 @@ const AdminBar = () => {
                         <ul>
                             <li><SettingsIcon className='adminbarIcons'/>
                                 <ul className='dropdown'>
-                                    <li><p onClick={(e) => {requestCsvFile()}}>Импортировать пользователей</p>
+                                    <li><p className='import' onClick={(e) => {requestCsvFile()}}>Импортировать пользователей</p>
                                         <input className='CsvFile'
                                         type="file"
                                         accept=".csv"

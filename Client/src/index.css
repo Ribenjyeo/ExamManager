@@ -476,8 +476,11 @@ input[type="file"] {
 
 ul.dropdown > li:hover {
   text-decoration: none;
-  color: teal;
   cursor: pointer;
+}
+
+.import:hover {
+  color:teal;
 }
 
 .AdminBarIconsContainer > ul li ul {
@@ -659,6 +662,13 @@ ul.dropdown {
 
 span.userShowInfoTitle {
   margin-left: 5px;
+}
+
+.userShowInfoTitle::after {
+  content: "🖍";
+  position: relative;
+  bottom: 10px;
+  left: 2px;
 }
 
 .userUpdate {

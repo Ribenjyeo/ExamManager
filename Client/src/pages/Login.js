@@ -69,7 +69,7 @@ const Login = () => {
                 type="text"
                 id="login"
                 name="login"
-                placeholder="Ничаев Илья"
+                placeholder="Логин"
                 required={true}
                 onChange={(e) => setLogin(e.target.value)}
               />
@@ -78,7 +78,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="**********"
+                placeholder="******"
                 required={true}
                 onChange={(e) => setPassword(e.target.value)}
               />

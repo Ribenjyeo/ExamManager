@@ -9,6 +9,7 @@ import {useNavigate} from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import photo from "../../img/userShowImg.png"
+import click_icon from "../../img/double_click.png"
 
 const User = () => {
     let navigate = useNavigate()

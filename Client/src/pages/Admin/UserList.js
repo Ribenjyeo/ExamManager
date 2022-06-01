@@ -1,7 +1,14 @@
 import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
-import { DataGrid } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarExport,
+  GridToolbarDensitySelector
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
@@ -135,6 +142,22 @@ const UserList = () => {
       }
     }];
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport csvOptions={{
+          fileName: 'User_list_MIREA',
+          delimiter: ';',
+          utf8WithBom: true,
+          }}
+        />
+      </GridToolbarContainer>
+    );
+  }
+
     return(
         <>
         <AdminBar/>
@@ -153,6 +176,9 @@ const UserList = () => {
                     onSelectionModelChange={item => setStudents(item)}
                     columns={columns}
                     pageSize={pageSize}
+                    components={{
+                      Toolbar: CustomToolbar,
+                    }}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                     rowsPerPageOptions={[10, 25, 50]}
                   />

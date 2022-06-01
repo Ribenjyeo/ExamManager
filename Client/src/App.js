@@ -22,16 +22,16 @@ const App = () => {
           <Route path='/auth' exact element={<Login/>}/>
           {cookies.AuthToken == undefined && <Route path='/' element={<Navigate replace to="/auth"/>}/>} 
           {cookies.AuthToken != undefined && <Route path='/' element={<Home/>}/>}
-          <Route path='/rename' element={<Rename/>}/>      
+          {cookies.userRole == 1 && <Route path='/rename' element={<Rename/>}/>}      
           {cookies.userRole == 2 && <Route path='/admin' element={<Navigate replace to="/admin/users"/>}/>}
           {cookies.userRole == 2 && <Route path='/admin/users' element={<UserList/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/users/:userId' element={<User/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/newUser' element={<NewUser/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/newGroup' element={<NewGroup/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/newGroup/:userId/students' element={<NewGroup/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/newTask' element={<NewTask/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/groups' element={<GroupsList/>}/>}
-          {cookies.userRole == 2 &&<Route path='/admin/groups/:groupId' element={<Group/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/users/:userId' element={<User/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/newUser' element={<NewUser/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/newGroup' element={<NewGroup/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/newGroup/:userId/students' element={<NewGroup/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/newTask' element={<NewTask/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/groups' element={<GroupsList/>}/>}
+          {cookies.userRole == 2 && <Route path='/admin/groups/:groupId' element={<Group/>}/>}
           {/* {cookies.userRole == 2 &&<Route path='/admin/task' element={<Task/>}/>} */}
           {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<TaskList/>}/>}
         </Routes>
