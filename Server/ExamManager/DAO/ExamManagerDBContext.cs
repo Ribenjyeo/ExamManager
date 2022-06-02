@@ -42,6 +42,10 @@ namespace ExamManager.DAO
             modelBuilder.Entity<StudyTask>()
                 .HasMany(st => st.PersonalTasks)
                 .WithOne(pt => pt.Task);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Tasks)
+                .WithOne(t => t.Student);
         }
     }
 }

@@ -1,7 +1,6 @@
 import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
-import { Link } from 'react-router-dom'
 import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import axios from 'axios'
@@ -9,7 +8,6 @@ import {useNavigate} from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import photo from "../../img/userShowImg.png"
-import click_icon from "../../img/double_click.png"
 
 const User = () => {
     let navigate = useNavigate()
@@ -46,8 +44,6 @@ const User = () => {
     const getUserEdit = async () => { // получить данные пользователя по его ID
         try {
             const response = await instance.get(`/user/${cookies.editUser}`)
-            console.log(response.data)
-            setTasks(response.data.tasks) 
             if(response.data.role == 1 && response.data.groupId != null){
                 const res = await instance.get(`/group/${response.data.groupId}`)
                 setFromData({
@@ -128,26 +124,40 @@ const User = () => {
             firstName : firstName,
             lastName : lastName,
         })
-        // window.location.reload()
+        window.location.reload()
     }
 
     const handleDelete = async (params) => { //Удаление задания у пользователя
-    const deleteTask = {taskId: params}
-    // console.log(deleteTask)
-    const response = await fetch('/task/delete', {
-        method: "POST",
-        headers: {
-        'Content-Type' : 'application/json',
-        'Authorization' : 'Bearer ' + cookies.AuthToken},
-        body: JSON.stringify(deleteTask)
-    })
-    getUserEdit() //Обновить список пользователей на странице
+        let array = []
+        array.push({id: params})
+
+        let deleteTask = {
+            tasks: array
+        }
+        // console.log(deleteTask)
+        const response = await fetch(`/user/${cookies.editUser}/tasks/remove`, {
+            method: "POST",
+            headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + cookies.AuthToken},
+            body: JSON.stringify(deleteTask)
+        })
+        // window.location.reload()
+    }
+
+    const GetTaskList = async () => {
+        const response = await fetch(`/user/${cookies.editUser}/tasks`, {method: "GET", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+        const json = await response.json()
+        const stringi = JSON.stringify(json)
+        const parse = JSON.parse(stringi)
+        setTasks(parse.personalTasks[0].tasks)
     }
 
     useEffect(() => {
-    getUserEdit()
-    removeCookies('editUser', {path:'/admin/user/:userId'})
-    groups()
+        getUserEdit()
+        GetTaskList()
+        removeCookies('editUser', {path:'/admin/user/:userId'})
+        groups()
     }, [])
 
 
@@ -157,10 +167,6 @@ const User = () => {
             if(fromData.groupName != null) return fromData.groupName
             else return "Нет группы"
         }   
-    }
-
-    function handleClickTask (params) { //получение ID изменяемого задания
-        setCookies("editTask", params)
     }
     
     function toggleInputFirstName() {
@@ -174,22 +180,22 @@ const User = () => {
     function toggleInputGroup() {
         setToggleGroup(false);
     }
-
-
     const columns = [
-        { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+        { field: 'id', headerName: 'ID', minWidth: 300, flex: 1},
         { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
+        { field: 'description', headerName: 'Описание задания', minWidth: 100, flex: 1},
+        { field: 'number', headerName: 'Внутренний номер задания', minWidth: 100, flex: 1},
+        { field: 'status', headerName: 'Статус задания', minWidth: 100, flex: 1},
+        // { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
+        // { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
         {
           field: 'action',
-          headerName: 'Изменить / Удалить',
+          headerName: 'Убрать задание',
           minWidth: 100,
           flex: 1,
           renderCell: (params) => {
             return (
               <>
-                <Link to={"/admin/tasks/"+params.row.id}>
-                  <button className="userListEdit" onClick={(e) => handleClickTask(params.row.id)}>Изменить</button>
-                </Link>
                 <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
               </>
             )
@@ -272,7 +278,6 @@ const User = () => {
                         <DataGrid
                             rows={tasks}
                             checkboxSelection
-                            // onSelectionModelChange={item => setStudents(item)}
                             columns={columns}
                             pageSize={pageSize}
                             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

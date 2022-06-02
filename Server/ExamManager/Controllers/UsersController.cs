@@ -34,18 +34,9 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.GetUsers)]
         public async Task<IActionResult> GetUsers([FromBody] GetUsersRequest request)
         {
-            var options = new UserOptions
-            {
-                Name = request.name,
-                FirstName = request.firstName,
-                LastName = request.lastName,
-                WithoutGroups = request.withoutGroup,
-                Role = request.role,
-                GroupIds = request.groupIds,
-                ExcludeGroupIds = request.excludeGroupIds,
-                TaskStatus = request.taskStatus,
-            };
-            var users = await _userService.GetUsers(options, includeTasks: true, includeGroup: true);
+            var user = (User)HttpContext.Items["User"]!;
+            var options = RequestMapper.MapFrom(request, user);
+            var users = await _userService.GetUsers(options, includePersonalTasks: true, includeGroup: true, includeTasks: true);
 
             return Ok(ResponseFactory.CreateResponse(users));
         }
@@ -101,22 +92,28 @@ namespace ExamManager.Controllers
             {
                 try
                 {
-                    var newUsers = await _fileService.ParseUsersFromFile(file, cancellationToken);
-                    users.AddRange(newUsers);
+                    var groups = new Dictionary<string, Guid>();
+                    var newUsers = (await _fileService.ParseUsersFromFile(file, cancellationToken)).ToArray();
+                    for (int i = 0; i < newUsers.Length; i++)
+                    {
+                        var group = await _groupService.GetGroup(newUsers[i].GroupName);
+                        if (group is null)
+                        {
+                            group = await _groupService.CreateGroup(newUsers[i].GroupName);
+                        }
+
+                        if (!groups.ContainsKey(newUsers[i].GroupName))
+                        {
+                            groups.Add(newUsers[i].GroupName, group.ObjectID);
+                        }
+                        newUsers[i].User.StudentGroupID = groups[newUsers[i].GroupName];
+                    }
+                    await _userService.RegisterUsers(newUsers.Select(u => u.User));
                 }
                 catch (Exception ex)
                 {
                     return Ok(ResponseFactory.CreateResponse(ex));
                 }
-            }
-
-            try
-            {
-                await _userService.RegisterUsers(users);
-            }
-            catch (Exception ex)
-            {
-                return Ok(ResponseFactory.CreateResponse(ex));
             }
 
             return Ok(ResponseFactory.CreateResponse(users));

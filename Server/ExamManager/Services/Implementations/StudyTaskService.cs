@@ -19,7 +19,7 @@ public class StudyTaskService : IStudyTaskService
         _vMachineService = vMachineService;
     }
 
-    public async Task<StudyTask> CreateStudyTaskAsync(string? title, string description, VirtualMachineImage[] virtualMachines)
+    public async Task<StudyTask> CreateStudyTaskAsync(string? title, string description, VirtualMachineImage[]? virtualMachines)
     {
         var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -36,14 +36,17 @@ public class StudyTaskService : IStudyTaskService
 
             await _dbContext.Tasks!.AddAsync(task);
 
-            foreach(var vMachine in virtualMachines)
+            if (virtualMachines is not null)
             {
-                vMachine.Task = task;
-            }
+                foreach (var vMachine in virtualMachines)
+                {
+                    vMachine.Task = task;
+                }
 
-            await _dbContext.VMImages!.AddRangeAsync(virtualMachines);
+                await _dbContext.VMImages!.AddRangeAsync(virtualMachines);
+            }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await transaction.RollbackAsync();
             throw new InvalidDataException($"Не удалось создать задание {title}", ex);
@@ -63,9 +66,19 @@ public class StudyTaskService : IStudyTaskService
     public async Task DeleteStudyTaskAsync(Guid taskId)
     {
         var task = await _dbContext.Tasks.FirstOrDefaultAsync(task => task.ObjectID == taskId);
-        var personalTasks = _dbContext.UserTasks.Where(pTask => pTask.TaskID == task.ObjectID);
-        // Удалить связанные задания у пользователей
-        _dbContext.UserTasks.RemoveRange(personalTasks);
+
+        if (task is null)
+        {
+            throw new InvalidDataException($"Задание {taskId} не существует");
+        }
+
+        var personalTasks = await _dbContext.UserTasks.Where(pTask => pTask.TaskID == task.ObjectID)?.ToListAsync();
+
+        // Если некоторым пользователям присвоены задание, то не удаляем его
+        if ((personalTasks?.Count ?? 0) > 0)
+        {
+            throw new InvalidDataException($"Невозможно удалить задание {task.Number}, поскольку оно присвоено студентам ({personalTasks.Count})");
+        }
 
         _dbContext.Tasks.Remove(task ?? throw new InvalidDataException($"Задания {taskId} не существует"));
         await _dbContext.SaveChangesAsync();
@@ -75,7 +88,8 @@ public class StudyTaskService : IStudyTaskService
     {
         var task = await _dbContext.Tasks
             .AsNoTracking()
-            .Include(nameof(StudyTask.PersonalTasks))
+            .Include(task => task.PersonalTasks)!
+            .ThenInclude(pTask => pTask.Student)
             .FirstOrDefaultAsync(task => task.ObjectID == taskId);
 
         return task ?? throw new InvalidDataException($"Задания {taskId} не существует");
@@ -95,10 +109,10 @@ public class StudyTaskService : IStudyTaskService
         var query = $"SELECT * FROM {nameof(ExamManagerDBContext.Tasks)} t ";
         var conditions = GetQueryConditions(options);
 
-        query += conditions.Condition;        
-
+        query += conditions;
+        var temp = _dbContext.Tasks.FromSqlRaw(query);
         var tasks = await _dbContext.Tasks
-            .FromSqlRaw(query, conditions.Parameters)
+            .FromSqlRaw(query)
             .AsNoTracking()
             .ToListAsync();
 
@@ -110,6 +124,7 @@ public class StudyTaskService : IStudyTaskService
         var personalTasks = await _dbContext.UserTasks
             .Include(pTask => pTask.Task)
             .ThenInclude(task => task.VirtualMachines)
+            .Include(pTask => pTask.VirtualMachines)
             .Where(pTask => studentIds.Contains(pTask.StudentID))
             .ToListAsync();
 
@@ -128,11 +143,12 @@ public class StudyTaskService : IStudyTaskService
         var entityManager = new EntityManager();
         entityManager
             .Modify(currentTask)
+            .Except(nameof(StudyTask.ObjectID))
             .BasedOn(newTask);
 
         await _dbContext.SaveChangesAsync();
 
-        throw new NotImplementedException();
+        return currentTask;
     }
 
     public async Task<PersonalTask> AssignTaskToStudentAsync(Guid taskId, Guid studentId)
@@ -199,7 +215,7 @@ public class StudyTaskService : IStudyTaskService
         await _dbContext.SaveChangesAsync();
     }
 
-    public async  Task WithdrawTasksFromStudentAsync(Guid[] personalTaskIds)
+    public async Task WithdrawTasksFromStudentAsync(Guid[] personalTaskIds)
     {
         var personalTasks = await _dbContext.UserTasks!
             .Where(pTask => personalTaskIds.Contains(pTask.ObjectID))
@@ -243,42 +259,40 @@ public class StudyTaskService : IStudyTaskService
         }
     }
 
-    private (string Condition, MySqlParameter[] Parameters) GetQueryConditions(StudyTaskOptions options)
+    private string GetQueryConditions(StudyTaskOptions options)
     {
-        var conditions = new List<(string Condition, MySqlParameter Parameter)>(5);
+        var conditions = new List<string>(5);
 
         #region CREATE_CONDITIONS
 
-        if (options.Title is not null)
+        if (options.Title is not null && options.Number is not null)
         {
-            conditions.Add((
-                $"LOWER({nameof(StudyTask.Title)}) LIKE @title", 
-                new MySqlParameter("title", options.Title.ToLower())
-                ));
+            conditions.Add($"LOWER({nameof(StudyTask.Title)}) LIKE '%{options.Title.ToLower()}%' OR CAST({nameof(StudyTask.Number)} AS VARCHAR(10)) like '%{options.Number}%'");
         }
-        if (options.Number is not null)
+        else
         {
-            conditions.Add((
-                $"{nameof(StudyTask.Number)} = @number",
-                new MySqlParameter("number", options.Number)
-                ));
+            if (options.Title is not null)
+            {
+                conditions.Add($"LOWER({nameof(StudyTask.Title)}) LIKE '%{options.Title.ToLower()}%'");
+            }
+            if (options.Number is not null)
+            {
+                conditions.Add($"CAST({nameof(StudyTask.Number)} AS VARCHAR(10)) like '%{options.Number}%'");
+            }
         }
         if (options.StudentIds is not null)
         {
-            conditions.Add((
-                $"EXISTS (SELECT 1 FROM {nameof(ExamManagerDBContext.UserTasks)} WHERE {nameof(PersonalTask.TaskID)} = t.ObjectID AND {nameof(PersonalTask.StudentID)} IN (@students))", 
-                new MySqlParameter("students", string.Join(", ", options.StudentIds))
-                ));
+            conditions.Add($"EXISTS (SELECT 1 FROM {nameof(ExamManagerDBContext.UserTasks)} WHERE {nameof(PersonalTask.TaskID)} = t.ObjectID AND {nameof(PersonalTask.StudentID)} IN ('{string.Join("', '", options.StudentIds)}))'");
         }
 
         #endregion
 
         if (conditions.Count > 0)
         {
-            return ($"WHERE {string.Join(" AND ", conditions.Select(cond => cond.Condition))}", conditions.Select(cond => cond.Parameter).ToArray());
+            return ($"WHERE {string.Join(" AND ", conditions)}");
         }
 
-        return (string.Empty, new MySqlParameter[0]);
+        return string.Empty;
     }
 
     public async Task WithdrawTaskFromStudentAsync(Guid taskId, Guid studentId)
@@ -321,4 +335,25 @@ public class StudyTaskService : IStudyTaskService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<VirtualMachine>?> GetPersonalTaskVirtualMachinesAsync(Guid taskId)
+    {
+        var pTask = await _dbContext.UserTasks!
+            .AsNoTracking()
+            .Include(pTask => pTask.VirtualMachines)
+            .FirstOrDefaultAsync(pTask => pTask.ObjectID == taskId);
+
+        if (pTask is null)
+        {
+            throw new DataNotFoundException<PersonalTask>();
+        }
+
+        var vMachines = pTask.VirtualMachines;
+
+        if (vMachines is null || vMachines.Count == 0)
+        {
+            throw new DataNotFoundException<VirtualMachine>();
+        }
+
+        return vMachines;
+    }
 }

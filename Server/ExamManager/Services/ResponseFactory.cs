@@ -90,11 +90,11 @@ public static class ResponseFactory
             role = user.Role,
             isDefault = user.IsDefault,
             groupId = user.StudentGroupID,
-            tasks = user.Tasks?.Select(task => new UserDataResponse.TaskView
+            tasks = (user.Tasks?.Count ?? 0) > 0 ? user.Tasks?.Select(task => new UserDataResponse.TaskView
             {
                 id = task.ObjectID,
                 title = task.Task.Title!
-            }).ToArray()
+            }).ToArray() : null
         };
     }
 
@@ -189,7 +189,9 @@ public static class ResponseFactory
                 status = HttpStatusCode.BadRequest,
                 id = null,
                 title = null,
-                description = null
+                description = null,
+                virtualMachines = null,
+                students = null
             };
         }
 
@@ -198,7 +200,18 @@ public static class ResponseFactory
             status = HttpStatusCode.OK,
             id = task.ObjectID,
             title = task.Title,
-            description = task.Description
+            description = task.Description,
+            virtualMachines = task.VirtualMachines.Select(vm =>
+            new TaskDataResponse.VirtualMachineView
+            {
+                id = vm.ID
+            }).ToArray(),
+            students = task.PersonalTasks?.Select(pTask => pTask.Student).Select(student => 
+            new TaskDataResponse.UserView
+            {
+                id = student.ObjectID,
+                fullName = $"{student.LastName} {student.FirstName}"
+            }).ToArray()
         };
     }
 
@@ -254,6 +267,7 @@ public static class ResponseFactory
                 new TasksDataResponse.TaskView
                 {
                     id = t.ObjectID,
+                    number = t.Number,
                     title = t.Title,
                     description = t.Description
                 }
@@ -261,6 +275,13 @@ public static class ResponseFactory
         };
     }
 
+    public static Response CreateResponse(VMStatus vmStatus)
+    {
+        return new TaskStatusResponse
+        {
+            status = vmStatus
+        };
+    }
 
     private static Dictionary<string, List<string>> CreateDictionary(ModelStateDictionary modelState)
     {

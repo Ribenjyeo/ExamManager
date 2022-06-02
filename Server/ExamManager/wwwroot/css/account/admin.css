@@ -79,10 +79,11 @@ body {
 
 .input-standard {
     font-size: 20px;
-    font-family: var(--font-Raleway);
+    font-family: var(--font-Roboto);
     font-weight: 700;
     letter-spacing: 1px;
     border: 2px solid rgba(1, 1, 1, .5);
     border-radius: 10px;
     padding: 8px;
+    width: 80%;
 }

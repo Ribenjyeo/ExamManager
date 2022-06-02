@@ -1,0 +1,54 @@
+﻿@using ExamManager.Models
+@model (User User, PersonalTaskView PersonalTask)
+@{
+    ViewData["Title"] = Model.PersonalTask.Title;
+    ViewData["UserName"] = $"{Model.User.LastName} {Model.User.FirstName}";
+    ViewData["IsAdmin"] = Model.User.Role == UserRole.ADMIN;
+    Layout = "_AccountLayout";
+}
+<link rel="stylesheet" href="~/css/account/task.css" />
+<div class="container">
+    <div class="page-header">@Model.PersonalTask.Title</div>
+    <div class="description">
+        @foreach (var descriptionPart in Model.PersonalTask.Description.Split("\n"))
+        {
+            @descriptionPart
+            <br />
+        }
+    </div>
+    <div class="vmachines-list">
+        @foreach (var vMachine in Model.PersonalTask.VirtualMachines)
+        {
+            <div class="vmachine">
+                <div class="header">@vMachine.Image.ID</div>
+                <!--С помощью JS подгружается список рабоающих виртуальных машин-->
+                @if ((vMachine.Instance?.Status ?? VMStatus.KILLED) == VMStatus.KILLED)
+                {
+                    <div class="description danger">
+                        Отключена
+                    </div>
+                }
+                else
+                {
+                    <div class="description success">
+                        Работает
+                    </div>
+                }
+                <div class="actions">
+                    @if((vMachine.Instance?.Status ?? VMStatus.KILLED) == VMStatus.KILLED)
+                    {
+                        <input type="button" class="btn-info" value="Включить"/>
+                    }
+                    else
+                    {
+                        <input type="button" class="btn-action" value="Подключиться"/>
+                        <input type="button" class="btn-cancel" value="Отключить"/>                        
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="footer">
+        <input type="button" class="btn-info" value="Проверить" />
+    </div>
+</div>

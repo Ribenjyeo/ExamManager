@@ -104,28 +104,39 @@ namespace ExamManager.Controllers
         }
 
         [HttpGet(Routes.TaskPage)]
-        [ValidateGuidFormat("id", "student")]
+        [ValidateGuidFormat("id")]
         [JwtAuthorize(RedirectUrl: "/pages/login")]
-        public async Task<IActionResult> TaskPageIndex([FromQuery] string id, [FromQuery] string student)
+        public async Task<IActionResult> TaskPageIndex([FromQuery] string id)
         {
             var user = (User?)HttpContext.Items["User"];
             var taskId = Guid.Parse(id);
 
-            var task = await _taskService.GetStudyTasksAsync(taskId);
-            return View("Task", (user, task));
+            // Если пользователь является администратором или преподавателем
+            if((user.Role & (UserRole.ADMIN | UserRole.TEACHER)) == user.Role)
+            {
+                var task = await _taskService.GetStudyTaskAsync(taskId);
+                if (task is null)
+                {
+                    return RedirectToAction(nameof(TasksPageIndex));
+                }
+                return View("Task", (user, task));
+            }
+
+            var personalTask = (await _taskService.GetPersonalTasksAsync(taskId))?.First();
+            if (personalTask is null)
+            {
+                return RedirectToAction(nameof(TasksPageIndex));
+            }
+            var pTaskView = PersonalTaskView.MapFrom(personalTask);
+
+            return View("PersonalTask", (user, pTaskView));
         }
 
         [HttpGet(Routes.NewTaskPage)]
         [JwtAuthorize(RedirectUrl: "/pages/login")]
-        [ValidateGuidFormat("student")]
         [OnlyUserRole(UserRole.ADMIN, "/pages/login")]
-        public async Task<IActionResult> NewTaskPageIndex([FromQuery] string student)
+        public async Task<IActionResult> NewTaskPageIndex()
         {
-            if ((await _userService.GetUser(Guid.Parse(student))) is null)
-            {
-                return RedirectToAction(nameof(HomePageIndex));
-            }
-
             var user = (User?)HttpContext.Items["User"];
             var task = new StudyTask
             {

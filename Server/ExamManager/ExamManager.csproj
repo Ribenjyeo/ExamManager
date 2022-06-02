@@ -21,5 +21,10 @@
 	<ItemGroup>
 	  <Folder Include="wwwroot\scripts\" />
 	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="ExamManager_IntegrationTests" />
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

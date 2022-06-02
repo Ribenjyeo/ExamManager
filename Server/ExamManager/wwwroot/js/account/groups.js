@@ -27,11 +27,11 @@ createButton.addEventListener("click", () => {
 
 // Поиск групп (выпадающий список)
 const searchInput = $("#group-name");
-searchInput.on("input", updateGroups);
+searchInput.on("input", updateTasks);
 searchInput.val("").trigger("input");
 
 // При вводе названия группы
-function updateGroups(e) {
+function updateTasks(e) {
 
     let groupName = e.target.value;
 
@@ -93,6 +93,12 @@ function fillGroups(data) {
 
         groupsTableBody.append(tableRow);
         index += 1;
+    }
+
+    if (groupsTableBody.children(".row").length == 0) {
+        let tableDescription = $('<div class="description">Нет групп</div>');
+        groupsTableBody.append(tableDescription);
+        return;
     }
 
     applyTableTemplate();

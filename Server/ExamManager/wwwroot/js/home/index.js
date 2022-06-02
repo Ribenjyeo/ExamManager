@@ -69,7 +69,7 @@ let handleLogin = function (event) {
 }
 
 let onSuccess = function (response) {
-    if (response.type === "BadResponse") {
+    if (response.type === "ErrorsResponse") {
         handleBadResponse(response);
     }
     else if (response.type === "JWTResponse") {
@@ -131,7 +131,7 @@ let handleDefault = function () {
 
     let onResponse = function (response) {
         let data = response;
-        if (data.type === "BadResponse") {
+        if (data.type === "ErrorsResponse") {
             handleBadResponse(data);
         }
         else if (data.type === "UserDataResponse") {

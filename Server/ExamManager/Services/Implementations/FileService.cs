@@ -16,12 +16,13 @@ public class FileService : IFileService
             { "Имя", 1 },
             { "Фамилия", 2 },
             { "Логин", 3 },
-            { "Пароль", 4 }
+            { "Пароль", 4 },
+            { "Группа", 5 }
         };
         _mapper = mapper;
     }    
 
-    public async Task<IEnumerable<User>> ParseUsersFromFile(IFormFile file, CancellationToken cancellationToken)
+    public async Task<IEnumerable<(User User, string GroupName)>> ParseUsersFromFile(IFormFile file, CancellationToken cancellationToken)
     {
         var extension = Path.GetExtension(file.FileName);
         var newUsers = extension switch
@@ -52,9 +53,9 @@ public class FileService : IFileService
         return _allowedColumnNames;
     }
 
-    private async Task<IEnumerable<User>> ParseExcelUsers(IFormFile file, CancellationToken cancellationToken)
+    private async Task<IEnumerable<(User User, string GroupName)>> ParseExcelUsers(IFormFile file, CancellationToken cancellationToken)
     {
-        var users = new List<User>();
+        var users = new List<(User User, string GroupName)>();
 
         using (var stream = new MemoryStream())
         {
@@ -78,14 +79,15 @@ public class FileService : IFileService
                         Role = UserRole.STUDENT
                     };
 
-                    users.Add(_mapper.Map<RegisterEditModel, User>(registerModel));
+                    var groupName = worksheet.Cells[row, fieldColumns["Группа"]].Value.ToString().Trim();
+                    users.Add((_mapper.Map<RegisterEditModel, User>(registerModel), groupName));
                 }
             }
         }
 
         return users;
     }
-    private async Task<IEnumerable<User>> ParseCsvUsers(IFormFile file, CancellationToken cancellationToken)
+    private async Task<IEnumerable<(User Users, string GroupNames)>> ParseCsvUsers(IFormFile file, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

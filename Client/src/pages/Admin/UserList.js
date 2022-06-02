@@ -7,7 +7,7 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarExport,
-  GridToolbarDensitySelector
+  GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
@@ -20,10 +20,16 @@ const UserList = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   let [userList, setUserList] = useState({
     id : null,
-    firstName: null,
+    name : null,
+    firstName : null,
     lastName : null,
-    groupName : null
+    withoutGroup : false,
+    groupIds : null,
+    excludeGroupIds : null,
+    taskStatus : null,
+    role : null
   })
+
   const [user_id, setUser_id] = useState(false)
   const [groupName, setGroupName] = useState({
     id: null,
@@ -171,6 +177,7 @@ const UserList = () => {
                 </div>
                 <div className="dataGrid">
                   <DataGrid
+                    columnBuffer={3}
                     rows={userList}
                     checkboxSelection
                     onSelectionModelChange={item => setStudents(item)}

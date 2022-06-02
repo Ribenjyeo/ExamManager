@@ -12,17 +12,39 @@ public static class RequestMapper
         _securityService = serviceProvider.GetService<ISecurityService>();
     }
 
+    public static UserOptions MapFrom(GetUsersRequest request, User? currentUser)
+    {
+        var options = new UserOptions
+        {
+            Name = request.name,
+            FirstName = request.firstName,
+            LastName = request.lastName,
+            ExcludeYourself = request.excludeYourself,
+            WithoutGroups = request.withoutGroup,
+            Role = request.role,
+            GroupIds = request.groupIds,
+            ExcludeGroupIds = request.excludeGroupIds,
+            TaskIds = request.taskIds,
+            ExcludeTaskIds = request.excludeTaskIds,
+            TaskStatus = request.taskStatus,
+
+            CurrentUserID = currentUser?.ObjectID
+        };
+
+        return options;
+    }
+
     public static StudyTask MapFrom(CreateTaskRequest request)
     {
         var task = new StudyTask
         {
             Title = request.title,
             Description = request.description,
-            VirtualMachines = request.virtualMachines.Select(vm =>
+            VirtualMachines = request.virtualMachines?.Select(vm =>
             new VirtualMachineImage
             {
                 ID = vm.id,
-                Title = vm.title,
+                Title = vm.title ?? string.Empty,
                 Order = vm.order
             }).ToArray()
         };

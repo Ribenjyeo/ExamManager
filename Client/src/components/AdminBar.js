@@ -54,9 +54,7 @@ const AdminBar = () => {
             const text = e.target.result
             processCSV(text)
         }
-
         reader.readAsText(file)
-
     }
 
     let requestCsvFile = async function () {
@@ -65,7 +63,7 @@ const AdminBar = () => {
             'Content-Type' : 'application/json',
             'Authorization' : 'Bearer ' + cookies.AuthToken}})
 
-        // window.location.reload()
+        window.location.reload()
     }
 
     useEffect(() => {

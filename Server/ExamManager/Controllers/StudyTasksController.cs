@@ -46,7 +46,7 @@ namespace ExamManager.Controllers
             var studyTask = RequestMapper.MapFrom(request);
             try
             {
-                studyTask = await _taskService.CreateStudyTaskAsync(studyTask.Title, studyTask.Description!, studyTask.VirtualMachines!.ToArray());
+                studyTask = await _taskService.CreateStudyTaskAsync(studyTask.Title, studyTask.Description!, studyTask.VirtualMachines?.ToArray());
 
                 return Ok(ResponseFactory.CreateResponse(studyTask));
             }
@@ -60,7 +60,14 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.DeleteTask)]
         public async Task<IActionResult> DeleteTask([FromBody] DeleteTaskRequest request)
         {
-            await _taskService.DeleteStudyTaskAsync(request.taskId);
+            try
+            {
+                await _taskService.DeleteStudyTaskAsync(request.taskId);
+            }
+            catch(Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex));
+            }
 
             return Ok(ResponseFactory.CreateResponse());
         }
@@ -96,6 +103,35 @@ namespace ExamManager.Controllers
             }
 
             return Ok(ResponseFactory.CreateResponse());
+        }
+
+        [HttpGet(Routes.GetTaskStatus)]
+        [ValidateGuidFormat("taskId")]
+        public async Task<IActionResult> GetTaskStatus(string taskId, string id)
+        {
+            var pTaskId = Guid.Parse(taskId);
+            IEnumerable<VirtualMachine> vMachines;
+
+            try
+            {
+                vMachines = await _taskService.GetPersonalTaskVirtualMachinesAsync(pTaskId);
+            }
+            catch (DataNotFoundException<PersonalTask> ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex.WithMessage($"Не удалось найти задание {taskId}")));
+            }
+            catch (DataNotFoundException<VirtualMachine> ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex.WithMessage($"Не удалось найти виртуальные машины для задания {taskId}")));
+            }
+
+            var vMachine = vMachines!.FirstOrDefault(vm => vm.Name == id);
+            if (vMachine is null)
+            {
+                return Ok(ResponseFactory.CreateResponse(new Exception($"У задания {taskId} нет виртуальной машины {id}")));
+            }
+
+            return Ok(ResponseFactory.CreateResponse(vMachine.Status));
         }
 
         [HttpGet(Routes.StopTask)]
@@ -135,8 +171,8 @@ namespace ExamManager.Controllers
 
             var fileText = await _virtualMachineService.GenerateConnectionFile(vMachine);
 
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream);
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
             writer.Write(fileText);
             writer.Flush();
             stream.Position = 0;

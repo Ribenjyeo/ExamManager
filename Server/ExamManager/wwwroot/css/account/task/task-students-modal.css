@@ -1,0 +1,109 @@
+.add-students-modal {
+    font-size: 1em;
+    width: 90vw;
+    border-radius: 10px;
+    padding: 0;
+}
+
+    .add-students-modal > .container {
+        margin: 0;
+        padding: 1em;
+    }
+
+        .add-students-modal > .container > .header {
+            font-size: 2em;
+            font-family: var(--font-Raleway);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+    .add-students-modal .search {
+        margin: .5em 0;
+    }
+
+    .add-students-modal .students {
+        position: relative;
+        height: 60vh;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5%;
+    }
+
+        /* .add-students-modal .students > .to-add::before{
+    content: 'Добавить';
+}
+
+.add-students-modal .students > .to-remove::before{
+    content: 'Убрать';
+}
+
+.add-students-modal .students > .to-add::before,
+.add-students-modal .students > .to-remove::before{    
+    position: absolute;
+    top: 0;
+    font-family: var(--font-Roboto);
+    font-size: 1.2em;
+    padding-bottom: .5em;
+} */
+
+        .add-students-modal .students > .section {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.5em;
+            margin-top: 1.5em;
+            overflow-y: auto;
+        }
+
+            .add-students-modal .students > .section > .header {
+                font-family: var(--font-Roboto);
+                font-size: 1.2em;
+                padding-bottom: .2em;
+            }
+
+    .add-students-modal .section .search > input[type="text"] {
+        font-size: 1em;
+        width: 70%;
+        padding: .2em .5em;
+        border: 1px solid rgba(1, 1, 1, .4);
+        border-radius: 10px;
+    }
+
+    .add-students-modal .students > .section > .content {
+        border: 1px solid rgba(1,1,1,.3);
+        background-color: rgba(57, 108, 167, 0.13);
+        height: 100%;
+        overflow-y: auto;
+    }
+
+        .add-students-modal .students > .section > .content > * {
+            padding: .3em .5em;
+            font-family: var(--font-Roboto);
+        }
+
+    .add-students-modal .students .student {
+        font-size: .8em;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+        .add-students-modal .students .student .name {
+            font-weight: 700;
+        }
+
+    .add-students-modal .students .section .student:hover {
+        cursor: pointer;
+        background-color: rgba(36, 124, 224, 0.4);
+    }
+
+    .add-students-modal .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        padding-top: 1em;
+    }
+
+@media(min-width: 1200px) {
+    .add-students-modal {
+        width: 70vw;
+    }
+}

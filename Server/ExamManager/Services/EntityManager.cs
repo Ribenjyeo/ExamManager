@@ -115,15 +115,26 @@ public class EntityManager
     public class ModifyManager<TEntity>
     {
         TEntity _entity { get; set; }
+        string[] _exceptedProperties { get; set; }
 
         public ModifyManager(TEntity entity)
         {
             _entity = entity;
+            _exceptedProperties = new string[0];
+        }
+
+        public ModifyManager<TEntity> Except(params string[] exceptedProperties)
+        {
+            _exceptedProperties = exceptedProperties;
+            return this;
         }
 
         public ModifyManager<TEntity> BasedOn(TEntity baseEntity)
         {
-            var properties = baseEntity.GetType().GetProperties();
+            var properties = baseEntity
+                .GetType()
+                .GetProperties()
+                .Where(prop => !_exceptedProperties.Contains(prop.Name));
 
             foreach(var property in properties)
             {

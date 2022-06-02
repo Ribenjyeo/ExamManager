@@ -16,8 +16,8 @@ public class PersonalTask
     [ForeignKey(nameof(StudentID))]
     public User Student { get; set; }
     public Guid StudentID { get; set; }
-
     public TaskStatus Status { get; set; } = TaskStatus.FAILED;
+    public ICollection<VirtualMachine> VirtualMachines { get; set; }
 }
 
 public enum TaskStatus

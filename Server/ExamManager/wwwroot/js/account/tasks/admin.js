@@ -1,12 +1,10 @@
-﻿
-
-// Поиск заданий
-const searchInput = $("#group-name");
-searchInput.on("input", updateGroups);
+﻿// Поиск заданий
+const searchInput = $("#task-number");
+searchInput.on("input", updateTasks);
 searchInput.val("").trigger("input");
 
 // При вводе названия или номера задания
-function updateGroups(e) {
+function updateTasks(e) {
 
     let taskTitle = e.target.value;
 
@@ -33,21 +31,21 @@ function fillTasks(data) {
         oldTable.empty();
     }
 
-    let groupsTableBody = $(".table>.body");
+    let tasksTableBody = $(".table>.body");
 
-    let index = 1;
-    for (group of data.groups) {
+    for (task of data.tasks) {
 
-        let tableRow = $(`<div class="row" group="${group.id}">` +
-            `<div>${index}</div>` +
-            `<div class="bold">${group.name}</div>` +
-            `<div>Количество: ${group.studentsCount}</div >` +
+        let tableRow = $(`<div class="row" task="${task.id}">` +
+            `<div>${task.number}</div>` +
+            `<div class="bold">${task.title != null ? task.title : "-"}</div>` +
+            `<div>${task.description}</div >` +
+            `<div>Количество: ${0}</div >` +
             '</div> ');
 
 
         let actionsColumn = $('<div class="actions"> ' +
-            `<a class="edit" href="/pages/group/${group.id}">` +
-            '<i class="fa fa-solid fa-eye"></i>' +
+            `<a class="edit" href="/pages/task?id=${task.id}">` +
+            '<i class="fa fa-solid fa-pen"></i>' +
             '</a>' +
             '</div>');
 
@@ -56,17 +54,57 @@ function fillTasks(data) {
             '</a>');
 
         deleteButton.on("click", function (e) {
-            deleteGroup(group.id, function (reponse) {
-                window.location.reload();
-            });
+            let id = $(this).closest(".row").attr("task");
+            let data = {
+                taskId: id
+            };
+            deleteTask(data, onDeleteResponse);
         });
 
         actionsColumn.append(deleteButton);
         tableRow.append(actionsColumn);
 
-        groupsTableBody.append(tableRow);
-        index += 1;
+        tasksTableBody.append(tableRow);
+    }
+
+    if (tasksTableBody.children(".row").length == 0) {
+        let tableDescription = $('<div class="description">Нет заданий</div>');
+        tasksTableBody.append(tableDescription);
+        return;
     }
 
     applyTableTemplate();
 }
+
+let onDeleteResponse = function (data) {
+    if (data.type === "BadResponse") {
+        new Notify({
+            status: 'error',
+            title: 'Ошибка',
+            text: data.message,
+            effect: 'fade',
+            speed: 1000,
+            customClass: '',
+            customIcon: '',
+            showIcon: true,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            gap: 20,
+            distance: 20,
+            type: 1,
+            position: 'right bottom',
+            customWrapper: '',
+        });
+
+        return;
+    }
+
+    searchInput.trigger("input");
+}
+
+updateTasks({
+    target: {
+        value: ""
+    }
+});

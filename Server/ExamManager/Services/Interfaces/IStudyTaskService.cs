@@ -26,11 +26,13 @@ public interface IStudyTaskService
 
     public Task<IEnumerable<PersonalTask>> GetPersonalTasksAsync(params Guid[] studentIds);
 
+    public Task<IEnumerable<VirtualMachine>?> GetPersonalTaskVirtualMachinesAsync(Guid taskId);
+
     #endregion
 
     #region TRANSFORM
 
-    public Task<StudyTask> CreateStudyTaskAsync(string title, string description, VirtualMachineImage[] virtualMachines);
+    public Task<StudyTask> CreateStudyTaskAsync(string? title, string description, VirtualMachineImage[]? virtualMachines);
     public Task CreateStudyTaskAsync(StudyTask task);
     public Task DeleteStudyTaskAsync(Guid taskId);
 

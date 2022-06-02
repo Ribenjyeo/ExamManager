@@ -20,12 +20,7 @@ let createNewTask = function () {
     }
 
     let onResponse = function (response) {
-
-        let onUserResponse = function (userResponse) {
-            window.location.replace(`/pages/group/${userResponse.groupId}`);
-        }
-
-        getUser(studentId, onUserResponse);
+        window.location.replace(`/pages/tasks`);
     }
 
     createTask(data, onResponse);
@@ -38,14 +33,9 @@ let saveTask = function () {
         description: taskDescription.val(),
         url: taskUrl.val()
     }
-    console.log(data);
+
     let onResponse = function (response) {
-
-        let onUserResponse = function (userResponse) {
-            window.location.replace(`/pages/group/${userResponse.groupId}`);
-        }
-
-        getUser(studentId, onUserResponse);
+        window.location.replace(`/pages/tasks`);
     }
 
     modifyTask(data, onResponse);

@@ -7,40 +7,53 @@
     Layout = "_AccountLayout";
 }
 <link rel="stylesheet" href="~/css/account/task.css" />
-<div class="container">
-
-    @if (Model.User.Role == UserRole.STUDENT)
-    {
-        <div class="page-header">@Model.Task.Title</div>
-    }
-    else
-    {
-        <input id="task-title" class="input-standard" style="width: 70%; font-size: 25px" placeholder="Название задания" value="@Model.Task.Title" />
-    }
-    <div class="description">
-        @if (Model.User.Role == UserRole.STUDENT)
-        {
-            @foreach(var descriptionPart in Model.Task.Description.Split("\n"))
-            {
-                @descriptionPart
-                <br/>
-            }
-        }
-        else
-        {
-            <textarea id="task-description" class="input-standard" style="resize: none" cols="100%" rows="10" placeholder="Описание">@Model.Task.Description</textarea>
-        }
-    </div>
-    <div class="footer">
-        @if (Model.User.Role == UserRole.STUDENT)
-        {
-
-            //<a href="@Model.Task.Url" type="button" class="btn-info">Перейти</a>
-        }
-        else
-        {
-            //<input id="task-url" type="text" class="input-standard" style="width: 50%" placeholder="URL ресурса" value="@Model.Task.Url" />
-            <input id="save-button" type="button" class="btn-action" value="Сохранить" />
-        }
-    </div>
+<link rel="stylesheet" href="~/css/account/task/task-students-modal.css" />
+<div id="taskId" value="@Model.Task.ObjectID"></div>
+<input id="task-title" class="input-standard" style="width: 70%; font-size: 25px" placeholder="Название задания" value="@Model.Task.Title" />
+<div class="description">
+    <textarea id="task-description" class="input-standard" style="resize: none" cols="100%" rows="10" placeholder="Описание">@Model.Task.Description</textarea>
 </div>
+
+<div class="footer">
+    <input id="open-button"
+           type="button"
+           class="btn-info"
+           value="Студенты" />
+    <input id="save-button"
+           type="button"
+           class="btn-action"
+           value="Сохранить" />
+</div>
+<dialog class="add-students-modal" id="add-students-modal">
+    <div class="container">
+      <div class="header">Присвоить студентам</div>
+      <div class="students">
+        <div id="to-add" class="section">
+          <div class="search">
+            <input id="search-to-add" type="text" />
+          </div>
+          <div class="content">
+
+          </div>
+        </div>
+        <div id="to-remove" class="section">
+          <div class="search">
+            <input id="search-to-remove" type="text" />
+          </div>
+          <div class="content">
+
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+          <input
+          id="close-button"
+          type="button"
+          class="btn-cancel"
+          value="Закрыть"
+        />
+      </div>
+    </div>
+  </dialog>
+
+  <script src="~/js/account/task/task-students-modal.js"></script>

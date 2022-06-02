@@ -5,5 +5,5 @@ namespace ExamManager.Services;
 
 public interface IFileService
 {
-    public Task<IEnumerable<User>> ParseUsersFromFile(IFormFile file, CancellationToken cancellationToken);
+    public Task<IEnumerable<(User User, string GroupName)>> ParseUsersFromFile(IFormFile file, CancellationToken cancellationToken);
 }

@@ -12,6 +12,7 @@ public class ScriptManager
     {
         _configuration = configuration;
         _environment = environment;
+        _logger = logger;
     }
 
     public async Task<string> Execute(string scriptName, string argumentsName, Dictionary<string, string> argumentsValue)
@@ -26,9 +27,8 @@ public class ScriptManager
             processArguments = processArguments.Replace($"{{{argument.Key}}}", argument.Value);
         }
 
-        var processInfo = new ProcessStartInfo(Path.GetFileName(processScript), processArguments);
+        var processInfo = new ProcessStartInfo(processScript, processArguments);
         processInfo.RedirectStandardOutput = true;
-        processInfo.WorkingDirectory = Path.GetPathRoot(processScript);
 
         using var process = new Process();
         process.StartInfo = processInfo;
@@ -37,16 +37,50 @@ public class ScriptManager
         {
             process.Start();
             _logger.LogInformation($"Process {processInfo.FileName} has started");
-            await Task.Run(() => process.WaitForExit());
+            await WaitForExecutionCompleted(process.WaitForExit, timeForWaiting: 5000);
         }
         catch (Exception ex)
         {
             _logger.LogError($"Process {processInfo.FileName} exited. Exception: {ex.Message}");
             process.Close();
+            throw;
         }
 
-        var result = process.StandardOutput.ReadToEnd();
+        var result = string.Empty;
+        try
+        {
+            result = process.StandardOutput.ReadToEnd();
+            if (!process.HasExited)
+            {
+                process.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
         return result;
+    }
+
+    private async Task WaitForExecutionCompleted(Action wait, CancellationToken? token = null, long? timeForWaiting = null)
+    {
+        var isCompleted = false;
+        var timer = Stopwatch.StartNew();
+
+        _ = Task.Run(() =>
+          {
+              wait();
+              isCompleted = true;
+          });
+
+        while (!isCompleted && 
+            (token.HasValue ? !token.Value.IsCancellationRequested : true ) &&
+            (timeForWaiting.HasValue ? timer.ElapsedMilliseconds < timeForWaiting : true)
+            )
+        {
+            await Task.Run(() => Task.Delay(1000));
+        }
+
     }
 }
 

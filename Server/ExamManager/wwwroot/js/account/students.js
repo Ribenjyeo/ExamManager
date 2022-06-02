@@ -47,7 +47,7 @@ function fillStudents(data) {
             `<div class="number">${index}</div>` +
             `<div class="bold">${user.lastName} ${user.firstName}</div>` +
             `<div class="description">${user.groupName == null ? "-" : user.groupName}</div >` +
-            `<div class="description">${user.tasks.length}</div >` +
+            `<div class="description">${user.tasks == null ? 0 : user.tasks.length}</div >` +
             '</div> ');
 
 
@@ -71,6 +71,13 @@ function fillStudents(data) {
         studentsTableBody.append(tableRow);
         index += 1;
     }
+
+    if (studentsTableBody.children(".row").length == 0) {
+        let tableDescription = $('<div class="description">Нет студентов</div>');
+        studentsTableBody.append(tableDescription);
+        return;
+    }
+
     applyTableTemplate();
 }
 
@@ -85,7 +92,11 @@ let deleteUser = function (id) {
     }
 
     let onResponse = function (response) {
-        window.location.reload();
+        updateStudents({
+            target: {
+                value: ""
+            }
+        });
     }
 
     deleteUsers(data, onResponse);
