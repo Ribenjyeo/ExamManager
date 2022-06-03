@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^34.1.0",
+    "@ckeditor/ckeditor5-react": "^5.0.2",
     "graceful-fs": "^4.2.10",
     "http-proxy-middleware": "^2.0.6",
     "react-cookies": "^0.1.1",

@@ -16,20 +16,20 @@ const Nav = () => {
     groupName: ''
   })
 
-  let userRole = cookies.userRole
-
   const instance = axios.create({  //экземпляр запроса с использованием текущего токена
     baseURL: "/user",
     timeout: 1000,
-    headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
+    headers: {'Content-Type' : 'application/json','Authorization': 'Bearer '+ cookies.AuthToken}
   });
+
+  console.log(cookies.UserId)
 
   const getUserName = async () => { // получить данные пользователя по его ID
     try {
-
       const response = await instance.get(`/${cookies.UserId}`)
+      console.log(response.data)
       if(response.data.status === 401) { //если токен не подходит то редиркер на страницу авторизации
-        logout()
+        console.log("logout")
       }
       setCookies("firstName", response.data.firstName)
       setCookies("lastName", response.data.lastName)
@@ -45,13 +45,12 @@ const Nav = () => {
     }
     catch(error) {
       console.log(error)
-      logout()
+      // logout()
     }
   }
 
   useEffect(() => {
       getUserName()
-
     }, [])
 
   const logout = () => { //выход из аккаунта

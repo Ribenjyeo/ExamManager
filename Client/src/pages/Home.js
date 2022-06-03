@@ -17,18 +17,16 @@ const Home = () => {
     headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
   });
 
-  const getTasksList = async () => { // получить данные о задании по ID пользователя
-    try {
-        const response = await instance.get(`/user/${cookies.UserId}/tasks`)
-        setTasks(response.data.tasks) 
-    } 
-    catch(error) {
-      console.log(error)
-    }
-  }
+  // const GetTaskList = async () => {
+  //   const response = await fetch(`/user/${cookies.UserId}/tasks`, {method: "GET", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+  //   const json = await response.json()
+  //   const stringi = JSON.stringify(json)
+  //   const parse = JSON.parse(stringi)
+  //   setTasks(parse.personalTasks[0].tasks)
+  // }
   
   useEffect(() => {
-    getTasksList()
+    // GetTaskList()
   }, [])
  
    
@@ -44,7 +42,7 @@ const Home = () => {
         <div className="home">
           <h1>Ваши задания для выполнения:</h1>
           <div className="tasks">
-            <ul>
+            {/* <ul>
               {tasks?.map((item, i) =>
               <li className="tasksItem" key={i}>
               <h1></h1>
@@ -58,7 +56,7 @@ const Home = () => {
               </div>
               </li>)
               }
-            </ul>
+            </ul> */}
          </div> 
         </div> 
       </div>

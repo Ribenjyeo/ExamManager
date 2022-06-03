@@ -44,6 +44,8 @@ const UserList = () => {
     const stringi = JSON.stringify(json)
     const parse = JSON.parse(stringi)
     setUserList(parse.users)
+    const respo = await fetch('/user/08da4491-2767-46ef-8b64-1831525f0b27', {method: 'GET', headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    console.log(respo)
   }
 
   const groups = async () => { //запрос на получение групп
@@ -130,7 +132,7 @@ const UserList = () => {
     { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
     {
       field: 'action',
-      headerName: 'Изменить / Добавить задание / Удалить',
+      headerName: 'Изменить / Удалить',
       minWidth: 100,
       flex: 1,
       renderCell: (params) => {
@@ -138,9 +140,6 @@ const UserList = () => {
           <>
             <Link to={"/admin/users/"+params.row.id}>
               <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
-            </Link>
-            <Link to={`/admin/${params.row.id}/newTask`}>
-              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Добавить задание</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>

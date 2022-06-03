@@ -49,6 +49,7 @@ const AddTasks = ({ setShowModal, taskItem }) =>{
                         body: JSON.stringify(addStudents)
                     })
             }
+            setShowModal(false)
         }
         else {
             console.log("выберите пользователей, которому нужно добавить задание")

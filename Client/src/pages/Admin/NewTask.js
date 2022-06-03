@@ -4,6 +4,8 @@ import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import {useNavigate} from 'react-router-dom'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const NewTask = () => {
     let navigate = useNavigate()
@@ -14,7 +16,12 @@ const NewTask = () => {
     const [titleMachine, setTitleMachine] = useState(null)
     const [order, setOrder] = useState(null)
     const [error, setError] = useState(false)
-
+    const [addData, setVal] = useState("")
+   
+    const handleChangeData = (e, editor) => {
+      const data = editor.getData()
+      setDescription(data)
+    }
 
 
     const handleClick = async (e) => { //запрос на добавление задания в систему
@@ -73,10 +80,6 @@ const NewTask = () => {
                             <input type="text" placeholder="Название задания" onChange={e => setTitle(e.target.value)} required/>
                         </div>
                         <div className="newTaskItem">
-                            <label>Описание задания</label>
-                            <input type="text" placeholder="Описание задания" onChange={e => setDescription(e.target.value)} required/>
-                        </div>
-                        <div className="newTaskItem">
                             <label>Идентификатор виртуальной машины</label>
                             <input type="text" placeholder="Идентификатор виртуальной машины" onChange={e => setIdMachine(e.target.value)} required/>
                         </div>
@@ -87,6 +90,14 @@ const NewTask = () => {
                         <div className="newTaskItem">
                             <label>Номер виртуальной машины</label>
                             <input type="text" placeholder="Порядковый номер виртуальной машины" onChange={e => setOrder(e.target.value)} required/>
+                        </div>
+                        <div className="CKeditor">
+                            <label>Описание задания</label>
+                            {/* <input type="text" placeholder="Описание задания" onChange={e => setDescription(e.target.value)} required/> */}
+                            <div className="editor-data">
+                              <CKEditor editor={ClassicEditor} data={addData} onChange={handleChangeData}/>
+                            </div>
+
                         </div>
                         <div className="buttonTaskForm">
                             <button className="newTaskButton" onClick={(e) => {handleClick(e)}}>Создать</button>

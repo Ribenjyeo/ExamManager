@@ -132,7 +132,7 @@ const User = () => {
         array.push({id: params})
 
         let deleteTask = {
-            tasks: array
+            personalTasks: array
         }
         // console.log(deleteTask)
         const response = await fetch(`/user/${cookies.editUser}/tasks/remove`, {
@@ -142,7 +142,7 @@ const User = () => {
             'Authorization' : 'Bearer ' + cookies.AuthToken},
             body: JSON.stringify(deleteTask)
         })
-        // window.location.reload()
+        window.location.reload()
     }
 
     const GetTaskList = async () => {
