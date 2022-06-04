@@ -22,12 +22,9 @@ const Nav = () => {
     headers: {'Content-Type' : 'application/json','Authorization': 'Bearer '+ cookies.AuthToken}
   });
 
-  console.log(cookies.UserId)
-
   const getUserName = async () => { // получить данные пользователя по его ID
     try {
       const response = await instance.get(`/${cookies.UserId}`)
-      console.log(response.data)
       if(response.data.status === 401) { //если токен не подходит то редиркер на страницу авторизации
         console.log("logout")
       }

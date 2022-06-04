@@ -4,8 +4,9 @@ import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import {useNavigate} from 'react-router-dom'
+import { Editor } from '../../components/ckeditor5/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 const NewTask = () => {
     let navigate = useNavigate()
@@ -93,7 +94,7 @@ const NewTask = () => {
                         <div className="CKeditor">
                             <label>Описание задания</label>
                             <div className="editor-data">
-                              <CKEditor editor={ClassicEditor} data={addData} onChange={handleChangeData}/>
+                              <CKEditor editor={Editor} data={addData} onChange={handleChangeData}/>
                             </div>
 
                         </div>

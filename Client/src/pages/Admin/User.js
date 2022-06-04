@@ -7,6 +7,7 @@ import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import photo from "../../img/userShowImg.png"
+import TaskList from './TaskList';
 
 const User = () => {
     const [pageSize, setPageSize] = useState(5)
@@ -124,7 +125,8 @@ const User = () => {
         window.location.reload()
     }
 
-    const handleDelete = async (params) => { //Удаление задания у пользователя
+    const handleDelete = async (e, params) => { //Удаление задания у пользователя
+        e.preventDefault()
         let array = []
         array.push({id: params})
 
@@ -138,7 +140,8 @@ const User = () => {
             'Authorization' : 'Bearer ' + cookies.AuthToken},
             body: JSON.stringify(deleteTask)
         })
-        GetTaskList()
+        if(tasks.length > 1) {GetTaskList()}
+        else {window.location.reload()}
     }
 
     const GetTaskList = async () => {
@@ -199,7 +202,7 @@ const User = () => {
           renderCell: (params) => {
             return (
               <>
-                <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
+                <DeleteIcon className="userListDelete" onClick={(e) => handleDelete(e, params.row.id)}/>
               </>
             )
           }

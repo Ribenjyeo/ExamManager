@@ -12,6 +12,7 @@ const Home = () => {
   const [url, setUrl] = useState([])
   const [role, setRole] = useState(0)
   let array = []
+
   const instance = axios.create({  //экземпляр запроса с использованием текущего токена
     timeout: 1000,
     headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
@@ -24,7 +25,7 @@ const Home = () => {
     const parse = JSON.parse(stringi)
     setTasks(parse.personalTasks[0].tasks)
   }
-  
+  console.log(tasks)
   useEffect(() => {
     GetTaskList()
   }, [])
@@ -47,13 +48,10 @@ const Home = () => {
               <li className="tasksItem" key={i}>
               <h1></h1>
               <h2>{i+1 + ". " + item.title}</h2>
-              <label>{item.description}</label> <br/>
-              <div className="copy-text">
-                <input type="text" className="text"  defaultValue={item.url}/>
-                <button onClick={() => {navigator.clipboard.writeText(item.url)}}>
-                  <ContentCopyIcon className="btn-icon"/>
-                </button>
-              </div>
+              <label>
+                <div dangerouslySetInnerHTML={{ __html: item.description}}/>
+              </label>
+              <br/>
               </li>)
               }
             </ul>
