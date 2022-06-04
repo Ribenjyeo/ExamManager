@@ -5,13 +5,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from 'react-router-dom'
 import { useCookies } from "react-cookie";
 import { useState } from 'react';
-import axios from 'axios'
-import { useEffect } from 'react';
-import UploadIcon from '@mui/icons-material/Upload';
+import { useEffect} from 'react';
+import axios from 'axios';
+import * as XLSX from "xlsx"
 
 const AdminBar = () => {
     const [cookies, setCookies, removeCookies] = useCookies(['user']);
     let navigate = useNavigate()
+
     const handleClick = () => {
         removeCookies("UserId", cookies.id);
         removeCookies("AuthToken", cookies.AuthToken);
@@ -22,54 +23,52 @@ const AdminBar = () => {
         window.location.reload()
     }
 
-    const [csvFile, setCsvFile] = useState()
-    const [csvArray, setCsvArray] = useState([])
+    const [data, setData] = useState()
 
-    const processCSV = (str, delim=";") => { //обработка текста и получение массива 
-        const headers = str.slice(0, str.indexOf('\n')).split(delim)
+    const importExcel = (e) => {
+        const file = e.target.files[0]
 
-        const rows = str.slice(str.indexOf('\n')+1, -1).split('\n')
-
-        const newArray =  rows.map ( row => { 
-            const values = row.split(delim)
-            const eachObject = headers.reduce((obj, header, i ) => {
-                obj[header] = values[i]
-                return obj
-            }, {})
-            return eachObject
-        })
-
-        for( let i = 0; i < newArray.length; i++) { //менял роль на Int
-            newArray[i].role = parseInt(newArray[i].role)
-        }
-
-        setCsvArray({'users' : newArray})
-    }
-
-    const handleFile = () => {
-        const file = csvFile
         const reader = new FileReader()
 
-        reader.onload = function(e) { //получение текста
-            const text = e.target.result
-            processCSV(text)
+        reader.onload = async (e) => {
+            const bstr = e.target.result
+            const workBook = XLSX.read(bstr, {type:"binary"})
+
+            const workSheetName = workBook.SheetNames[0]
+            const workSheet = workBook.Sheets[workSheetName]
+            
+            const fileData = XLSX.utils.sheet_to_json(workSheet, {header:1})
+            const headers = fileData[0]
+
+            fileData.splice(0,1)
+            const newArray =  fileData.map ( fileData => { 
+                const eachObject = headers.reduce((obj, header, i ) => {
+                    obj[header] = fileData[i]
+                    return obj
+                }, {})
+                return eachObject
+            })
+
+            for( let i = 0; i < newArray.length; i++) {
+                newArray[i].firstName = newArray[i].firstName.toString()
+                newArray[i].lastName = newArray[i].lastName.toString()
+                newArray[i].password = newArray[i].password.toString()
+                newArray[i].login = newArray[i].login.toString()
+            }
+
+            setData({'users' : newArray})
         }
-        reader.readAsText(file)
+
+        reader.readAsBinaryString(file)
     }
 
     const requestCsvFile = async () => {
-        const response = await axios.post('/users/create', JSON.stringify(csvArray),  {headers: {
+        const response = await axios.post('/users/create', JSON.stringify(data),  {headers: {
             'Content-Type' : 'application/json',
             'Authorization' : 'Bearer ' + cookies.AuthToken}})
 
         window.location.reload()
     }
-
-    useEffect(() => {
-        if(acsvFile.files[0]) {
-            handleFile()
-        }
-    })
 
     return (
         <>
@@ -87,9 +86,10 @@ const AdminBar = () => {
                                     <li><p className='import' onClick={(e) => {requestCsvFile()}}>Импортировать пользователей</p>
                                         <input className='CsvFile'
                                         type="file"
-                                        accept=".csv"
+                                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
                                         id="acsvFile"
-                                        onChange={(e) => {setCsvFile(e.target.files[0])}}
+                                        // onChange={(e) => {setCsvFile(e.target.files[0])}}
+                                        onChange={importExcel}
                                         />
                                     </li>
                                     {/* <li>Экспортировать пользователей</li> */}

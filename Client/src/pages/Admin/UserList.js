@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 
-
 const UserList = () => {
   const [pageSize, setPageSize] = useState(10)
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
@@ -68,11 +67,10 @@ const UserList = () => {
         'Authorization' : 'Bearer ' + cookies.AuthToken},
         body: JSON.stringify(deleteUser)
       })
-    window.location.reload()
+      users()
   }
 
   const handleAddStudents = async () => { //Добавление пользователей в группу
-    groups() //Получение списка групп
     let check = false
     let currentGroupId = null
     for (let i = 0; i < groupList.length; i++){
@@ -138,6 +136,7 @@ const UserList = () => {
       }
     }];
 
+    
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
@@ -150,6 +149,7 @@ const UserList = () => {
           utf8WithBom: true,
           }}
         />
+        {/* <ImportButton {...importProps} /> */}
       </GridToolbarContainer>
     );
   }

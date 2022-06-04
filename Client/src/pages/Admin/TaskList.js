@@ -19,8 +19,6 @@ const TaskList = () => {
   const [taskItem, setTaskItem] = useState([{id: null}])
   const [showModal, setShowModal] = useState(false)
 
-
-  console.log(taskItem)
   const tasks = async () => { //Получение всех заданий
       const response = await fetch('/tasks', {method: "POST", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
       const json = await response.json()
@@ -40,7 +38,7 @@ const TaskList = () => {
         'Authorization' : 'Bearer ' + cookies.AuthToken},
         body: JSON.stringify(deleteUser)
       })
-    window.location.reload()
+    tasks()
   }
 
   const handleAddUserTask = () => {

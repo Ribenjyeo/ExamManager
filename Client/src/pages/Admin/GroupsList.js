@@ -38,11 +38,9 @@ const GroupList = () => {
     setCookies("editGroup", params)
   }
 
-  // console.log(groupList)
-
   const handleDelete = async (params) => {  //удаление группы
     const response = await axios.get(`/group/${params}/delete`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
-    window.location.reload()
+    groups()
   }
 
   useEffect(() => {
