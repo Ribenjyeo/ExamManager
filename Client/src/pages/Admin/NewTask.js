@@ -96,7 +96,6 @@ const NewTask = () => {
                             <div className="editor-data">
                               <CKEditor editor={Editor} data={addData} onChange={handleChangeData}/>
                             </div>
-
                         </div>
                         <div className="buttonTaskForm">
                             <button className="newTaskButton" onClick={(e) => {handleClick(e)}}>Создать</button>

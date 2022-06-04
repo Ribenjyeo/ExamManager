@@ -61,7 +61,8 @@ const User = () => {
                     role : response.data.role,
                     groupName : null
                 })
-            }   
+            } 
+            
         }
         catch(error) {
             console.log(error)

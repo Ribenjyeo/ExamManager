@@ -13,9 +13,12 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 import AddTasks from "../../components/AddTasks";
+import axios from "axios";
 
 
 const TaskList = () => {
+  const [error, setError] = useState(false)
+  const [textError, setTextError] = useState()
   const [pageSize, setPageSize] = useState(10)
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   let [taskList, setTaskList] = useState({
@@ -26,6 +29,11 @@ const TaskList = () => {
   const [taskItem, setTaskItem] = useState(0)
   const [showModal, setShowModal] = useState(false)
 
+  const instance = axios.create({  //экземпляр запроса с использованием текущего токена
+    timeout: 1000,
+    headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
+});
+
   const tasks = async () => { //Получение всех заданий
       const response = await fetch('/tasks', {method: "POST", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
       const json = await response.json()
@@ -34,20 +42,23 @@ const TaskList = () => {
       setTaskList(parse.tasks)
   }
 
-  console.log(taskItem)
-
   const handleDelete = async (params) => { //Удаление задания
     const deleteUser = {
       taskId : params
       }
-    const response = await fetch('/task/delete', {
-      method: "POST",
+    const response = await axios.post('/task/delete', JSON.stringify(deleteUser), {
       headers: {
         'Content-Type' : 'application/json',
-        'Authorization' : 'Bearer ' + cookies.AuthToken},
-        body: JSON.stringify(deleteUser)
+        'Authorization' : 'Bearer ' + cookies.AuthToken}
       })
-    tasks()
+
+    if(response.data.type == "BadResponse") {
+      setError(true)
+      setTextError(response.data.message)
+    }
+    else{
+      tasks()
+    }
   }
 
   const handleAddUserTask = () => {
@@ -100,6 +111,13 @@ const TaskList = () => {
 
   return(
       <>
+      {error && (
+        <div className="error-message">
+          <p>
+            <strong>Ошибка!</strong> {textError}
+          </p>
+        </div>
+      )}
       <AdminBar/>
           <div className="AdminContainer">
               <SideBarAdmin/>

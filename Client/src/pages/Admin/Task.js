@@ -4,7 +4,8 @@ import SideBarAdmin from '../../components/SideBarAdmin'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import photo from "../../img/userShowImg.png"
+import { Editor } from '../../components/ckeditor5/build/ckeditor';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 const Task = () => {
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
@@ -78,14 +79,6 @@ const Task = () => {
                 </div>
                 <div className="userShow">
                     <div className="userShowTop">
-                        <div className="userShowTopTitle">
-                            {/* <img
-                                src={photo}
-                                alt=""
-                                className="userShowImg"
-                            />
-                            <span className="userShowUserName">{data.title}</span> */}
-                        </div>
                     </div> 
                     <div className="userDetails">
                         <div className="userShowButton">
@@ -104,6 +97,12 @@ const Task = () => {
                                     />
                                 )}
                             </div>
+                            <div className="CKeditor">
+                            <label>Описание задания</label>
+                            <div className="editor-data">
+                              <CKEditor editor={Editor} />
+                            </div>
+                        </div>
                             <div className="editUser">
                                     <button className="buttonEditUser" onClick={(e) => {handleClick(e)}}>Внести изменения</button>
                             </div>
