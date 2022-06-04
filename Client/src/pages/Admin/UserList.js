@@ -143,7 +143,7 @@ const UserList = () => {
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        {/* <ImportFile/> */}
+        <ImportFile/>
       </GridToolbarContainer>
     );
   }

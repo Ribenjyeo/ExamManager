@@ -55,10 +55,30 @@ const ImportFile = () => {
         window.location.reload()
     }
 
+    document.querySelector("html").classList.add('js');
+
+    var fileInput = document.querySelector( ".input-file" ),  
+        button = document.querySelector( ".input-file-trigger" ),
+        the_return = document.querySelector(".file-return");
+        
+    if(fileInput) {
+        button.addEventListener( "keydown", function( event ) {  
+            if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+                fileInput.focus();  
+            }  
+        });
+        button.addEventListener( "click", function( event ) {
+            fileInput.focus();
+            return false;
+        });  
+        fileInput.addEventListener( "change", function( event ) {  
+            the_return.innerHTML = this.value;  
+        });  
+    }
+
     return (
         <>
-            <button class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-1knaqv7-MuiButtonBase-root-MuiButton-root"
-                tabindex="0"
+            <button className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-1knaqv7-MuiButtonBase-root-MuiButton-root"
                 type="button"
                 aria-label="Export"
                 aria-haspopup="menu"
@@ -66,8 +86,8 @@ const ImportFile = () => {
                 id="mui-48"
                 onClick={(e) => {requestCsvFile()}}
             >
-                <span class="MuiButton-startIcon MuiButton-iconSizeSmall css-y6rp3m-MuiButton-startIcon">
-                    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                <span className="MuiButton-startIcon MuiButton-iconSizeSmall css-y6rp3m-MuiButton-startIcon">
+                    <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
                         focusable="false"
                         aria-hidden="true"
                         viewBox="0 0 24 24"
@@ -77,16 +97,17 @@ const ImportFile = () => {
                     </svg>
                 </span>
                 IMPORT
-                <span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
+                <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
             </button>
-            <input className='custom-file-input'
-                type="file"
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
-                id="acsvFile"
-                onChange={importExcel}
-            />
-
-
+            <div className="input-file-container">  
+                <input className="input-file"
+                    id="my-file"
+                    type="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
+                    onChange={importExcel}
+                />
+                <label tabIndex={0} htmlFor="my-file" className="input-file-trigger">Выберите файл...</label>
+            </div>
         </>
     )
 }

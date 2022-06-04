@@ -6,7 +6,6 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridToolbarExport,
   GridToolbarDensitySelector
 } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -76,12 +75,6 @@ const GroupList = () => {
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <GridToolbarDensitySelector />
-          <GridToolbarExport csvOptions={{
-            fileName: 'Group_list_MIREA',
-            delimiter: ';',
-            utf8WithBom: true,
-            }}
-          />
         </GridToolbarContainer>
       );
     }

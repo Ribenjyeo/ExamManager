@@ -1,7 +1,13 @@
 import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
-import { DataGrid } from '@mui/x-data-grid';
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarDensitySelector,
+  } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
@@ -79,6 +85,16 @@ const Group = () => {
         }
     }];
 
+    function CustomToolbar() {
+        return (
+          <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+          </GridToolbarContainer>
+        );
+      }
+
     return(
         <>
          <AdminBar/>
@@ -95,6 +111,9 @@ const Group = () => {
                         disableSelectionOnClick
                         columns={columns}
                         pageSize={pageSize}
+                        components={{
+                            Toolbar: CustomToolbar,
+                          }}
                         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                         rowsPerPageOptions={[10, 25, 50]}
                     />

@@ -11,6 +11,7 @@ import NewTask from "./pages/Admin/NewTask"
 import TaskList from "./pages/Admin/TaskList";
 import Rename from "./components/Rename"
 import { useCookies } from "react-cookie";
+import Task from "./pages/Admin/Task"
 
 const App = () => {
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
@@ -32,6 +33,7 @@ const App = () => {
           {cookies.userRole == 2 && <Route path='/admin/groups' element={<GroupsList/>}/>}
           {cookies.userRole == 2 && <Route path='/admin/groups/:groupId' element={<Group/>}/>}
           {cookies.userRole == 2 &&<Route path='/admin/tasks' element={<TaskList/>}/>}
+          {cookies.userRole == 2 &&<Route path='/admin/task/:taskId' element={<Task/>}/>}
         </Routes>
       </BrowserRouter>
     </div>

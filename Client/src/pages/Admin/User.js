@@ -4,13 +4,11 @@ import SideBarAdmin from '../../components/SideBarAdmin'
 import { useState, useEffect} from 'react'
 import { useCookies } from "react-cookie";
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import photo from "../../img/userShowImg.png"
 
 const User = () => {
-    let navigate = useNavigate()
     const [pageSize, setPageSize] = useState(5)
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [fromData, setFromData] = useState({
@@ -82,7 +80,6 @@ const User = () => {
         if(groupId !== null) { //Если мы решили поменять группу у отдельного студента
             let currentGroupId = null
             let check = false
-            // console.log(groupList)
             for (let i = 0; i < groupList.length; i++){  //Поиск совпадений в изменяемой группе
                 if(groupList[i].name === groupId) {
                     check = true
@@ -188,6 +185,7 @@ const User = () => {
     function toggleInputGroup() {
         setToggleGroup(false);
     }
+
     const columns = [
         { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
         { field: 'description', headerName: 'Описание задания', minWidth: 100, flex: 1},
