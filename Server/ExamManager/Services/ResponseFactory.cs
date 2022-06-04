@@ -242,8 +242,7 @@ public static class ResponseFactory
                         title = task.Task.Title,
                         description = task.Task.Description,
                         status = task.Status,
-                        number = task.Task.Number.Value,
-                        vMachines = task.Task.VirtualMachines?.Select(vm => vm.ID).ToArray()
+                        number = task.Task.Number.Value
                     })
                     .ToArray()
             }).ToArray()

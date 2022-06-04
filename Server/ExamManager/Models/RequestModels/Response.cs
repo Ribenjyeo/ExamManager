@@ -96,6 +96,8 @@ public record PersonalTaskDataResponse : Response
     public string? title { get; set; }
     public ushort number { get; set; }
     public string description { get; set; }
+    public TaskStatus status { get; set; }
+    public string message { get; set; }
     public VirtualMachineView[]? virtualMachines { get; set;}
 
     public struct VirtualMachineView
@@ -127,7 +129,6 @@ public record PersonalTasksDataResponse : Response
             public string? description { get; set; }
             public ushort number { get; set; }
             public Models.TaskStatus status { get; set; }
-            public string[]? vMachines { get; set; }
         }
     }
 }

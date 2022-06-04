@@ -64,7 +64,7 @@ namespace ExamManager.Controllers
 
         [HttpGet(Routes.GroupsPage)]
         [JwtAuthorize(RedirectUrl: "/pages/login")]
-        [OnlyUserRole(UserRole.ADMIN)]
+        [OnlyUserRole(UserRole.ADMIN, "/pages/login")]
         public IActionResult GroupsPageIndex()
         {
             var user = (User?)HttpContext.Items["User"];

@@ -1,6 +1,4 @@
-﻿
-
-const logoutButton = $("#logout");
+﻿const logoutButton = $("#logout");
 
 const logout = function () {
     Cookies.remove("token");
@@ -11,7 +9,15 @@ logoutButton.on('click', logout);
 
 const token = Cookies.get("token");
 const decoded = jwt_decode(token);
-const userId = decoded["Claim.Key.Id"];
+//const userId = decoded["Claim.Key.Id"];
+
+const updateUserData = function (userData) {
+    if (userData.firstName != null && userData.lastName != null) {
+        let fullName = $('#user-name > span');
+        fullName.empty();
+        fullName.text(`${userData.lastName} ${userData.firstName}`);
+    }
+}
 
 //$(document).ready(function () {
 //    let onResponse = function (response) {

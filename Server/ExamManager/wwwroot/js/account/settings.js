@@ -3,6 +3,27 @@ $(document).ready(function () {
     const saveButton = $("#save-button");
     const changePasswordButton = $("#change-password-button");
 
+    let notifyMessage = function (title, msg, status){
+        new Notify({
+            status: status,
+            title: title,
+            text: msg,
+            effect: 'fade',
+            speed: 1000,
+            customClass: '',
+            customIcon: '',
+            showIcon: true,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 5000,
+            gap: 20,
+            distance: 20,
+            type: 3,
+            position: 'right bottom',
+            customWrapper: '',
+        });
+    }
+
     let saveChanges = function (e) {
         saveButton.attr("disabled", "disabled");
 
@@ -19,7 +40,20 @@ $(document).ready(function () {
         };
 
         let onResponse = function (response) {
-            window.location.reload();
+            if (response.type === "BadResponse") {
+                notifyMessage('Ошибка', response.message, 'error');
+                return;
+            }
+            else if (response.type === "ErrorsResponse") {
+                Object.keys(response.errors).map((msgsKey) => { response.errors[msgsKey].join(';\n ') });
+                let msg = Object.values(response.errors).join(';\n ');
+                notifyMessage('Ошибка', msg, 'error');
+            }
+            else {
+                notifyMessage('Успешно', 'Данные изменены', 'success');
+                updateUserData(response);
+            }
+            saveButton.removeAttr('disabled');
         }
 
         modifyUser(data, onResponse);

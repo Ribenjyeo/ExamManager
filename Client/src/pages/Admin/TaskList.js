@@ -16,7 +16,7 @@ const TaskList = () => {
       description: null,
     })
 
-  const [taskItem, setTaskItem] = useState([{id: null}])
+  const [taskItem, setTaskItem] = useState(0)
   const [showModal, setShowModal] = useState(false)
 
   const tasks = async () => { //Получение всех заданий
@@ -26,6 +26,8 @@ const TaskList = () => {
       const parse = JSON.parse(stringi)
       setTaskList(parse.tasks)
   }
+
+  console.log(taskItem)
 
   const handleDelete = async (params) => { //Удаление задания
     const deleteUser = {

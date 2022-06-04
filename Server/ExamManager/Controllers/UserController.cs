@@ -28,11 +28,19 @@ namespace ExamManager.Controllers
         }
 
         [HttpGet(Routes.GetUser)]
-        [OnlyUserRole(UserRole.ADMIN | UserRole.TEACHER)]
         [ValidateGuidFormat("id")]
         public async Task<IActionResult> GetUser(string id)
         {
-            var user = await _userService.GetUser(Guid.Parse(id), includeTasks: true, includeGroup: true);
+            var currentUser = (User)HttpContext.Items["User"]!;
+            var userId = Guid.Parse(id);
+
+            if ((currentUser.Role & (UserRole.TEACHER | UserRole.ADMIN)) != currentUser.Role && 
+                currentUser.ObjectID != userId)
+            {
+                return Ok(ResponseFactory.CreateResponse(new Exception("Нельзя запросить информацию о другом пользователе без прав администратора")));
+            }
+
+            var user = await _userService.GetUser(userId, includeTasks: true, includeGroup: true);
 
             return Ok(ResponseFactory.CreateResponse(user));
         }
@@ -75,11 +83,17 @@ namespace ExamManager.Controllers
         }
 
         [HttpGet(Routes.GetUserTasks)]
-        [OnlyUserRole(UserRole.ADMIN | UserRole.TEACHER)]
         [ValidateGuidFormat("id")]
         public async Task<IActionResult> GetUserTasks(string id)
         {
+            var currentUser = (User)HttpContext.Items["User"]!;
             var studentId = Guid.Parse(id);
+
+            if ((currentUser.Role & (UserRole.TEACHER | UserRole.ADMIN)) != currentUser.Role &&
+                currentUser.ObjectID != studentId)
+            {
+                return Ok(ResponseFactory.CreateResponse(new Exception("Нельзя запросить информацию о другом пользователе без прав администратора")));
+            }
 
             var userTasks = await _taskService.GetPersonalTasksAsync(studentId);
             if (userTasks is null || userTasks.Count() == 0)

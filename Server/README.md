@@ -77,7 +77,7 @@
         <th>Описание</th>
     </tr>
     <tr>
-        <td colspan=2>tasks</td>
+        <td colspan=2>pesronalTasks</td>
         <td>array</td>
         <td></td>
         <td></td>
@@ -87,10 +87,9 @@
         <td>id</td>
         <td>guid</td>
         <td>Да</td>
-        <td>Идентификатор задания</td>
+        <td>Идентификатор задания у пользователя</td>
     </tr>
 </table>
-
 
 
 ## GetTasksRequest
@@ -265,9 +264,12 @@
 | name            | string     |             | Полное имя пользователя                                      |
 | firstName       | string     |             | Имя пользователя                                             |
 | lastName        | string     |             | Фамилия пользователя                                         |
+| excludeYourself | bool       |             | При значении **true** пользователь, запрашивающий информацию, не будет добавлен в выборку |
 | withoutGroup    | bool       |             | При значении **true** пользователи, которые не состоят в группе, будут добавлены в выборку. При этом значения полей *groupIds*, *excludeGroupIds* не будут учитываться |
 | groupIds        | guid[]     |             | ID групп, пользователи которых будут добавлены в выборку     |
 | excludeGroupIds | guid[]     |             | ID групп, пользователи которых не будут добавлены в выборку  |
+| taskIds         | guid[]     |             | ID заданий, при наличии которых пользователи будут добавлены в выборку |
+| excludeTaskIds  | guid[]     |             | ID заданий, при наличии которых пользователи не будут добавлены в выборку |
 | taskStatus      | int        |             | Статус задания, при наличии которого (хотя бы одного задания<br />с таким статусом) пользователь будет добавлен в выборку |
 | role            | int        |             | Роль, пользователи имеющие которую будут добавлены в выборку |
 
@@ -687,7 +689,25 @@
     	<td>guid</td>
     	<td>ID образа виртуальной машины</td>
     </tr>
+    <tr>
+    	<td colspan=2>students</td>
+    	<td>array</td>
+    	<td></td>
+    </tr>
+    <tr>
+    	<td></td>
+    	<td>id</td>
+    	<td>guid</td>
+    	<td>ID пользователя</td>
+    </tr>
+    <tr>
+    	<td></td>
+    	<td>fullName</td>
+    	<td>string</td>
+    	<td>Фамилия, имя пользователя</td>
+    </tr>
 </table>
+
 
 
 
@@ -719,10 +739,20 @@
         <td>ushort</td>
         <td>Внутренний номер задания</td>
     </tr>
-    <tr>
+    <tr class="new">
     	<td colspan=3>description</td>
         <td>string</td>
-        <td>Название задания</td>
+        <td>Описание задания</td>
+    </tr>
+    <tr>
+    	<td colspan=3>status</td>
+        <td>int</td>
+        <td>Статус задания</td>
+    </tr>
+    <tr>
+        <td colspan=3>message</td>
+        <td>string</td>
+        <td>Комментарий к статусу задания</td>
     </tr>
     <tr>
     	<td colspan=3>virtualMachines</td>

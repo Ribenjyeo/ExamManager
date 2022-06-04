@@ -1,4 +1,5 @@
 ﻿using ExamManager.Models;
+using ExamManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -21,8 +22,17 @@ namespace ExamManager.Filters
             {
                 if ((user.Role & _role) != user.Role)
                 {
-                    context.Result = new RedirectResult(_redirectUrl);
-                    return;
+                    // Если задана ссылка перехода
+                    if (_redirectUrl is not null)
+                    {
+                        context.Result = new RedirectResult(_redirectUrl);
+                        return;
+                    }
+                    else
+                    {
+                        context.Result = new OkObjectResult(ResponseFactory.CreateResponse(new Exception("Данный метод недоступен пользователю с текущей ролью")));
+                        return;
+                    }
                 }
             }
 
