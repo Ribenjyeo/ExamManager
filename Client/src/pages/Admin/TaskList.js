@@ -61,12 +61,12 @@ const TaskList = () => {
   }, [])
 
   const columns = [
-      { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
-      { field: 'title', headerName: 'Название', minWidth: 100, flex: 1},
-      { field: 'description', headerName: 'Описание', minWidth: 100, flex: 1},
+      { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
+      { field: 'title', headerName: <b>Название</b>, minWidth: 100, flex: 1},
+      { field: 'description', headerName: <b>Описание</b>, minWidth: 100, flex: 1},
       {
         field: 'action',
-        headerName: 'Изменить / Удалить',
+        headerName: <b>Изменить / Удалить</b>,
         minWidth: 100,
         flex: 1,
         renderCell: (params) => {

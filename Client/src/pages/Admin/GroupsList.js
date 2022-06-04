@@ -50,12 +50,12 @@ const GroupList = () => {
   }, [])
 
   const columns = [
-    { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
-    { field: 'name', headerName: 'Название группы', minWidth: 100, flex: 1},
-    { field: 'studentsCount', headerName: 'Количество студентов, состоящих в группе', width: 500},
+    { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
+    { field: 'name', headerName: <b>Название группы</b>, minWidth: 100, flex: 1},
+    { field: 'studentsCount', headerName: <b>Количество студентов, состоящих в группе</b>, width: 500},
     {
       field: 'action',
-      headerName: 'Изменить/Удалить',
+      headerName: <b>Изменить/Удалить</b>,
       minWidth: 100,
       flex: 1,
       renderCell: (params) => {

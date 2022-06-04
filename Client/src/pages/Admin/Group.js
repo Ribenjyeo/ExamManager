@@ -58,24 +58,24 @@ const Group = () => {
       }, [])
 
     const columns = [
-    { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
-    { field: 'firstName', headerName: 'Имя', minWidth: 100, flex: 1},
-    { field: 'lastName', headerName: 'Фамилия', minWidth: 100, flex: 1},
-    { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
-    {
-        field: 'action',
-        headerName: 'Изменить/Удалить',
-        minWidth: 100,
-        flex: 1,
-        renderCell: (params) => {
-        return (
+        { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
+        { field: 'firstName', headerName: <b>Имя</b>, minWidth: 100, flex: 1},
+        { field: 'lastName', headerName: <b>Фамилия</b>, minWidth: 100, flex: 1},
+        { field: 'groupName', headerName: <b>Группа</b>, minWidth: 100, flex: 1},
+        {
+          field: 'action',
+          headerName: <b>Изменить / Удалить</b>,
+          minWidth: 100,
+          flex: 1,
+          renderCell: (params) => {
+          return (
             <>
             <Link to={"/admin/users/"+params.row.id}>
                 <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
             </>
-        )
+          )
         }
     }];
 

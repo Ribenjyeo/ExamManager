@@ -39,7 +39,7 @@ const User = () => {
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
         timeout: 1000,
         headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
-      });
+    });
     
     const getUserEdit = async () => { // получить данные пользователя по его ID
         try {
@@ -134,7 +134,6 @@ const User = () => {
         let deleteTask = {
             personalTasks: array
         }
-        // console.log(deleteTask)
         const response = await fetch(`/user/${cookies.editUser}/tasks/remove`, {
             method: "POST",
             headers: {
@@ -142,7 +141,7 @@ const User = () => {
             'Authorization' : 'Bearer ' + cookies.AuthToken},
             body: JSON.stringify(deleteTask)
         })
-        window.location.reload()
+        GetTaskList()
     }
 
     const GetTaskList = async () => {
@@ -150,6 +149,15 @@ const User = () => {
         const json = await response.json()
         const stringi = JSON.stringify(json)
         const parse = JSON.parse(stringi)
+        const array = parse.personalTasks[0].tasks
+        for(let i = 0; i < array.length; i++) {
+            if(array[i].status == 1) {
+                array[i].status = "Не завершено"
+            }
+            else {
+                array[i].status = "Выполнено"
+            }
+        }
         setTasks(parse.personalTasks[0].tasks)
     }
 
@@ -181,16 +189,13 @@ const User = () => {
         setToggleGroup(false);
     }
     const columns = [
-        { field: 'id', headerName: 'ID', minWidth: 300, flex: 1},
-        { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
-        { field: 'description', headerName: 'Описание задания', minWidth: 100, flex: 1},
-        { field: 'number', headerName: 'Внутренний номер задания', minWidth: 100, flex: 1},
-        { field: 'status', headerName: 'Статус задания', minWidth: 100, flex: 1},
-        // { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
-        // { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
+        { field: 'title', headerName: <b>Название задания</b>, minWidth: 100, flex: 1},
+        { field: 'description', headerName: <b>Описание задания</b>, minWidth: 100, flex: 1},
+        { field: 'number', headerName: <b>Внутренний номер задания</b>, minWidth: 100, flex: 1},
+        { field: 'status', headerName: <b>Статус задания</b>, minWidth: 100, flex: 1},
         {
           field: 'action',
-          headerName: 'Убрать задание',
+          headerName: <b>Убрать задание</b>,
           minWidth: 100,
           flex: 1,
           renderCell: (params) => {
@@ -277,7 +282,6 @@ const User = () => {
                     <div className="dataGridTask">
                         <DataGrid
                             rows={tasks}
-                            checkboxSelection
                             columns={columns}
                             pageSize={pageSize}
                             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

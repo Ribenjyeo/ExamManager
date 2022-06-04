@@ -417,10 +417,10 @@ nav .nav-button {
 }
 
 .dataGridTask {
-  height: 50vh;
+  height: 50%;
+  margin-right: 20px;
+  margin-left: 20px
 }
-
-
 
 /* ------ Admin Bar ------ */
 
