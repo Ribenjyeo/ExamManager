@@ -6,13 +6,13 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridToolbarExport,
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
+import ImportFile from "../../components/ImportFile";
 
 const UserList = () => {
   const [pageSize, setPageSize] = useState(10)
@@ -115,13 +115,13 @@ const UserList = () => {
   }, [])
   
   const columns = [
-    { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
-    { field: 'firstName', headerName: <b>Имя</b>, minWidth: 100, flex: 1},
-    { field: 'lastName', headerName: <b>Фамилия</b>, minWidth: 100, flex: 1},
-    { field: 'groupName', headerName: <b>Группа</b>, minWidth: 100, flex: 1},
+    { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+    { field: 'firstName', headerName: 'Имя', minWidth: 100, flex: 1},
+    { field: 'lastName', headerName: 'Фамилия', minWidth: 100, flex: 1},
+    { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
     {
       field: 'action',
-      headerName: <b>Изменить / Удалить</b>,
+      headerName: 'Изменить / Удалить',
       minWidth: 100,
       flex: 1,
       renderCell: (params) => {
@@ -143,13 +143,7 @@ const UserList = () => {
         <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-        <GridToolbarExport csvOptions={{
-          fileName: 'User_list_MIREA',
-          delimiter: ';',
-          utf8WithBom: true,
-          }}
-        />
-        {/* <ImportButton {...importProps} /> */}
+        {/* <ImportFile/> */}
       </GridToolbarContainer>
     );
   }

@@ -357,6 +357,13 @@ nav .nav-button {
   display: flex;
 }
 
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.input#acsvFile {
+  
+}
+
 .userAddGroupButton {
   width: 160px;
   border: none;
@@ -431,10 +438,6 @@ nav .nav-button {
   position: sticky;
   top: 0px;
   z-index: 999;
-}
-
-input[type="file"] {
-  
 }
 
 .adminbarIcons:hover {

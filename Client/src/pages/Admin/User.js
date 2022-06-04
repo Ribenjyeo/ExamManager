@@ -154,7 +154,7 @@ const User = () => {
             if(array[i].status == 1) {
                 array[i].status = "Не завершено"
             }
-            else {
+            else if (array[i].status == 2) {
                 array[i].status = "Выполнено"
             }
         }
@@ -189,13 +189,13 @@ const User = () => {
         setToggleGroup(false);
     }
     const columns = [
-        { field: 'title', headerName: <b>Название задания</b>, minWidth: 100, flex: 1},
-        { field: 'description', headerName: <b>Описание задания</b>, minWidth: 100, flex: 1},
-        { field: 'number', headerName: <b>Внутренний номер задания</b>, minWidth: 100, flex: 1},
-        { field: 'status', headerName: <b>Статус задания</b>, minWidth: 100, flex: 1},
+        { field: 'title', headerName: 'Название задания', minWidth: 100, flex: 1},
+        { field: 'description', headerName: 'Описание задания', minWidth: 100, flex: 1},
+        { field: 'number', headerName: 'Внутренний номер задания', minWidth: 100, flex: 1},
+        { field: 'status', headerName: 'Статус задания', minWidth: 100, flex: 1},
         {
           field: 'action',
-          headerName: <b>Убрать задание</b>,
+          headerName: 'Убрать задание у пользователя',
           minWidth: 100,
           flex: 1,
           renderCell: (params) => {

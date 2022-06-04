@@ -66,7 +66,6 @@ const AdminBar = () => {
         const response = await axios.post('/users/create', JSON.stringify(data),  {headers: {
             'Content-Type' : 'application/json',
             'Authorization' : 'Bearer ' + cookies.AuthToken}})
-
         window.location.reload()
     }
 
@@ -88,13 +87,9 @@ const AdminBar = () => {
                                         type="file"
                                         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
                                         id="acsvFile"
-                                        // onChange={(e) => {setCsvFile(e.target.files[0])}}
                                         onChange={importExcel}
                                         />
                                     </li>
-                                    {/* <li>Экспортировать пользователей</li> */}
-                                    {/* <li>Импортировать задание</li>
-                                    <li>Экспортировать задание</li> */}
                                 </ul>
                             </li>
                         </ul>

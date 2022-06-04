@@ -1,7 +1,13 @@
 import * as React from "react";
 import AdminBar from '../../components/AdminBar'
 import SideBarAdmin from '../../components/SideBarAdmin'
-import { DataGrid } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
@@ -61,12 +67,12 @@ const TaskList = () => {
   }, [])
 
   const columns = [
-      { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
-      { field: 'title', headerName: <b>Название</b>, minWidth: 100, flex: 1},
-      { field: 'description', headerName: <b>Описание</b>, minWidth: 100, flex: 1},
+      { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+      { field: 'title', headerName: 'Название', minWidth: 100, flex: 1},
+      { field: 'description', headerName: 'Описание', minWidth: 100, flex: 1},
       {
         field: 'action',
-        headerName: <b>Изменить / Удалить</b>,
+        headerName: 'Изменить / Удалить',
         minWidth: 100,
         flex: 1,
         renderCell: (params) => {
@@ -80,6 +86,16 @@ const TaskList = () => {
           )
         }
       }];
+
+      function CustomToolbar() {
+        return (
+          <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+          </GridToolbarContainer>
+        );
+      }
 
   return(
       <>
@@ -101,6 +117,9 @@ const TaskList = () => {
                   onSelectionModelChange={item => setTaskItem(item)}
                   columns={columns}
                   pageSize={pageSize}
+                  components={{
+                    Toolbar: CustomToolbar,
+                  }}
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   rowsPerPageOptions={[10, 25, 50]}
                 />

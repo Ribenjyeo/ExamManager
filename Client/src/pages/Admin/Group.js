@@ -58,13 +58,13 @@ const Group = () => {
       }, [])
 
     const columns = [
-        { field: 'id', headerName: <b>ID</b>, minWidth: 100, flex: 1},
-        { field: 'firstName', headerName: <b>Имя</b>, minWidth: 100, flex: 1},
-        { field: 'lastName', headerName: <b>Фамилия</b>, minWidth: 100, flex: 1},
-        { field: 'groupName', headerName: <b>Группа</b>, minWidth: 100, flex: 1},
+        { field: 'id', headerName: 'ID', minWidth: 100, flex: 1},
+        { field: 'firstName', headerName: 'Имя', minWidth: 100, flex: 1},
+        { field: 'lastName', headerName: 'Фамилия', minWidth: 100, flex: 1},
+        { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
         {
           field: 'action',
-          headerName: <b>Изменить / Удалить</b>,
+          headerName: 'Изменить / Удалить',
           minWidth: 100,
           flex: 1,
           renderCell: (params) => {
