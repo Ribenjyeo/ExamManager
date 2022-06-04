@@ -361,8 +361,8 @@ nav .nav-button {
   width: 160px;
   border: none;
   padding: 5px;
-  background-color: teal;
-  border-radius: 5px;
+  background-color: #1976d2;
+  border-radius: 0 5px 5px 0;
   cursor: pointer;
   color: white;
   font-size: 16px;
@@ -372,7 +372,7 @@ nav .nav-button {
 }
 
 .userAddGroupButton:hover {
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 
@@ -385,7 +385,7 @@ nav .nav-button {
   font-size: 16px;
   position: relative;
   margin-left: auto;
-  border: 1px solid teal;
+  border: 1px solid #1976d2;
   padding: 4px;
 }
 
@@ -397,19 +397,19 @@ nav .nav-button {
   border: none;
   border-radius: 10px;
   padding: 5px 10px;
-  background-color: #3bb077;
+  background-color: #1976d2;
   color: white;
   cursor: pointer;
   margin-right: 20px;
 }
 
 .userListEdit:hover{
-  background-color: #47d38f;
+  background-color: #0288d1;
 }
 
 .userListDelete:hover {
   cursor: pointer;
-  color: red;
+  color: #d32f2f;
 }
 
 .dataGrid {
@@ -438,7 +438,7 @@ input[type="file"] {
 }
 
 .adminbarIcons:hover {
-  color: red;
+  color: #d32f2f;
 }
 
 .AdminBarIconsContainer {
@@ -480,7 +480,7 @@ ul.dropdown > li:hover {
 }
 
 .import:hover {
-  color:teal;
+  color:#1976d2;
 }
 
 .AdminBarIconsContainer > ul li ul {
@@ -528,7 +528,7 @@ ul.dropdown {
 .logo {
   font-weight: bold;
   font-size: 25px;
-  color: darkblue;
+  color: #1565c0;
   cursor: pointer;
 }
 
@@ -550,7 +550,7 @@ ul.dropdown {
   right: -5px;
   width: 15px;
   height: 15px;
-  background-color: red;
+  background-color: #d32f2f;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -640,7 +640,7 @@ ul.dropdown {
   width: 80px;
   border: none;
   padding: 5px;
-  background-color: teal;
+  background-color: #1976d2;
   border-radius: 5px;
   cursor: pointer;
   color: white;
@@ -649,11 +649,11 @@ ul.dropdown {
 }
 
 .userAddButton:hover {
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 .AdButton:hover {
-  background-color: rgb(2, 160, 160);
+  background-color: #0288d1;
 }
 
 .userShow {
@@ -768,7 +768,7 @@ span.userShowInfoTitle {
   width: 300px;
   border: none;
   padding: 5px;
-  background-color: teal;
+  background-color: #1976d2;
   border-radius: 5px;
   cursor: pointer;
   color: white;
@@ -779,7 +779,7 @@ span.userShowInfoTitle {
 }
 
 .userAddTaskButton:hover {
-  background-color: rgb(15, 177, 177)
+  background-color: #0288d1
 }
 
 .userUpdateInput {
@@ -816,7 +816,7 @@ span.userShowInfoTitle {
   width: 100%;
   border: none;
   padding: 5px;
-  background-color: teal;
+  background-color: #1976d2;
   border-radius: 0 0 10px 10px;
   cursor: pointer;
   color: white;
@@ -824,7 +824,7 @@ span.userShowInfoTitle {
 }
 
 .buttonEditUser:hover { 
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 /* ------ NEW User ------ */
@@ -881,7 +881,7 @@ span.userShowInfoTitle {
 .newUserButton{
     width: 200px;
     border: none;
-    background-color: teal;
+    background-color: #1976d2;
     color: white;
     padding: 7px 10px;
     font-weight: 600;
@@ -892,7 +892,7 @@ span.userShowInfoTitle {
 }
 
 .newUserButton:hover {
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 .buttonForm {
@@ -952,7 +952,7 @@ span.userShowInfoTitle {
 .newGroupButton{
     width: 200px;
     border: none;
-    background-color: teal;
+    background-color: #1976d2;
     color: white;
     padding: 7px 10px;
     font-weight: 600;
@@ -963,7 +963,7 @@ span.userShowInfoTitle {
 }
 
 .newGroupButton:hover {
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 .buttonGroupForm {
@@ -1046,7 +1046,7 @@ span.userShowInfoTitle {
 .newTaskButton{
     width: 200px;
     border: none;
-    background-color: teal;
+    background-color: #1976d2;
     color: white;
     padding: 7px 10px;
     font-weight: 600;
@@ -1057,7 +1057,7 @@ span.userShowInfoTitle {
 }
 
 .newTaskButton:hover {
-  background-color: rgb(15, 177, 177);
+  background-color: #0288d1;
 }
 
 .buttonTaskForm {
@@ -1111,7 +1111,7 @@ span.userShowInfoTitle {
   margin-top: 20px;
   border: none;
   padding: 5px;
-  background-color: teal;
+  background-color: #1976d2;
   border-radius: 5px;
   cursor: pointer;
   color: white;
@@ -1122,5 +1122,5 @@ span.userShowInfoTitle {
 }
 
 .AddTaskButton:hover {
-  background-color: rgb(15, 177, 177)
+  background-color: #0288d1;
 }

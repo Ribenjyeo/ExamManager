@@ -75,23 +75,23 @@ const NewUser = () => {
             <form className="newUserForm">
               <div className="newUserItem">
                 <label>Логин</label>
-                <input type="text" placeholder="Логин" onChange={e => setLogin(e.target.value)}/>
+                <input type="text" placeholder="Логин" onChange={e => setLogin(e.target.value.trim())}/>
               </div>
               <div className="newUserItem">
                 <label>Имя</label>
-                <input type="text" placeholder="Имя" onChange={e => setFirstName(e.target.value)}/>
+                <input type="text" placeholder="Имя" onChange={e => setFirstName(e.target.value.trim())}/>
               </div>
               <div className="newUserItem">
                 <label>Фамилия</label>
-                <input type="text" placeholder="Фамилия" onChange={e => setLastName(e.target.value)}/>
+                <input type="text" placeholder="Фамилия" onChange={e => setLastName(e.target.value.trim())}/>
               </div>
               <div className="newUserItem">
                 <label>Пароль</label>
-                <input type="password" placeholder="Пароль"  onChange={e => setPassword(e.target.value)}/>
+                <input type="password" placeholder="Пароль"  onChange={e => setPassword(e.target.value.trim())}/>
               </div>
               <div className="newUserItem">
                 <label>Роль пользователя</label>
-                <select className="newUserSelect" name="active" onChange={e => setRole(e.target.value || null)}>
+                <select className="newUserSelect" name="active" onChange={e => setRole(e.target.value.trim() || null)}>
                   <option value="">Выберите роль</option>
                   <option value="1">Студент</option>
                   <option value="0">Администратор</option>

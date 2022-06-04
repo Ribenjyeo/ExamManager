@@ -23,7 +23,6 @@ const NewTask = () => {
       setDescription(data)
     }
 
-
     const handleClick = async (e) => { //запрос на добавление задания в систему
         e.preventDefault()
         try {
@@ -77,23 +76,22 @@ const NewTask = () => {
                     <form className="newTaskForm">
                         <div className="newTaskItem">
                             <label>Название задания</label>
-                            <input type="text" placeholder="Название задания" onChange={e => setTitle(e.target.value)} required/>
+                            <input type="text" placeholder="Название задания" onChange={e => setTitle(e.target.value.trim())} required/>
                         </div>
                         <div className="newTaskItem">
                             <label>Идентификатор виртуальной машины</label>
-                            <input type="text" placeholder="Идентификатор виртуальной машины" onChange={e => setIdMachine(e.target.value)} required/>
+                            <input type="text" placeholder="Идентификатор виртуальной машины" onChange={e => setIdMachine(e.target.value.trim())} required/>
                         </div>
                         <div className="newTaskItem">
                             <label>Название виртуальной машины</label>
-                            <input type="text" placeholder="Название виртуальной машины" onChange={e => setTitleMachine(e.target.value)} required/>
+                            <input type="text" placeholder="Название виртуальной машины" onChange={e => setTitleMachine(e.target.value.trim())} required/>
                         </div>
                         <div className="newTaskItem">
                             <label>Номер виртуальной машины</label>
-                            <input type="text" placeholder="Порядковый номер виртуальной машины" onChange={e => setOrder(e.target.value)} required/>
+                            <input type="text" placeholder="Порядковый номер виртуальной машины" onChange={e => setOrder(e.target.value.trim())} required/>
                         </div>
                         <div className="CKeditor">
                             <label>Описание задания</label>
-                            {/* <input type="text" placeholder="Описание задания" onChange={e => setDescription(e.target.value)} required/> */}
                             <div className="editor-data">
                               <CKEditor editor={ClassicEditor} data={addData} onChange={handleChangeData}/>
                             </div>

@@ -37,6 +37,8 @@ const NewGroup = () => {
         }
       }
 
+      console.log(name)
+
     return (
         <>
           {error && (
@@ -55,7 +57,7 @@ const NewGroup = () => {
                     <form className="newGroupForm">
                         <div className="newGroupItem">
                             <label>Название группы</label>
-                            <input type="text" placeholder="Название группы" onChange={e => setName(e.target.value)} required/>
+                            <input type="text" placeholder="Название группы" onChange={e => setName(e.target.value.trim())} required/>
                         </div>
                         <div className="buttonGroupForm">
                             <button className="newGroupButton" onClick={(e) => {handleClick(e)}}>Создать</button>

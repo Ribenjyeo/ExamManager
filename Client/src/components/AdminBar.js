@@ -57,8 +57,7 @@ const AdminBar = () => {
         reader.readAsText(file)
     }
 
-    let requestCsvFile = async function () {
-
+    const requestCsvFile = async () => {
         const response = await axios.post('/users/create', JSON.stringify(csvArray),  {headers: {
             'Content-Type' : 'application/json',
             'Authorization' : 'Bearer ' + cookies.AuthToken}})

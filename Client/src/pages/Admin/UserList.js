@@ -44,8 +44,6 @@ const UserList = () => {
     const stringi = JSON.stringify(json)
     const parse = JSON.parse(stringi)
     setUserList(parse.users)
-    const respo = await fetch('/user/08da4491-2767-46ef-8b64-1831525f0b27', {method: 'GET', headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
-    console.log(respo)
   }
 
   const groups = async () => { //запрос на получение групп
@@ -90,14 +88,10 @@ const UserList = () => {
           array.push({id: students[i]})
       }
 
-      // console.log("aaray: ", array)
-
       let AddStudentsRequest = {
         groupId : currentGroupId,
         students : array
       }
-
-      // console.log(JSON.stringify(AddStudentsRequest))
 
       const response = fetch('/group/students/add', {
         method: "POST",
@@ -107,15 +101,12 @@ const UserList = () => {
           body: JSON.stringify(AddStudentsRequest)
         })
       window.location.reload()
-      // console.log(userList)
     }
   }
 
   function handleClick (params) { //получение ID изменяемого пользователя
     setCookies("editUser", params)
   }
-
-  // console.log(userList)
 
   useEffect(() => {
     users()
