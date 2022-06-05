@@ -274,6 +274,38 @@ public static class ResponseFactory
         };
     }
 
+    public static PersonalTaskDataResponse CreateResponse(PersonalTask personalTask)
+    {
+        if (personalTask is null)
+        {
+            return null;
+        }
+
+        var vms = new List<PersonalTaskDataResponse.VirtualMachineView>();
+
+
+        return new PersonalTaskDataResponse
+        {
+            status = personalTask.Status,
+            description = personalTask.Task?.Description ?? string.Empty,
+            message = personalTask.Message,
+            title = personalTask.Task?.Title ?? string.Empty,
+            number = personalTask.Task?.Number ?? 0,
+            virtualMachines = personalTask.VirtualMachines?.Select(vMachine =>
+            new PersonalTaskDataResponse.VirtualMachineView
+            {
+                image = new()
+                {
+                    id = vMachine.ImageID.ToString()
+                },
+                instance = new()
+                {
+                    status = vMachine.Status
+                }
+            }).ToArray()
+        };
+    }
+
     public static Response CreateResponse(VMStatus vmStatus)
     {
         return new TaskStatusResponse

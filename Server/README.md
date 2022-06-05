@@ -4,7 +4,7 @@
 |--------|--------|--------|--------|
 |  **POST** */login*  |  Проверить зарегистрирован ли пользователь и сгенерировать для него JWT-токен  |  LoginEditModel  |  JwtResponse  |
 |  **GET** */user/{id}*  |  Получить информацию о пользователе по его ID  |  id  |  UserDataResponse  |
-| **GET** */user/{id}/task?task={taskId}* | Получить информацию о задании пользователя по его ID | **id** - идентификатор пользователя<br />**taskId** - идентификатор задания | PersonalTaskDataResponse |
+| **GET** */user/{id}/task/{taskId}* | Получить информацию о задании пользователя по его ID | **id** - идентификатор пользователя<br />**taskId** - идентификатор задания | PersonalTaskDataResponse |
 | **GET** */user/{id}/tasks* | Получить информацию о заданиях, которые имеются у пользователя ID | id | PersonalTasksDataResponse |
 | **POST** */user/{id}/tasks/add* | Присвоить пользователю задания | AddPersonalTasksRequest | PersonalTasksDataResponse |
 | **POST** */user/{id}/tasks/remove* | Убрать задания у пользователя | RemovePersonalTasksRequest | Response |

@@ -2,6 +2,7 @@
 const taskDescription = $("#task-description");
 const taskUrl = $("#task-url");
 
+
 const path = window.location.pathname.split('/');
 const taskType = path[path.length - 1];
 
@@ -9,7 +10,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
 let createNewTask = function () {
-
     let data = {
         title: taskTitle.val(),
         description: taskDescription.val(),
@@ -28,7 +28,7 @@ let saveTask = function () {
     let data = {
         taskId: id,
         title: taskTitle.val(),
-        description: taskDescription.val(),
+        description: editor.getData(),
         students: studentsToRemove
     }
     let onResponse = function (response) {

@@ -6,11 +6,28 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Editor } from '../../components/ckeditor5/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 const Task = () => {
     const [cookies, setCookies, removeCookies] = useCookies(['user'])
     const [toggleTitle, setToggleTitle] = useState(true);
     const [title, setTitle] = useState(null)
+    const [description, setDescription] = useState(null)
     const [data, setData] = useState({
         id: '',
         title: '',
@@ -24,6 +41,10 @@ const Task = () => {
         }]
     })
 
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const instance = axios.create({  //экземпляр запроса с использованием текущего токена
         timeout: 1000,
         headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
@@ -32,17 +53,15 @@ const Task = () => {
     const getTask = async () => { // получить данные задания
         try {
             const response = await instance.get(`/task/${cookies.editTask}`)
+            // console.log(response.data)
             setData({
                 id: response.data.id,
                 title: response.data.title,
                 description: response.data.description,
-                virtualMachine: [{
-                    id: response.data.virtualMachine[0].id
-                }],
-                students: [{
-                    id: response.data.students[0].id,
-                    fullName: response.data.students[0].fullName
-                }]
+                // virtualMachine: [{
+                //     id: response.data.virtualMachine[0].id
+                // }],
+                students: response.data.students.length > 0 ? response.data.students : [{fullName: 'Это задание не присвоено пользователям'}]
             })
         }
         catch(error) {
@@ -53,9 +72,9 @@ const Task = () => {
     const handleClick = async (e) => { //запрос на изменения задания
         e.preventDefault()
         const res = await instance.post('/task/modify', { 
-            id : cookies.editTask,
-            title : firstName,
-            lastName : lastName,
+            taskId : cookies.editTask,
+            title : title,
+            description : description
         })
         window.location.reload()
     }
@@ -64,9 +83,14 @@ const Task = () => {
         setToggleTitle(false)
     }
 
+    const handleChangeData = (e, editor) => {
+        const data = editor.getData()
+        setDescription(data)
+      }
+
     useEffect(() => {
         getTask()
-    })
+    }, [])
 
     return (
         <>
@@ -93,18 +117,39 @@ const Task = () => {
                                         name="title"
                                         onChange={e => setTitle(e.target.value)}
                                         placeholder={data.title}
-                                        className="userUpdateInput"
+                                        className="taskUpdateInput"
                                     />
                                 )}
                             </div>
+                            <div className="userShowInfo">
+                                <Button className="connect-button" name="connectbtn" variant="outlined" onClick={handleOpen}>Список пользователей</Button>
+                                <Modal
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={style}>
+                                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                                            Список пользователей, которые используют это задание:
+                                        </Typography>
+                                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                            {/* {data.students[0].fullName} */}
+                                            {data.students.map((item, i) => 
+                                                {item.fullName}
+                                            )}
+                                        </Typography>
+                                    </Box>
+                                </Modal>
+                            </div>
                             <div className="CKeditor">
-                            <label>Описание задания</label>
+                            <label><b>Описание задания</b></label>
                             <div className="editor-data">
-                              <CKEditor editor={Editor} />
+                              <CKEditor editor={Editor} data={data.description}  onChange={handleChangeData}/>
                             </div>
                         </div>
                             <div className="editUser">
-                                    <button className="buttonEditUser" onClick={(e) => {handleClick(e)}}>Внести изменения</button>
+                                <button className="buttonEditUser" onClick={(e) => {handleClick(e)}}>Внести изменения</button>
                             </div>
                         </div>
                     </div>

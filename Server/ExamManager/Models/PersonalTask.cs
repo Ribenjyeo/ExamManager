@@ -17,6 +17,7 @@ public class PersonalTask
     public User Student { get; set; }
     public Guid StudentID { get; set; }
     public TaskStatus Status { get; set; } = TaskStatus.FAILED;
+    public string? Message { get; set; }
     public ICollection<VirtualMachine> VirtualMachines { get; set; }
 }
 

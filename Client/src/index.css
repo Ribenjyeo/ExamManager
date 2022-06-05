@@ -486,7 +486,6 @@ nav .nav-button {
 .input-file-container {
   position: relative;
   width: 150px;
-  left: 5px;
 } 
 .js .input-file-trigger {
   display: block;
@@ -1276,4 +1275,32 @@ span.userShowInfoTitle {
 
 .AddTaskButton:hover {
   background-color: #0288d1;
+}
+
+/* ------ TASKS EDIT ------ */
+
+.taskUpdateInput {
+  width: 600px;
+  min-height: 20px;
+  max-height: 25px;
+  margin-left: 10px;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.taskUpdateInput::placeholder {
+  color: #212529;
+  opacity: 0.5;
+}
+
+.taskUpdateInput:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
 }

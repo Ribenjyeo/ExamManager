@@ -40,7 +40,6 @@ const NewUser = () => {
               role: parseInt(role)
               }]
             }
-            console.log(users)
           const response = await fetch('/users/create', {
           method: "POST",
           headers: {

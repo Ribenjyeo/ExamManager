@@ -97,7 +97,7 @@ public record PersonalTaskDataResponse : Response
     public ushort number { get; set; }
     public string description { get; set; }
     public TaskStatus status { get; set; }
-    public string message { get; set; }
+    public string? message { get; set; }
     public VirtualMachineView[]? virtualMachines { get; set;}
 
     public struct VirtualMachineView

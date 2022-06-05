@@ -16,6 +16,14 @@ body .tasks {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
+    .tasks-list > .description {
+        font-family: var(--font-Roboto);
+        font-size: 2em;
+        text-align: center;
+        color: rgba(1, 1, 1, .3);
+        grid-column: 1/4;
+        margin: 2em 0;
+    }
 
     .tasks-list .task {
         display: grid;

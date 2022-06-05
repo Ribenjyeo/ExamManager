@@ -17,10 +17,19 @@
 
             tasksList.append(taskElement);
         }
+
+        if (tasksList.children(".task").length == 0) {
+            let tableDescription = $('<div class="description">Нет заданий</div>');
+            tasksList.append(tableDescription);
+            return;
+        }
     }
 
     let onResponse = function (response) {
-        let tasks = response.personalTasks[0].tasks;
+        let tasks = [];
+        if (response.type != "BadResponse") {
+            tasks = response.personalTasks[0].tasks;
+        }
         fillTasksList(tasks);
     }
 

@@ -106,10 +106,12 @@ namespace ExamManager.Controllers
         }
 
         [HttpGet(Routes.GetUserTask)]
-        [ValidateGuidFormat("id")]
-        public async Task<IActionResult> GetUserTask(string id, string task)
+        [ValidateGuidFormat("id", "taskId")]
+        public async Task<IActionResult> GetUserTask(string id, string taskId)
         {
-            throw new NotImplementedException();
+            var task = await _taskService.GetPersonalTaskAsync(Guid.Parse(taskId));
+
+            return Ok(ResponseFactory.CreateResponse(task));
         }
 
         [HttpPost(Routes.AddUserTasks)]

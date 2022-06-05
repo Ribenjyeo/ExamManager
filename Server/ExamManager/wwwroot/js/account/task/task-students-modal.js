@@ -127,7 +127,7 @@ function fillStudents(addStudents, removeStudents) {
     addStudents.sort(sortNames);
 
     for (user of addStudents) {
-        let userElement = $(`<div value="${user.id}" class="student">${user.lastName} ${user.firstName}</div>`);
+        let userElement = $(`<div value="${user.id}" class="student"><div class="name">${user.lastName} ${user.firstName}</div><div class="group">${user.groupName}</div></div>`);
 
         userElement.on('click', (e) => {
             let id = e.currentTarget.attributes['value'].value;
@@ -144,7 +144,7 @@ function fillStudents(addStudents, removeStudents) {
     removeStudents.sort(sortNames);
 
     for (user of removeStudents) {
-        let userElement = $(`<div value="${user.id}" class="student">${user.lastName} ${user.firstName}</div>`);
+        let userElement = $(`<div value="${user.id}" class="student"><div class="name">${user.lastName} ${user.firstName}</div><div class="group">${user.groupName}</div></div>`);
 
         userElement.on('click', (e) => {
             let id = e.currentTarget.attributes['value'].value;

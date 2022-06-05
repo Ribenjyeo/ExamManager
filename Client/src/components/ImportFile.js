@@ -4,6 +4,8 @@ import React from 'react'
 import { useState } from 'react';
 import { useCookies } from "react-cookie";
 import axios from 'axios';
+import Button from '@mui/material/Button';
+
 const ImportFile = () => {
 
     const [cookies, setCookies, removeCookies] = useCookies(['user']);
@@ -55,27 +57,6 @@ const ImportFile = () => {
         window.location.reload()
     }
 
-    document.querySelector("html").classList.add('js');
-
-    var fileInput = document.querySelector( ".input-file" ),  
-        button = document.querySelector( ".input-file-trigger" ),
-        the_return = document.querySelector(".file-return");
-        
-    if(fileInput) {
-        button.addEventListener( "keydown", function( event ) {  
-            if ( event.keyCode == 13 || event.keyCode == 32 ) {  
-                fileInput.focus();  
-            }  
-        });
-        button.addEventListener( "click", function( event ) {
-            fileInput.focus();
-            return false;
-        });  
-        fileInput.addEventListener( "change", function( event ) {  
-            the_return.innerHTML = this.value;  
-        });  
-    }
-
     return (
         <>
             <button className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-1knaqv7-MuiButtonBase-root-MuiButton-root"
@@ -99,14 +80,20 @@ const ImportFile = () => {
                 IMPORT
                 <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span>
             </button>
-            <div className="input-file-container">  
-                <input className="input-file"
-                    id="my-file"
-                    type="file"
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
-                    onChange={importExcel}
-                />
-                <label tabIndex={0} htmlFor="my-file" className="input-file-trigger">Выберите файл...</label>
+            <div className="input-file-container">
+                <Button
+                    variant="text"
+                    component="label"
+                    size="small"
+                    >
+                    Выберите файл
+                    <input
+                        type="file"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
+                        onChange={importExcel}
+                        hidden
+                    />
+                </Button>
             </div>
         </>
     )
