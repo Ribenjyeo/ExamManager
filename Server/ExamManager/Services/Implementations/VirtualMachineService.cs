@@ -43,13 +43,25 @@ public class VirtualMachineService : IVirtualMachineService
 
     public async Task<VirtualMachine?> StartVirtualMachine(string vmImageId, Guid ownerId, Guid personalTaskId)
     {
-        var result = await _scriptManager.Execute(
-            IVirtualMachineService.VMControl,
-            IVirtualMachineService.StartVM,
-            new()
-            {
-                { "id", vmImageId }
-            });
+        var vMachine = await _dbContext.VirtualMachines!.Include(vm => vm.Image).FirstOrDefaultAsync(vm => vm.Image.ID == vmImageId && vm.OwnerID == ownerId && vm.TaskID == personalTaskId);
+        // Если уже существует подходящий объект виртуальной машины,
+        // то удаляем его
+        if (vMachine is not null)
+        {
+            _dbContext.VirtualMachines!.Remove(vMachine);
+        }
+
+        var result = string.Empty;
+        try
+        {
+            result = await _scriptManager.Execute(
+                IVirtualMachineService.VMControl,
+                IVirtualMachineService.StartVM,
+                new()
+                {
+                    { "id", vmImageId }
+                });
+        
 
         var vmStatus = JsonConvert.DeserializeObject<StartVirtualMachineResult?>(result);
         
@@ -58,10 +70,15 @@ public class VirtualMachineService : IVirtualMachineService
             return null;
         }
 
-        var vMachine = _mapper.Map<StartVirtualMachineResult, VirtualMachine>(vmStatus.Value);
+        vMachine = _mapper.Map<StartVirtualMachineResult, VirtualMachine>(vmStatus.Value);
         vMachine.OwnerID = ownerId;
         vMachine.TaskID = personalTaskId;
         vMachine.Status = VMStatus.RUNNING;
+        }
+        catch
+        {
+            return null;
+        }
 
         await _dbContext.AddAsync(vMachine);
         await _dbContext.SaveChangesAsync();

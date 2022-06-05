@@ -21,12 +21,18 @@ public record VirtualMachine
     [ForeignKey(nameof(TaskID))]
     public PersonalTask Task { get; set; }
     public Guid TaskID { get; set; }
+
+    [ForeignKey(nameof(ImageID))]
+    public VirtualMachineImage Image { get; set; }
+    public Guid ImageID { get; set; }
+
 }
 
 public enum VMStatus
 {
     RUNNING = 1 << 0,
-    KILLED = 1 << 1
+    KILLED = 1 << 1,
+    LOADING = 1 << 2
 }
 
 public static class VirtualMachineExtensions

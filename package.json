@@ -2,6 +2,9 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^34.1.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.8.2",
     "@mui/x-data-grid-pro": "^5.12.0",
     "@pankod/refine-antd": "^3.23.2",
     "@pankod/refine-core": "^3.23.2",

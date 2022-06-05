@@ -89,18 +89,11 @@ namespace ExamManager.Controllers
         [ValidateGuidFormat("taskId")]
         public async Task<IActionResult> StartTask(string taskId, string id)
         {
-            var currentUserID = ((User)HttpContext.Items["User"]).ObjectID;
+            var currentUserID = ((User)HttpContext.Items["User"]!).ObjectID;
             var currentTaskId = Guid.Parse(taskId);
 
             var vmId = string.Empty;
-            try
-            {
-                await _taskService.StartTaskVirtualMachine(id, currentTaskId, currentUserID);
-            }
-            catch (Exception ex)
-            {
-                return Ok(ResponseFactory.CreateResponse(ex));
-            }
+            _taskService.StartTaskVirtualMachine(id, currentTaskId, currentUserID);
 
             return Ok(ResponseFactory.CreateResponse());
         }

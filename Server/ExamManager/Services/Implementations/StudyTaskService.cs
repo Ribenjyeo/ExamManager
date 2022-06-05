@@ -11,12 +11,14 @@ public class StudyTaskService : IStudyTaskService
 {
     ExamManagerDBContext _dbContext;
     IVirtualMachineService _vMachineService;
+    INotificationService _notificationService;
 
     public StudyTaskService(
-        ExamManagerDBContext context, IVirtualMachineService vMachineService)
+        ExamManagerDBContext context, IVirtualMachineService vMachineService, INotificationService notificationService)
     {
         _dbContext = context;
         _vMachineService = vMachineService;
+        _notificationService = notificationService;
     }
 
     public async Task<StudyTask> CreateStudyTaskAsync(string? title, string description, VirtualMachineImage[]? virtualMachines)
@@ -237,7 +239,12 @@ public class StudyTaskService : IStudyTaskService
 
     public async Task<string> StartTaskVirtualMachine(string vmImageId, Guid personalTaskId, Guid ownerId)
     {
+        // Проверить наличие включенных виртуальных машин на других заданиях
+
+        // Отправляем команду на запуск виртуальной машины
         var virtualMachine = await _vMachineService.StartVirtualMachine(vmImageId, personalTaskId, ownerId);
+        
+        // Отправить уведомление пользователю
 
         if (virtualMachine is null)
         {
