@@ -55,7 +55,7 @@ const Home = () => {
 
   function handleClick (e) {
     setCheck(false)
-    handleChange(e)
+    setIsDisabled(true)
   }
    
   return (
