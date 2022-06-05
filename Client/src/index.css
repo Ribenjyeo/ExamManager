@@ -269,6 +269,7 @@ nav .nav-button {
   margin-left: 40px;
   flex-wrap: wrap;
   width: 500px;
+  height: fit-content;
   padding: 15px;
   margin: 0 auto;
   background-color: #fff;
@@ -289,7 +290,7 @@ nav .nav-button {
 .vm-item {
   display: flex;
   width: 100%;
-  color: #3c3c3c;
+  color: #000000;
   font-size: 1em;
   font-weight: 400;
   line-height: 20px;
@@ -307,11 +308,17 @@ nav .nav-button {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
+.h2-vm-title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .vm-item:not(:first-child) {
   margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
-  color: #3c3c3c;
+  color: #000000;
   font-size: 1em;
   font-weight: 400;
   line-height: 20px;

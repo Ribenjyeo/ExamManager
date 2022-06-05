@@ -31,14 +31,32 @@ const Home = () => {
     const json = await response.json()
     const stringi = JSON.stringify(json)
     const parse = JSON.parse(stringi)
-    console.log(parse)
     setTasks(parse.personalTasks[0].tasks)
   }
 
   useEffect(() => {
     GetTaskList()
   }, [])
- 
+
+  const [check, setCheck] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
+  console.log("Checkbox", check)
+  console.log("Button", isDisabled)
+
+  function handleChange (e) {
+    if(check == true) {
+      setIsDisabled(true)
+    }
+    else {
+      setIsDisabled(false)
+    }
+    setCheck(e.target.checked)
+  }
+
+  function handleClick (e) {
+    setCheck(false)
+    handleChange(e)
+  }
    
   return (
     <>
@@ -53,46 +71,33 @@ const Home = () => {
           <h1>Ваши задания для выполнения:</h1>
           <div className="tasks">
             <ul>
-              {/* {tasks?.map((item, i) => */}
-              {/* <li className="tasksItem" key={i}> */}
-              <li className="tasksItem">
+              {tasks?.map((item, i) =>
+              <li className="tasksItem" key={i}>
                 <div className="titles-block">
-                  {/* <h2>{i+1 + ". " + item.title}</h2>  */}
-                  <h2>Название задания</h2> 
-                  {/* <div className="task-block" dangerouslySetInnerHTML={{ __html: item.description}}/> */}
-                  <div className="task-block">Являясь всего лишь частью общей картины, тщательные исследования конкурентов формируют
-                  глобальную экономическую сеть и при этом — преданы социально-демократической анафеме. Однозначно, предприниматели
-                  в сети интернет лишь добавляют фракционных разногласий и подвергнуты целой серии независимых исследований.
-                  Современные технологии достигли такого уровня, что социально-экономическое развитие играет важную роль в
-                  формировании экономической целесообразности принимаемых решений. Ясность нашей позиции очевидна: высокое
-                  качество позиционных исследований способствует подготовке и реализации соответствующих условий активизации.
-                  В рамках спецификации современных стандартов, реплицированные с зарубежных источников, современные исследования
-                  будут преданы социально-демократической анафеме. Ясность нашей позиции очевидна: дальнейшее развитие различных
-                  форм деятельности играет важную роль в формировании модели развития. Прежде всего, высокое качество позиционных
-                  исследований играет определяющее значение для распределения внутренних резервов и ресурсов. В целом, конечно,
-                  высокотехнологичная концепция общественного уклада позволяет оценить значение новых предложений.</div>
-                </div>
+                  <h2>{i+1 + ". " + item.title}</h2> 
+                  <div className="task-block" dangerouslySetInnerHTML={{ __html: item.description}}/>
+                </div> 
                 <div className="vm-block">
                   <ul className="vm-list">
                     <li className="vm-item">
-                      <h2>Список виртуальных машин:</h2>
+                      <h2 className="h2-vm-title">Список виртуальных машин:</h2>
                       <div className="connect">
                         <label className="vm-title">Виртуальная машина №8</label>
                         <FormControlLabel
                           value="end"
                           control={<Switch color="primary" />}
                           label="Включить"
-                          labelPlacement="end"
-                          defaultChecked
+                          checked={check}
+                          onChange={(e) => {handleChange(e)}}
                         />
                       </div>
                       <div className="connect-delete">
-                        <Button className="connect-button" variant="outlined">Подключиться</Button>
+                        <Button className="connect-button" name="connectbtn" variant="outlined" disabled={isDisabled}>Подключиться</Button>
                         <span> </span>
-                        <Button variant="outlined" color="error">Удалить</Button>
+                        <Button variant="outlined" name="deletebtn" color="error" disabled={isDisabled} onClick={e => handleClick(e)}>Удалить</Button>
                       </div>
                     </li>
-                    <li className="vm-item">
+                    {/* <li className="vm-item">
                       <div className="connect">
                         <label className="vm-title">Виртуальная машина №8</label>
                         <FormControlLabel
@@ -101,6 +106,8 @@ const Home = () => {
                           label="Включить"
                           labelPlacement="end"
                           margin="0"
+                          id="2"
+                          onChange={handleChange()}
                         />
                       </div>
                       <div className="connect-delete">
@@ -125,12 +132,12 @@ const Home = () => {
                         <span> </span>
                         <Button variant="outlined" color="error" disabled>Удалить</Button>
                       </div>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               <br/>
               </li>
-              {/* )} */}
+                )} 
             </ul>
          </div> 
         </div> 

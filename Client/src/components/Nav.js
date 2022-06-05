@@ -64,13 +64,15 @@ const Nav = () => {
   return (
     <nav>
       <span className="logo-container">
+        <a href="/">
         <img
           className="logo"
           src={logo}
           alt="учебный портал по системному администрированию РТУ МИРЭА"
         />
+        </a>
       </span>
-      <span>Учебный портал РТУ МИРЭА</span>
+      <a href="/"><span>Учебный портал РТУ МИРЭА</span></a>
       <div className="nav-items">
         <ul>
           <li>
