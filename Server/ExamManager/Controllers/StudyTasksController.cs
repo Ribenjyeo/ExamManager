@@ -43,11 +43,18 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.CreateTask)]
         public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
         {
-            var studyTask = RequestMapper.MapFrom(request);
+            (var studyTask, var studentIds) = RequestMapper.MapFrom(request);
             try
             {
                 studyTask = await _taskService.CreateStudyTaskAsync(studyTask.Title, studyTask.Description!, studyTask.VirtualMachines?.ToArray());
 
+                if (studentIds is not null)
+                {
+                    foreach (var id in studentIds)
+                    {
+                        await _taskService.AssignTaskToStudentAsync(studyTask.ObjectID, id);
+                    }
+                }
                 return Ok(ResponseFactory.CreateResponse(studyTask));
             }
             catch (Exception ex)
@@ -75,13 +82,35 @@ namespace ExamManager.Controllers
         [HttpPost(Routes.ModifyTask)]
         public async Task<IActionResult> ModifyTask([FromBody] ModifyTaskRequest request)
         {
-            var studyTask = new StudyTask
-            {
-                Title = request.title,
-                Description = request.description                
-            };
+            (var taskId, var newTask, var studentIds) = RequestMapper.MapFrom(request);
 
-            var studentTask = await _taskService.ModifyTaskAsync(request.taskId, studyTask);
+            var studentTask = await _taskService.ModifyTaskAsync(taskId, newTask);
+
+            if (studentIds is not null)
+            {
+                var students = await _taskService.GetStudentsHavingTask(taskId);
+
+                var studentsToRemove = students.Where(s => !request.students!.Contains(s));
+                var studentsToAdd = request.students!.Where(s => !students.Contains(s));
+
+                if (studentsToRemove.Any())
+                {
+                    foreach (var student in studentsToRemove)
+                    {
+                        await _taskService.WithdrawTaskFromStudentAsync(taskId, student);
+                    }                    
+                }
+
+                if (studentsToAdd.Any())
+                {
+                    foreach (var student in studentsToAdd)
+                    {
+                        await _taskService.AssignTaskToStudentAsync(taskId, student);
+                    }                    
+                }
+            }
+            studentTask = await _taskService.GetStudyTaskAsync(studentTask.ObjectID);
+
             return Ok(ResponseFactory.CreateResponse(studentTask));
         }
 

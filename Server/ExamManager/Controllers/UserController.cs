@@ -105,6 +105,13 @@ namespace ExamManager.Controllers
             return Ok(ResponseFactory.CreateResponse(userTasks));
         }
 
+        [HttpGet(Routes.GetUserTask)]
+        [ValidateGuidFormat("id")]
+        public async Task<IActionResult> GetUserTask(string id, string task)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost(Routes.AddUserTasks)]
         [OnlyUserRole(UserRole.ADMIN | UserRole.TEACHER)]
         [ValidateGuidFormat("id")]

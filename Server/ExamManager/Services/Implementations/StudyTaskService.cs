@@ -363,4 +363,25 @@ public class StudyTaskService : IStudyTaskService
 
         return vMachines;
     }
+
+    public async Task<IEnumerable<Guid>> GetStudentsHavingTask(Guid taskId)
+    {
+        var studentIds = await _dbContext.UserTasks!
+            .Where(pTask => pTask.TaskID == taskId)
+            .Select(pTask => pTask.StudentID)
+            .ToListAsync();
+
+        return studentIds;
+    }
+
+    public async Task<PersonalTask> GetPersonalTaskAsync(Guid taskId)
+    {
+        var personalTask = await _dbContext.UserTasks!
+            .Include(pTask => pTask.Task)
+            .ThenInclude(task => task.VirtualMachines)
+            .Include(pTask => pTask.VirtualMachines)
+            .FirstOrDefaultAsync(pTask => pTask.ObjectID == taskId);
+
+        return personalTask;
+    }
 }

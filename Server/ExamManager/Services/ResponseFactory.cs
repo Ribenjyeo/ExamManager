@@ -201,7 +201,7 @@ public static class ResponseFactory
             id = task.ObjectID,
             title = task.Title,
             description = task.Description,
-            virtualMachines = task.VirtualMachines.Select(vm =>
+            virtualMachines = task.VirtualMachines?.Select(vm =>
             new TaskDataResponse.VirtualMachineView
             {
                 id = vm.ID

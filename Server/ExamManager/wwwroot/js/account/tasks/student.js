@@ -20,7 +20,7 @@
     }
 
     let onResponse = function (response) {
-        let tasks = response.tasks;
+        let tasks = response.personalTasks[0].tasks;
         fillTasksList(tasks);
     }
 

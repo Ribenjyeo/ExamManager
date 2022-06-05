@@ -15,6 +15,8 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const GroupList = () => {
+  const [error, setError] = useState(false)
+  const [textError, setTextError] = useState()
   const [cookies, setCookies, removeCookies] = useCookies(['user']);
   const [groupList, setGroupList] = useState(
     {
@@ -39,7 +41,13 @@ const GroupList = () => {
 
   const handleDelete = async (params) => {  //удаление группы
     const response = await axios.get(`/group/${params}/delete`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
-    groups()
+    if(response.data.type == "BadResponse") {
+      setError(true)
+      setTextError(response.data.message)
+    }
+    else{
+      groups()
+    }
   }
 
   useEffect(() => {
@@ -81,6 +89,13 @@ const GroupList = () => {
 
     return(
         <>
+        {error && (
+        <div className="error-message">
+          <p>
+            <strong>Ошибка!</strong> {textError}. В ней есть студенты
+          </p>
+        </div>
+      )}
         <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>
@@ -92,7 +107,6 @@ const GroupList = () => {
                     <DataGrid
                       rows={groupList}
                       checkboxSelection
-                      onSelectionModelChange={item => setStudents(item)}
                       columns={columns}
                       pageSize={pageSize}
                       components={{

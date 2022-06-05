@@ -33,7 +33,7 @@ const AddTasks = ({ setShowModal, taskItem }) =>{
 
             let array = []
             for(let i = 0; i < taskItem.length; i++){
-                array.push({id: taskItem[i]})
+                array.push(taskItem[i])
             }
 
             let addStudents = {

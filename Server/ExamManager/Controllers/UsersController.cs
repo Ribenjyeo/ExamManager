@@ -38,6 +38,11 @@ namespace ExamManager.Controllers
             var options = RequestMapper.MapFrom(request, user);
             var users = await _userService.GetUsers(options, includePersonalTasks: true, includeGroup: true, includeTasks: true);
 
+            if (options.ExcludeYourself ?? false)
+            {
+                users = users.Where(u => u.ObjectID != user.ObjectID);
+            }
+
             return Ok(ResponseFactory.CreateResponse(users));
         }
 

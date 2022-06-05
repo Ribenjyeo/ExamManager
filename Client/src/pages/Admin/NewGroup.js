@@ -37,8 +37,6 @@ const NewGroup = () => {
         }
       }
 
-      console.log(name)
-
     return (
         <>
           {error && (

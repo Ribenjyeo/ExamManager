@@ -151,7 +151,7 @@ public class UserService : IUserService
     {
         var UserSet = _dbContext.Set<User>();
 
-        var query = $"SELECT * FROM `Users`";
+        var query = $"SELECT * FROM `Users` u";
         var conditions = GetQueryConditions(options);
         if (!string.IsNullOrEmpty(conditions))
         {
@@ -322,15 +322,15 @@ public class UserService : IUserService
         }
         if (options.TaskIds is not null)
         {
-            conditions.Add($"EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = ObjectID AND t.{nameof(PersonalTask.TaskID)} IN ('{string.Join("', '", options.TaskIds)}'))");
+            conditions.Add($"EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = u.ObjectID AND t.{nameof(PersonalTask.TaskID)} IN ('{string.Join("', '", options.TaskIds)}'))");
         }
         if (options.ExcludeTaskIds is not null)
         {
-            conditions.Add($"NOT EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = ObjectID AND t.{nameof(PersonalTask.TaskID)} IN ('{string.Join("', '", options.ExcludeTaskIds)}'))");
+            conditions.Add($"NOT EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = u.ObjectID AND t.{nameof(PersonalTask.TaskID)} IN ('{string.Join("', '", options.ExcludeTaskIds)}'))");
         }
         if (options.TaskStatus is not null)
         {
-            conditions.Add($"EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = ObjectID AND t.{nameof(PersonalTask.Status)} = {(int)options.TaskStatus})");
+            conditions.Add($"EXISTS (SELECT 1 FROM `UserTasks` AS t WHERE t.{nameof(PersonalTask.StudentID)} = u.ObjectID AND t.{nameof(PersonalTask.Status)} = {(int)options.TaskStatus})");
         }
 
         if (conditions.Count > 0)

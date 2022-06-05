@@ -13,8 +13,11 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 import ImportFile from "../../components/ImportFile";
+import axios from "axios";
 
 const UserList = () => {
+  const [error, setError] = useState(false)
+  const [textError, setTextError] = useState()
   const [pageSize, setPageSize] = useState(10)
   const [cookies, setCookies, removeCookies] = useCookies(['user'])
   let [userList, setUserList] = useState({
@@ -54,20 +57,28 @@ const UserList = () => {
   }
 
   const handleDelete = async (params) => { //Удаление пользователя
-    const deleteUser = {
-      'users' : [{
-        id: params,
-        onlyLogin: false
-        }]
-      }
-    const response = await fetch('/users/delete', {
-      method: "POST",
-      headers: {
-        'Content-Type' : 'application/json',
-        'Authorization' : 'Bearer ' + cookies.AuthToken},
-        body: JSON.stringify(deleteUser)
-      })
-      users()
+
+    const res = await axios.get (`/user/${params}`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    if(res.data.role == 2) {
+      setError(true)
+      setTextError("Вы не можете удалить пользователя с ролью \"Администратор\"")
+    }
+    else {
+      const deleteUser = {
+        'users' : [{
+          id: params,
+          onlyLogin: false
+          }]
+        }  
+      const response = await fetch('/users/delete', {
+        method: "POST",
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization' : 'Bearer ' + cookies.AuthToken},
+          body: JSON.stringify(deleteUser)
+        })
+        users()
+    }
   }
 
   const handleAddStudents = async () => { //Добавление пользователей в группу
@@ -108,9 +119,9 @@ const UserList = () => {
 
   useEffect(() => {
     users()
-    removeCookies('editUser', {path:'/admin/users'})
-    removeCookies('editUser', {path:'/admin'})
-    removeCookies('editUser', {path:'/'})
+    // removeCookies('editUser', {path:'/admin/users'})
+    // removeCookies('editUser', {path:'/admin'})
+    // removeCookies('editUser', {path:'/'})
     groups()
   }, [])
   
@@ -150,6 +161,13 @@ const UserList = () => {
 
     return(
         <>
+         {error && (
+        <div className="error-message">
+          <p>
+            <strong>Ошибка!</strong> {textError}
+          </p>
+        </div>
+      )}
         <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>

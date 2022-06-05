@@ -9,11 +9,14 @@ const AdminBar = () => {
     let navigate = useNavigate()
 
     const handleClick = () => {
-        removeCookies("UserId", cookies.id);
-        removeCookies("AuthToken", cookies.AuthToken);
-        removeCookies("firstName", cookies.firstName);
-        removeCookies("lastName", cookies.lastName);
-        removeCookies("userRole", cookies.userRole);
+        removeCookies("UserId", {path:'/'});
+        removeCookies("AuthToken",  {path:'/'});
+        removeCookies("firstName",  {path:'/'})
+        removeCookies("lastName",  {path:'/'})
+        removeCookies("userRole",  {path:'/'})
+        removeCookies("editGroup", cookies.editGroup)
+        removeCookies("editTask", cookies.editTask)
+        removeCookies("editUser", cookies.editUser)
         navigate('/auth')
         window.location.reload()
     }

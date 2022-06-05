@@ -34,7 +34,7 @@ public static class RequestMapper
         return options;
     }
 
-    public static StudyTask MapFrom(CreateTaskRequest request)
+    public static (StudyTask NewTask, Guid[]? StudentIds) MapFrom(CreateTaskRequest request)
     {
         var task = new StudyTask
         {
@@ -49,7 +49,7 @@ public static class RequestMapper
             }).ToArray()
         };
 
-        return task;
+        return (task, request.students);
     }
 
     public static IEnumerable<User> MapFrom(CreateUsersRequest request)
@@ -72,7 +72,7 @@ public static class RequestMapper
         return request.name;
     }
 
-    public static (Guid TaskID,StudyTask NewTask) MapFrom(ModifyTaskRequest request)
+    public static (Guid TaskID,StudyTask NewTask, Guid[]? Students) MapFrom(ModifyTaskRequest request)
     {
         var newTask = new StudyTask
         {
@@ -80,12 +80,12 @@ public static class RequestMapper
             Description = request.description
         };
 
-        return (request.taskId, newTask);
+        return (request.taskId, newTask, request.students);
     }
 
     public static IEnumerable<Guid> MapFrom(AddPersonalTasksRequest request)
     {
-        return request.tasks?.Select(task => task.id);
+        return request.tasks;
     }
 
     public static IEnumerable<Guid> MapFrom(RemovePersonalTasksRequest request)

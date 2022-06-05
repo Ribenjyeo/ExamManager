@@ -7,16 +7,13 @@ const taskType = path[path.length - 1];
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
-const studentId = urlParams.get('student');
 
 let createNewTask = function () {
 
     let data = {
         title: taskTitle.val(),
         description: taskDescription.val(),
-        url: taskUrl.val(),
-        studentId: studentId,
-        authorId: decoded["Claim.Key.Id"],
+        students: studentsToRemove
     }
 
     let onResponse = function (response) {
@@ -27,13 +24,13 @@ let createNewTask = function () {
 }
 
 let saveTask = function () {
+
     let data = {
         taskId: id,
         title: taskTitle.val(),
         description: taskDescription.val(),
-        url: taskUrl.val()
+        students: studentsToRemove
     }
-
     let onResponse = function (response) {
         window.location.replace(`/pages/tasks`);
     }
@@ -43,7 +40,7 @@ let saveTask = function () {
 
 $(document).ready(function () {
     const saveButton = $("#save-button");
-    console.log(taskType);
+
     if (taskType === "new") {
         saveButton.on("click", createNewTask);
     }

@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom'
 
 
 const Nav = () => {
-  const [cookies, setCookies, removeCookies] = useCookies(['user']);
+  const [cookies, setCookies, removeCookies] = useCookies(["user"]);
   let navigate = useNavigate()
   const [fromData, setFromData] = useState({
     id: '',
@@ -25,8 +25,8 @@ const Nav = () => {
   const getUserName = async () => { // получить данные пользователя по его ID
     try {
       const response = await instance.get(`/${cookies.UserId}`)
-      if(response.data.status === 401) { //если токен не подходит то редиркер на страницу авторизации
-        console.log("logout")
+      if(response.data.status === 401 ) { //если токен не подходит то редиркер на страницу авторизации
+        logout()
       }
       setCookies("firstName", response.data.firstName)
       setCookies("lastName", response.data.lastName)
@@ -42,7 +42,7 @@ const Nav = () => {
     }
     catch(error) {
       console.log(error)
-      // logout()
+      logout()
     }
   }
 
@@ -56,6 +56,7 @@ const Nav = () => {
     removeCookies("firstName", cookies.firstName)
     removeCookies("lastName", cookies.lastName)
     removeCookies("userRole", cookies.userRole)
+    removeCookies("editGroup", cookies.userRole)
     navigate('/auth')
 
     window.location.reload()

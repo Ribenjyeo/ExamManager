@@ -122,7 +122,7 @@ namespace ExamManager.Controllers
                 return View("Task", (user, task));
             }
 
-            var personalTask = (await _taskService.GetPersonalTasksAsync(taskId))?.First();
+            var personalTask = (await _taskService.GetPersonalTaskAsync(taskId));
             if (personalTask is null)
             {
                 return RedirectToAction(nameof(TasksPageIndex));

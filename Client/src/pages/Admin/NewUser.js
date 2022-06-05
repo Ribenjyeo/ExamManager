@@ -94,7 +94,7 @@ const NewUser = () => {
                 <select className="newUserSelect" name="active" onChange={e => setRole(e.target.value.trim() || null)}>
                   <option value="">Выберите роль</option>
                   <option value="1">Студент</option>
-                  <option value="0">Администратор</option>
+                  <option value="2">Администратор</option>
                 </select>
               </div>
               <div className="buttonForm">

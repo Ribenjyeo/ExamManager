@@ -9,6 +9,7 @@ public static class Routes
     public const string User = "user";
     public const string GetUser = "{id}";
     public const string GetUserTasks = "{id}/tasks";
+    public const string GetUserTask = "{id}/task/{taskId}";
     public const string ModifyUser = "modify";
     public const string AddUserTasks = "{id}/tasks/add";
     public const string RemoveUserTasks = "{id}/tasks/remove";
