@@ -4,6 +4,8 @@ import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState} from 'react'
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
+import Alert from '@mui/material/Alert';
+import ErrorIcon from '@mui/icons-material/Error';
 
 
 const NewGroup = () => {
@@ -39,13 +41,13 @@ const NewGroup = () => {
 
     return (
         <>
-          {error && (
-            <div className="error-message">
-              <p>
-                <strong>Ошибка!</strong> Вы не ввели название группы
-              </p>
-            </div>
-          )}
+          {error && (<Alert
+            severity="error"
+            iconMapping={{success: <ErrorIcon fontSize="medium"/>}}
+            onClose={(e) => {onClose()}}>
+            <strong>Ошибка!</strong> Вы не ввели название группы
+        </Alert>)}
+         <AdminBar/>
          <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>

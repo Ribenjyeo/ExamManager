@@ -4,6 +4,8 @@ import SideBarAdmin from "../../components/SideBarAdmin";
 import { useState} from 'react'
 import { useCookies } from "react-cookie";
 import {useNavigate} from 'react-router-dom'
+import Alert from '@mui/material/Alert';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const NewUser = () => {
   let navigate = useNavigate()
@@ -56,15 +58,17 @@ const NewUser = () => {
     }
   }
 
+  function onClose () {
+    setError(false)
+  }
+
   return (
     <>
-      {error && (
-        <div className="error-message">
-          <p>
-            <strong>Ошибка!</strong> Заполните все поля
-          </p>
-        </div>
-      )}
+      {error && (<Alert
+        severity="error"
+        iconMapping={{success: <ErrorIcon fontSize="medium"/>}}
+        onClose={(e) => {onClose()}}>
+          <strong>Ошибка!</strong> Заполните все поля</Alert>)}
       <AdminBar />
       <div className="createUser">
         <SideBarAdmin />

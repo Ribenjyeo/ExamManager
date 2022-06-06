@@ -8,6 +8,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 
 const style = {
@@ -15,9 +17,9 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  borderRadius: 1 ,
   boxShadow: 24,
   p: 4,
 };
@@ -50,15 +52,15 @@ const Home = () => {
 
   const [check, setCheck] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
-  console.log("Checkbox", check)
-  console.log("Button", isDisabled)
 
   function handleChange (e) {
     if(check == true) {
       setIsDisabled(true)
+      setAlert(false)
     }
     else {
       setIsDisabled(false)
+      setAlert(true)
     }
     setCheck(e.target.checked)
   }
@@ -68,6 +70,12 @@ const Home = () => {
     setIsDisabled(true)
   }
 
+
+  const [alert, setAlert] = useState(true)
+  function onClose () {
+    setAlert(false)
+  }
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -75,7 +83,15 @@ const Home = () => {
   return (
     <>
         <div className="overlay">
-        <Nav authToken={authToken} />  
+        <div className="head-menu">
+          {alert && <Alert
+            iconMapping={{success: <CheckIcon fontSize="medium" />}}
+            style={{fontSize: 18}}
+            onClose={(e) => {onClose()}}>
+            Подключение к виртуальной машине прошло успешно
+            </Alert>}
+          <Nav authToken={authToken}/>
+        </div>
         <div className="reminder">
           Незабывайте при первом входе в аккаунт        
           <br />
@@ -115,52 +131,18 @@ const Home = () => {
                         >
                           <Box sx={style}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                              Text in a modal
+                              Данные для подключения к виртуальной машине: 
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                              <p>Адресс: https://task_number_1</p>
+                              <p>Порт: 1234</p>
+                              <p>Пароль: 12345</p>
                             </Typography>
                           </Box>
                         </Modal>
                         <Button variant="outlined" name="deletebtn" color="error" disabled={isDisabled} onClick={e => handleClickDelete(e)}>Удалить</Button>
                       </div>
                     </li>
-                    {/* <li className="vm-item">
-                      <div className="connect">
-                        <label className="vm-title">Виртуальная машина №8</label>
-                        <FormControlLabel
-                          value="end"
-                          control={<Switch color="primary" />}
-                          label="Включить"
-                          labelPlacement="end"
-                          margin="0"
-                          id="2"
-                          onChange={handleChange()}
-                        />
-                      </div>
-                      <div className="connect-delete">
-                        <Button className="connect-button" variant="outlined" disabled>Подключиться</Button>
-                        <span> </span>
-                        <Button variant="outlined" color="error" disabled>Удалить</Button>
-                      </div>
-                    </li>
-                    <li className="vm-item">
-                      <div className="connect">
-                        <label className="vm-title">Виртуальная машина №8</label>
-                        <FormControlLabel
-                          value="end"
-                          control={<Switch color="primary" />}
-                          label="Включить"
-                          labelPlacement="end"
-                          margin="0"
-                        />
-                      </div>
-                      <div className="connect-delete">
-                        <Button className="connect-button" variant="outlined" disabled>Подключиться</Button>
-                        <span> </span>
-                        <Button variant="outlined" color="error" disabled>Удалить</Button>
-                      </div>
-                    </li> */}
                   </ul>
                 </div>
               <br/>

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
+import Alert from '@mui/material/Alert';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const Login = () => {
   const rename = false;
@@ -38,15 +40,18 @@ const Login = () => {
     }
   };
 
+  function onClose () {
+    setError(false)
+  }
+
   return (
     <div className="auth-modal">
-      {error && (
-        <div className="error-message">
-          <p>
-            <strong>Ошибка!</strong> Пользователя с такими логином или паролем не существует
-          </p>
-        </div>
-      )}
+      {error && (<Alert
+        severity="error"
+        iconMapping={{success: <ErrorIcon fontSize="medium"/>}}
+        onClose={(e) => {onClose()}}>
+          <strong>Ошибка!</strong> Пользователя с такими логином или паролем не существует
+        </Alert>)}
       <div className="header">
         <div className="logo-container">
           <img className="img-logo" src={logo} alt="Логотип МИРЭА" />

@@ -43,7 +43,7 @@ const NewTask = () => {
                     order: parseInt(order)
                   }]
               }
-
+              console.log(task)
               const response = await fetch('/task/create', {
               method: "POST",
               headers: {
@@ -52,7 +52,7 @@ const NewTask = () => {
                 body: JSON.stringify(task)
               })
             }
-            navigate('/admin/tasks')
+            // navigate('/admin/tasks')
           }
         catch(error){
           console.log(error)

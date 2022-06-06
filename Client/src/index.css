@@ -474,6 +474,13 @@ nav .nav-button {
   display: flex;
 }
 
+.head-menu {
+  position: sticky;
+  top: 0px;
+  background-color: white;
+  z-index: 999;
+}
+
 .custom-file-input::-webkit-file-upload-button {
   visibility: hidden;
 }

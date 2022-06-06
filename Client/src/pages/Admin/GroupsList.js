@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect} from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import Alert from '@mui/material/Alert';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const GroupList = () => {
   const [error, setError] = useState(false)
@@ -89,13 +91,13 @@ const GroupList = () => {
 
     return(
         <>
-        {error && (
-        <div className="error-message">
-          <p>
+        {error && (<Alert
+            severity="error"
+            iconMapping={{success: <ErrorIcon fontSize="medium"/>}}
+            onClose={(e) => {onClose()}}>
             <strong>Ошибка!</strong> {textError}. В ней есть студенты
-          </p>
-        </div>
-      )}
+        </Alert>)}
+         <AdminBar/>
         <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>
