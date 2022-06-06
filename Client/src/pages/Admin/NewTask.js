@@ -94,7 +94,6 @@ const NewTask = () => {
                         <div className="CKeditor">
                             <label>Описание задания</label>
                             <div className="editor-data">
-                              {/* <CKEditor editor={Editor} data={addData} onChange={handleChangeData}/> */}
                               <CKEditor editor={Editor} data={addData} onChange={handleChangeData}/>
                             </div>
                         </div>

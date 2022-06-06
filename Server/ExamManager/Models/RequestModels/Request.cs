@@ -49,6 +49,13 @@ public struct ModifyTaskRequest
     public string? title { get; set; }
     public string? description { get; set; }
     public Guid[]? students { get; set; }
+    public VirtualMachineView[] virtualMachines { get; set; }
+    public struct VirtualMachineView
+    {
+        public string id { get; set; }
+        public string? title { get; set; }
+        public int? order { get; set; }
+    }
 }
 
 public struct CreateGroupRequest

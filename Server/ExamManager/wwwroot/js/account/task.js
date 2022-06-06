@@ -10,11 +10,23 @@ const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
 let createNewTask = function () {
+    let vMachines = [];
+    for (let element of document.querySelectorAll(".vmachine > input")) {
+        if (element.value === '') {
+            continue;
+        }
+        vMachines.push(
+            {
+                id: element.value
+            });
+    }
+
     let data = {
         title: taskTitle.val(),
-        description: taskDescription.val(),
-        students: studentsToRemove
-    }
+        description: editor.getData(),
+        students: studentsToRemove,
+        virtualMachines: vMachines
+    };
 
     let onResponse = function (response) {
         window.location.replace(`/pages/tasks`);
@@ -24,12 +36,24 @@ let createNewTask = function () {
 }
 
 let saveTask = function () {
+    let vMachines = [];
+    for (let element of document.querySelectorAll(".vmachine > input")) {
+        if (element.value === '') {
+            continue;
+        }
+
+        vMachines.push(
+            {
+                id: element.value
+            });
+    }
 
     let data = {
         taskId: id,
         title: taskTitle.val(),
         description: editor.getData(),
-        students: studentsToRemove
+        students: studentsToRemove,
+        virtualMachines: vMachines
     }
     let onResponse = function (response) {
         window.location.replace(`/pages/tasks`);

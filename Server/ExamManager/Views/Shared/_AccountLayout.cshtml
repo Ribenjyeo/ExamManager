@@ -25,8 +25,6 @@
         <link rel="stylesheet" href="~/css/account/tasks.css" />
     }
     <link rel="stylesheet" href="~/css/tables/tables.css" />
-    <link rel="stylesheet" href="~/css/fontawesome/css/fontawesome.css" />
-    <link rel="stylesheet" href="~/css/fontawesome/css/solid.css" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/js.cookie.js"></script>
     <script src="~/js/jwt-decode.js"></script>
@@ -42,17 +40,18 @@
         </div>
         @if ((bool?)ViewData["IsAdmin"] ?? false)
         {
-            <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-graduate"></i>Студенты</a>
-            <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-user-group"></i>Группы</a>
-            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-list-check"></i>Задания</a>
+            <a href="@(Routes.StudentsPage)" class="@(Context.Request.Path.Value.Equals(Routes.StudentsPage) ? "nav-item hl" : "nav-item" )"><i class="fa fa-solid fa-user-graduate"></i>Студенты</a>
+            <a href="@(Routes.GroupsPage)" class="@(Context.Request.Path.Value.Equals(Routes.GroupsPage) ? "nav-item hl" : "nav-item" )"><i class="fa fa-solid fa-group"></i>Группы</a>
+            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa fa-solid fa-list"></i>Задания</a>
         }
         else
         {
-            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-book"></i>Задания</a>
+            <a href="@(Routes.TasksPage)" class="@(Context.Request.Path.Value.Equals(Routes.TasksPage) ? "nav-item hl" : "nav-item" )"><i class="fa fa-solid fa-book"></i>Задания</a>
         }
-        <a href="@(Routes.SettingsPage)" class="@(Context.Request.Path.Value.Equals(Routes.SettingsPage) ? "nav-item hl" : "nav-item" )"><i class="fa-solid fa-gear"></i> Настройки</a>
+        <a href="@(Routes.SettingsPage)" class="@(Context.Request.Path.Value.Equals(Routes.SettingsPage) ? "nav-item hl" : "nav-item" )"><i class="fa fa-solid fa-gear"></i> Настройки</a>
         <a href="#" id="logout" class="nav-exit">Выйти</a>
     </div>
+    <script src="https://kit.fontawesome.com/bcb194349f.js" crossorigin="anonymous"></script>
     <div class="container">
         @RenderBody()
     </div>

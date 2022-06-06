@@ -137,3 +137,8 @@
             padding: 1rem 0;
             height: 1rem;
         }
+
+        .table .row .description *{
+            margin: 0;
+            padding: 0;
+        }

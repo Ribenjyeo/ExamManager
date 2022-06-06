@@ -46,6 +46,19 @@ body {
     transition: 200ms;
 }
 
+    .btn-action.disabled,
+    .btn-cancel.disabled,
+    .btn-info.disabled {
+        background-color: grey;
+    }
+
+    .btn-action.disabled:hover,
+    .btn-cancel.disabled:hover,
+    .btn-info.disabled:hover {
+        cursor: default;
+        background-color: grey;
+    }
+
 .btn-action {
     background-color: rgb(24, 182, 37);
     color: white;
@@ -55,6 +68,8 @@ body {
         cursor: pointer;
         background-color: rgb(17, 128, 27);
     }
+
+
 
 .btn-cancel {
     background-color: rgb(182, 24, 24);

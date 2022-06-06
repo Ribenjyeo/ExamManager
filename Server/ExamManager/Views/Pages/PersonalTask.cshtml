@@ -8,18 +8,14 @@
 }
 <link rel="stylesheet" href="~/css/account/task.css" />
 <div class="container">
-    <div class="page-header">@Model.PersonalTask.Title</div>
+    <div class="page-header" value="@Model.PersonalTask.ObjectID">@Model.PersonalTask.Title</div>
     <div class="description">
-        @foreach (var descriptionPart in Model.PersonalTask.Description.Split("\n"))
-        {
-            @descriptionPart
-            <br />
-        }
+        @Html.Raw(Model.PersonalTask.Description)
     </div>
     <div class="vmachines-list">
         @foreach (var vMachine in Model.PersonalTask.VirtualMachines)
         {
-            <div class="vmachine">
+            <div id="@vMachine.Image.ID" class="vmachine">
                 <div class="header">@vMachine.Image.ID</div>
                 <!--С помощью JS подгружается список рабоающих виртуальных машин-->
                 @if ((vMachine.Instance?.Status ?? VMStatus.KILLED) == VMStatus.KILLED)
@@ -35,14 +31,14 @@
                     </div>
                 }
                 <div class="actions">
-                    @if((vMachine.Instance?.Status ?? VMStatus.KILLED) == VMStatus.KILLED)
+                    @if ((vMachine.Instance?.Status ?? VMStatus.RUNNING) == VMStatus.RUNNING)
                     {
-                        <input type="button" class="btn-info" value="Включить"/>
+                        <input type="button" class="btn-action connecct" value="Подключиться" />
+                        <input type="button" class="btn-cancel turn-off" value="Отключить" />
                     }
                     else
                     {
-                        <input type="button" class="btn-action" value="Подключиться"/>
-                        <input type="button" class="btn-cancel" value="Отключить"/>                        
+                        <input type="button" class="btn-info turn-on" value="Включить" />
                     }
                 </div>
             </div>
@@ -52,3 +48,4 @@
         <input type="button" class="btn-info" value="Проверить" />
     </div>
 </div>
+<script src="~/js/account/task/personal-task.js"></script>

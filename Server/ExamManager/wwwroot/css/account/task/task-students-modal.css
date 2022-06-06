@@ -10,7 +10,7 @@
         padding: 1em;
     }
 
-        .add-students-modal > .container > .header {
+        dialog > .container > .header {
             font-size: 2em;
             font-family: var(--font-Raleway);
             font-weight: 900;

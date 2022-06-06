@@ -42,21 +42,23 @@ public class ScriptManager
         catch (Exception ex)
         {
             _logger.LogError($"Process {processInfo.FileName} exited. Exception: {ex.Message}");
-            process.Close();
+            process.Kill();
             throw;
         }
 
         var result = string.Empty;
         try
         {
-            result = process.StandardOutput.ReadToEnd();
+            result = await process.StandardOutput.ReadToEndAsync();
+            _logger.LogInformation($"SCRIPT RETURNS: {result}");
             if (!process.HasExited)
             {
-                process.Close();
+                process.Kill();
             }
         }
         catch (Exception ex)
         {
+            process.Kill();
             throw;
         }
         return result;
@@ -81,6 +83,10 @@ public class ScriptManager
             await Task.Run(() => Task.Delay(1000));
         }
 
+        if (!isCompleted)
+        {
+            throw new InvalidOperationException("Не удалось запустить скрипт");
+        }
     }
 }
 

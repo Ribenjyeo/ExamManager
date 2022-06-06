@@ -70,14 +70,14 @@ const Group = () => {
         { field: 'groupName', headerName: 'Группа', minWidth: 100, flex: 1},
         {
           field: 'action',
-          headerName: 'Изменить / Удалить',
+          headerName: 'Подробнее / Удалить',
           minWidth: 100,
           flex: 1,
           renderCell: (params) => {
           return (
             <>
             <Link to={"/admin/users/"+params.row.id}>
-                <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
+                <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Подробнее</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
             </>

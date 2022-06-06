@@ -67,7 +67,7 @@ public interface IStudyTaskService
     /// <returns>Идентификатор виртуальной машины</returns>
     public Task<string> StartTaskVirtualMachine(string vmImageId, Guid personalTaskId, Guid ownerId);
     public Task StopTaskVirtualMachine(string vMachineId);
-    public Task CheckStudyTaskAsync(Guid taskId);
+    public Task CheckStudyTaskAsync(string vMachineId, string vmImageId, Guid pTaskId);
 
     #endregion
 }

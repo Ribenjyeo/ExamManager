@@ -245,9 +245,17 @@ nav .nav-button {
   flex-wrap: nowrap;
 }
 
+.tasksItem:not(:first-child) {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 20px;
+}
+
 .titles-block {
   display: flex;
-  width: 100%;
+  width: 1360px;
+  max-width: max-content;
+  min-width: 1360px;
   flex-wrap: nowrap;
   flex-direction: column;
 }
@@ -268,7 +276,7 @@ nav .nav-button {
   display: flex;
   margin-left: 40px;
   flex-wrap: wrap;
-  width: 500px;
+  width: 350px;
   height: fit-content;
   padding: 15px;
   margin: 0 auto;
@@ -312,6 +320,7 @@ nav .nav-button {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .vm-item:not(:first-child) {

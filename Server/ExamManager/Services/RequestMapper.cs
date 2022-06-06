@@ -77,7 +77,14 @@ public static class RequestMapper
         var newTask = new StudyTask
         {
             Title = request.title,
-            Description = request.description
+            Description = request.description,
+            VirtualMachines = request.virtualMachines?.Select(vm =>
+            new VirtualMachineImage
+            {
+                ID = vm.id,
+                Title = vm.title ?? string.Empty,
+                Order = vm.order
+            }).ToArray()
         };
 
         return (request.taskId, newTask, request.students);

@@ -2,18 +2,6 @@ let allStudents = [];
 let studentsToAdd = [];
 let studentsToRemove = [];
 
-const modal = document.querySelector("#add-students-modal");
-const openModal = document.querySelector("#open-button");
-const closeModal = document.querySelector("#close-button");
-
-openModal.addEventListener("click", () => {
-    modal.showModal();
-});
-
-closeModal.addEventListener("click", () => {
-    modal.close();
-});
-
 // Поиск студентов
 const searchToAdd = $("#search-to-add");
 const searchToRemove = $("#search-to-remove");

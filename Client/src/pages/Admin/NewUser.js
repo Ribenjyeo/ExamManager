@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import {useNavigate} from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import ErrorIcon from '@mui/icons-material/Error';
+import axios from "axios";
 
 const NewUser = () => {
   let navigate = useNavigate()
@@ -41,7 +42,7 @@ const NewUser = () => {
           setErorr(true)
           setErrorText("Заполните все поля")
         }
-        else if(group !== null){
+        else if(group !== null) {
           let currentGroupId = null
           let check = false
           for (let i = 0; i < groupList.length; i++){  //Поиск совпадений в изменяемой группе
@@ -56,26 +57,56 @@ const NewUser = () => {
           }
           else {
             let users = {
-              'users' : [{
-                login: login,
-                password: password,
-                firstName: firstName,
-                lastName: lastName,
-                role: parseInt(role),
-                groupId: currentGroupId
-                }]
-              }
-            const response = await fetch('/users/create', {
-            method: "POST",
+            'users' : [{
+              login: login,
+              password: password,
+              firstName: firstName,
+              lastName: lastName,
+              role: parseInt(role),
+              groupId: currentGroupId
+              }]
+            }
+            const response = await axios.post('/users/create', JSON.stringify(users), {
+              headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Bearer ' + cookies.AuthToken},
+                body: JSON.stringify(users)
+              })
+  
+            if(response.data.status == 400) {
+              setErorr(true)
+              setErrorText(response.data.errors.login[0])
+            }
+            else{
+              navigate('/admin/users')
+            }
+          }
+        }
+        else { 
+          let users = {
+            'users' : [{
+              login: login,
+              password: password,
+              firstName: firstName,
+              lastName: lastName,
+              role: parseInt(role)
+              }]
+            }
+          const response = await axios.post('/users/create', JSON.stringify(users), {
             headers: {
               'Content-Type' : 'application/json',
               'Authorization' : 'Bearer ' + cookies.AuthToken},
               body: JSON.stringify(users)
             })
+
+          if(response.data.status == 400) {
+            setErorr(true)
+            setErrorText(response.data.errors.login[0])
           }
-        
-        
-      }
+          else{
+            navigate('/admin/users')
+          }
+        }
       }
       if(role == 2) {
         if(login.trim().length === 0 ||
@@ -94,15 +125,27 @@ const NewUser = () => {
               role: parseInt(role)
               }]
             }
-          const response = await fetch('/users/create', {
-          method: "POST",
-          headers: {
-            'Content-Type' : 'application/json',
-            'Authorization' : 'Bearer ' + cookies.AuthToken},
-            body: JSON.stringify(users)
-          })
-  
-          // navigate('/admin/users')
+          // const response = await fetch('/users/create', {
+          // method: "POST",
+          // headers: {
+          //   'Content-Type' : 'application/json',
+          //   'Authorization' : 'Bearer ' + cookies.AuthToken},
+          //   body: JSON.stringify(users)
+          // })
+          const response = await axios.post('/users/create', JSON.stringify(users), {
+            headers: {
+              'Content-Type' : 'application/json',
+              'Authorization' : 'Bearer ' + cookies.AuthToken},
+              body: JSON.stringify(users)
+            })
+
+          if(response.data.status == 400) {
+            setErorr(true)
+            setErrorText(response.data.errors.login[0])
+          }
+          else{
+            navigate('/admin/users')
+          }
         }
       }
     }

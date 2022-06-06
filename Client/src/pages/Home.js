@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -31,6 +30,12 @@ const Home = () => {
   const [tasks, setTasks] = useState([])
   const [url, setUrl] = useState([])
   const [role, setRole] = useState(0)
+  const [check, setCheck] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
+  const [alert, setAlert] = useState(true)
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   let array = []
 
   const instance = axios.create({  //экземпляр запроса с использованием текущего токена
@@ -38,20 +43,22 @@ const Home = () => {
     headers: {'Authorization': 'Bearer '+ cookies.AuthToken}
   });
 
+  console.log(tasks)
+
   const GetTaskList = async () => {
     const response = await fetch(`/user/${cookies.UserId}/tasks`, {method: "GET", headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
     const json = await response.json()
     const stringi = JSON.stringify(json)
     const parse = JSON.parse(stringi)
     setTasks(parse.personalTasks[0].tasks)
+    const res = await axios.get(`/user/${cookies.UserId}/task/${tasks[0].id}`, {headers: {'Content-Type' : 'application/json', 'Authorization' : 'Bearer ' + cookies.AuthToken}})
+    console.log(res.data)
+
   }
 
   useEffect(() => {
     GetTaskList()
   }, [])
-
-  const [check, setCheck] = useState(false)
-  const [isDisabled, setIsDisabled] = useState(true)
 
   function handleChange (e) {
     if(check == true) {
@@ -70,15 +77,10 @@ const Home = () => {
     setIsDisabled(true)
   }
 
-
-  const [alert, setAlert] = useState(true)
   function onClose () {
     setAlert(false)
   }
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
    
   return (
     <>

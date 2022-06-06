@@ -64,14 +64,14 @@ const GroupList = () => {
     { field: 'studentsCount', headerName: 'Количество студентов, состоящих в группе', width: 500},
     {
       field: 'action',
-      headerName: 'Изменить/Удалить',
+      headerName: 'Подробнее/Удалить',
       minWidth: 100,
       flex: 1,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/admin/groups/"+params.row.id}>
-              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Изменить</button>
+              <button className="userListEdit" onClick={(e) => handleClick(params.row.id)}>Подробнее</button>
             </Link>
             <DeleteIcon className="userListDelete" onClick={() => handleDelete(params.row.id)}/>
           </>
@@ -97,7 +97,6 @@ const GroupList = () => {
             onClose={(e) => {onClose()}}>
             <strong>Ошибка!</strong> {textError}. В ней есть студенты
         </Alert>)}
-         <AdminBar/>
         <AdminBar/>
             <div className="AdminContainer">
                 <SideBarAdmin/>

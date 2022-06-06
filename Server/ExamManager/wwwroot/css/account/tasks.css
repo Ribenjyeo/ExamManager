@@ -25,19 +25,21 @@ body .tasks {
         margin: 2em 0;
     }
 
-    .tasks-list .task {
-        display: grid;
-        grid-template-rows: calc(var(--symbol-height) * 3) calc(var(--symbol-height) * 16) calc(var(--symbol-height) * 3);
-        margin-top: 2em;
-        padding: 20px;
-        width: 80%;
-        border: 1px solid rgba(0, 0, 0, .4);
-        box-shadow: .5em .5em .5em .5em rgba(0, 0, 0, .4);
-    }
+        .tasks-list .task {
+            display: grid;
+            grid-template-rows: calc(var(--symbol-height) * 3) calc(var(--symbol-height) * 16) calc(var(--symbol-height) * 3);
+            margin-top: 2em;
+            padding: 20px;
+            width: 80%;
+            border: 1px solid rgba(0, 0, 0, .4);
+            box-shadow: .5em .5em .5em .5em rgba(0, 0, 0, .4);
+        }
 
 .task .title {
     font-size: 25px;
     font-family: var(--font-Roboto-Slab);
+    overflow: hidden;
+    line-height: 1em;
 }
 
 title * {

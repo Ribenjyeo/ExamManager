@@ -55,6 +55,8 @@ namespace ExamManager.Controllers
                         await _taskService.AssignTaskToStudentAsync(studyTask.ObjectID, id);
                     }
                 }
+
+                studyTask = await _taskService.GetStudyTaskAsync(studyTask.ObjectID);
                 return Ok(ResponseFactory.CreateResponse(studyTask));
             }
             catch (Exception ex)
@@ -122,9 +124,16 @@ namespace ExamManager.Controllers
             var currentTaskId = Guid.Parse(taskId);
 
             var vmId = string.Empty;
-            _taskService.StartTaskVirtualMachine(id, currentTaskId, currentUserID);
+            try
+            {
+                vmId = await _taskService.StartTaskVirtualMachine(id, currentTaskId, currentUserID);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex));
+            }
 
-            return Ok(ResponseFactory.CreateResponse());
+            return Ok(ResponseFactory.CreateResponse(vmId, System.Net.HttpStatusCode.OK));
         }
 
         [HttpGet(Routes.GetTaskStatus)]
@@ -174,9 +183,16 @@ namespace ExamManager.Controllers
 
         [HttpGet(Routes.CheckTask)]
         [ValidateGuidFormat("taskId")]
-        public async Task<IActionResult> CheckTak(string taskId)
-        {            
-            await _taskService.CheckStudyTaskAsync(Guid.Parse(taskId));
+        public async Task<IActionResult> CheckTak(string taskId, [FromQuery] string vMachine, [FromQuery] string vmImage)
+        {
+            try
+            {
+                await _taskService.CheckStudyTaskAsync(vMachine, vmImage, Guid.Parse(taskId));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseFactory.CreateResponse(ex));
+            }
 
             return Ok(ResponseFactory.CreateResponse());
         }

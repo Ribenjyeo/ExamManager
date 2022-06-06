@@ -13,12 +13,14 @@ namespace ExamManager.Controllers
         IGroupService _groupService { get; set; }
         IUserService _userService { get; set; }
         IStudyTaskService _taskService { get; set; }
-        public PagesController(IMapper mapper, IGroupService groupService, IUserService userService, IStudyTaskService taskService)
+        ILogger<PagesController> _logger { get; set; }
+        public PagesController(IMapper mapper, IGroupService groupService, IUserService userService, IStudyTaskService taskService, ILogger<PagesController> logger)
         {
             _mapper = mapper;
             _groupService = groupService;
             _userService = userService;
             _taskService = taskService;
+            _logger = logger;
         }
 
 
@@ -122,12 +124,13 @@ namespace ExamManager.Controllers
                 return View("Task", (user, task));
             }
 
-            var personalTask = (await _taskService.GetPersonalTaskAsync(taskId));
+            var personalTask = await _taskService.GetPersonalTaskAsync(taskId);
             if (personalTask is null)
             {
                 return RedirectToAction(nameof(TasksPageIndex));
             }
             var pTaskView = PersonalTaskView.MapFrom(personalTask);
+            _logger.LogInformation(string.Join(";\n", pTaskView.VirtualMachines.Select(vm => $"{vm.Image.ID}: {vm.Instance?.Status ?? VMStatus.KILLED}")));
 
             return View("PersonalTask", (user, pTaskView));
         }

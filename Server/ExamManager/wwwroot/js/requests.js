@@ -66,8 +66,8 @@ let modifyTask = function (data, onResponse){
     handleRequest(`/task/modify`, "POST", data, onResponse);
 }
 
-let startTask = function (virtualMachineId, onResponse){
-    handleRequest(`/task/start/${virtualMachineId}`, "GET", null, onResponse);
+let startTask = function (taskId, virtualMachineId, onResponse){
+    handleRequest(`/task/${taskId}/start/${virtualMachineId}`, "GET", null, onResponse);
 }
 
 let stopTask = function (virtualMachineId, onResponse) {

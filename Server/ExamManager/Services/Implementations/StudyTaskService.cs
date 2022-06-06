@@ -90,6 +90,7 @@ public class StudyTaskService : IStudyTaskService
     {
         var task = await _dbContext.Tasks
             .AsNoTracking()
+            .Include(task => task.VirtualMachines)
             .Include(task => task.PersonalTasks)!
             .ThenInclude(pTask => pTask.Student)
             .FirstOrDefaultAsync(task => task.ObjectID == taskId);
@@ -142,11 +143,34 @@ public class StudyTaskService : IStudyTaskService
             throw new InvalidDataException($"Задания {taskId} не существует");
         }
 
+        var vMachines = newTask.VirtualMachines;
+        newTask.VirtualMachines = null;
+
         var entityManager = new EntityManager();
         entityManager
             .Modify(currentTask)
             .Except(nameof(StudyTask.ObjectID))
             .BasedOn(newTask);
+
+        var taskVMachines = _dbContext.VMImages!.Where(vm => vm.TaskID == currentTask.ObjectID).ToList();
+        foreach (var vMachine in vMachines ?? new List<VirtualMachineImage>())
+        {
+            var existedVMachine = taskVMachines.FirstOrDefault(vm => vm.ID == vMachine.ID);
+
+            if (existedVMachine is null)
+            {
+                await _dbContext.VMImages!.AddAsync(vMachine);
+                vMachine.TaskID = currentTask.ObjectID;
+            }
+            else
+            {
+                taskVMachines.Remove(existedVMachine);
+            }
+        }
+        foreach (var vMachine in taskVMachines)
+        {
+            _dbContext.VMImages?.Remove(vMachine);
+        }
 
         await _dbContext.SaveChangesAsync();
 
@@ -213,6 +237,11 @@ public class StudyTaskService : IStudyTaskService
             throw new InvalidDataException($"Не удалось найти индивидуальное задание {personalTaskId}");
         }
 
+        if (personalTask.Status == Models.TaskStatus.SUCCESSED)
+        {
+            throw new InvalidDataException($"Задание {personalTask.Task?.Number.ToString() ?? personalTaskId.ToString()} нельзя удалить у студента {personalTask.Student.FirstName}, поскольку оно выполнено");
+        }
+
         _dbContext.Remove(personalTask);
         await _dbContext.SaveChangesAsync();
     }
@@ -228,23 +257,27 @@ public class StudyTaskService : IStudyTaskService
             throw new InvalidDataException($"Не удалось найти индивидуальные задания {string.Join(", ", personalTaskIds)}");
         }
 
+        personalTasks = personalTasks.Where(pTask => pTask.Status != Models.TaskStatus.SUCCESSED).ToList();
+
         _dbContext.RemoveRange(personalTasks);
         await _dbContext.SaveChangesAsync();
     }
 
-    public Task CheckStudyTaskAsync(Guid taskId)
+    public async Task CheckStudyTaskAsync(string vMachineId, string vmImageId, Guid pTaskId)
     {
-        throw new NotImplementedException();
+        await _vMachineService.CheckVirtualMachine(vMachineId, vmImageId, pTaskId);
     }
 
     public async Task<string> StartTaskVirtualMachine(string vmImageId, Guid personalTaskId, Guid ownerId)
     {
         // Проверить наличие включенных виртуальных машин на других заданиях
+        // TODO
 
         // Отправляем команду на запуск виртуальной машины
-        var virtualMachine = await _vMachineService.StartVirtualMachine(vmImageId, personalTaskId, ownerId);
-        
+        var virtualMachine = await _vMachineService.StartVirtualMachine(vmImageId, ownerId, personalTaskId);
+
         // Отправить уведомление пользователю
+        // TODO
 
         if (virtualMachine is null)
         {
@@ -304,7 +337,9 @@ public class StudyTaskService : IStudyTaskService
 
     public async Task WithdrawTaskFromStudentAsync(Guid taskId, Guid studentId)
     {
-        var personalTask = await _dbContext.UserTasks!.FirstOrDefaultAsync(pTask => pTask.TaskID == taskId && pTask.StudentID == studentId);
+        var personalTask = await _dbContext.UserTasks!
+            .Include(pTask => pTask.Task)
+            .FirstOrDefaultAsync(pTask => pTask.TaskID == taskId && pTask.StudentID == studentId);
 
         if (personalTask is null)
         {
@@ -323,6 +358,11 @@ public class StudyTaskService : IStudyTaskService
             throw new InvalidDataException($"Не удалось найти задание {taskNumber} у пользователя {studentName}");
         }
 
+        if (personalTask.Status == Models.TaskStatus.SUCCESSED)
+        {
+            throw new InvalidDataException($"Задание {personalTask.Task?.Number.ToString()} нельзя удалить у студента {personalTask.Student.FirstName}, поскольку оно выполнено");
+        }
+
         _dbContext.Remove(personalTask);
         await _dbContext.SaveChangesAsync();
     }
@@ -337,6 +377,8 @@ public class StudyTaskService : IStudyTaskService
         {
             throw new InvalidDataException($"Не удалось найти задания {string.Join(", ", taskId)} у пользователя {studentId}");
         }
+
+        personalTasks = personalTasks.Where(pTask => pTask.Status != Models.TaskStatus.SUCCESSED).ToList();
 
         _dbContext.RemoveRange(personalTasks);
         await _dbContext.SaveChangesAsync();

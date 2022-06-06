@@ -15,6 +15,8 @@ public interface IVirtualMachineService
     // Аргументы для остановки виртуальной машины
     public const string StopVM = "StopVM";
 
+    public const string CheckVM = "CheckVM";
+
     #endregion
 
     /// <summary>
@@ -36,6 +38,8 @@ public interface IVirtualMachineService
     public Task<string> GetVirtualMachineStatus(string virtualMachineId);
 
     public Task<VirtualMachine?> GetVirtualMachine(string virtualMachineID);
+
+    public Task CheckVirtualMachine(string vMachineId, string vmImageId, Guid personalTaskId);
 
     public Task<string> GenerateConnectionFile(VirtualMachine vMachine);
 }
