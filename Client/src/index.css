@@ -1010,9 +1010,7 @@ span.userShowInfoTitle {
 }
 
 .newUserItem {
-  max-width: 300px;
-  min-width: 200px;
-  width: 300px;
+  width: 250px;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -1191,6 +1189,10 @@ span.userShowInfoTitle {
   font-weight: 600;
   color: rgb(151, 150, 150);
   text-align: left;
+}
+
+.ck-editor__editable {
+  min-height: 300px !important;
 }
 
 .editor-data {

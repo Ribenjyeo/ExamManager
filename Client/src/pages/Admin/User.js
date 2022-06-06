@@ -88,7 +88,6 @@ const User = () => {
                     currentGroupId = groupList[i].id
                 }
             }
-            console.log(check)
             if(check) {
                 if(fromData.groupId !== null) { //Если студент уже состоит в группе, то убираем его из неё
                     let RemoveStudentsRequest = {
