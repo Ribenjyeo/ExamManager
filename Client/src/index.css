@@ -938,6 +938,7 @@ span.userShowInfoTitle {
 .userUpdateInput {
   min-height: 20px;
   max-height: 22px;
+  padding: 5px;
   margin-left: 10px;
   color: #212529;
   background-color: #fff;
@@ -1282,6 +1283,7 @@ span.userShowInfoTitle {
 .taskUpdateInput {
   width: 600px;
   min-height: 20px;
+  padding: 5px;
   max-height: 25px;
   margin-left: 10px;
   color: #212529;
@@ -1303,4 +1305,8 @@ span.userShowInfoTitle {
   border-color: #bdbdbd;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+
+.link-users {
+  outline: none;
 }

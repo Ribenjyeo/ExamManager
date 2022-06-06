@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'
 
 const style = {
     position: 'absolute',
@@ -18,7 +19,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: 1 ,
     boxShadow: 24,
     p: 4,
   };
@@ -134,9 +135,8 @@ const Task = () => {
                                             Список пользователей, которые используют это задание:
                                         </Typography>
                                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                            {/* {data.students[0].fullName} */}
                                             {data.students.map((item, i) => 
-                                                {item.fullName}
+                                              <Link to={"/admin/users/"+item.id} style={{ color: 'black', textDecoration: 'none' }}><p>{item.fullName}</p></Link>
                                             )}
                                         </Typography>
                                     </Box>
