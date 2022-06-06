@@ -52,7 +52,7 @@ const NewTask = () => {
                 body: JSON.stringify(task)
               })
             }
-            // navigate('/admin/tasks')
+            navigate('/admin/tasks')
           }
         catch(error){
           console.log(error)
