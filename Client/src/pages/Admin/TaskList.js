@@ -78,6 +78,8 @@ const TaskList = () => {
 
   useEffect(() => {
     tasks()
+    removeCookies('editTask', {path:'/'})
+    removeCookies('editTask', {path:'/admin/task'})
   }, [])
 
   const columns = [
