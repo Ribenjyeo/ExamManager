@@ -91,8 +91,6 @@ const Task = () => {
 
     useEffect(() => {
         getTask()
-        // removeCookies('editTask')
-        // removeCookies('editTask', {path:'/admin/task'})
     }, [])
 
     return (

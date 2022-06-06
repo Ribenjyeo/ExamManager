@@ -119,9 +119,9 @@ const UserList = () => {
 
   useEffect(() => {
     users()
-    // removeCookies('editUser', {path:'/admin/users'})
-    // removeCookies('editUser', {path:'/admin'})
-    // removeCookies('editUser', {path:'/'})
+    removeCookies('editUser', {path:'/admin/users'})
+    removeCookies('editUser', {path:'/admin'})
+    removeCookies('editUser', {path:'/'})
     groups()
   }, [])
   

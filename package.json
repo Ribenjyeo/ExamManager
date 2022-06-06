@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@ckeditor/ckeditor5-build-classic": "^34.1.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
