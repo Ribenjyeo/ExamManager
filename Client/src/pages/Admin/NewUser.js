@@ -33,16 +33,16 @@ const NewUser = () => {
   const handleClick = async (e) => { //запрос на добавление пользователя
     e.preventDefault()
     try {
-      if(role == 1) {
-        if(login.trim().length === 0 ||
+      if(role == 1) { //Если пользователь студент
+        if(login.trim().length === 0 || //Проверяем сначала поля на заполнение
         password.trim().length === 0 ||
         firstName.trim().length === 0 ||
         lastName.trim().length === 0 ||
         role === null ) {
-          setErorr(true)
-          setErrorText("Заполните все поля")
+          setErorr(true) 
+          setErrorText("Заполните все поля") //Выдача ошибки
         }
-        else if(group !== null) {
+        else if(group !== null) { //Добавить студента сразу в группу
           let currentGroupId = null
           let check = false
           for (let i = 0; i < groupList.length; i++){  //Поиск совпадений в изменяемой группе
@@ -51,11 +51,11 @@ const NewUser = () => {
                   currentGroupId = groupList[i].id
               }
           }
-          if (!check) {
+          if (!check) { //Выдача ошибки
             setErorr(true)
             setErrorText("Группа не найдена")
           }
-          else {
+          else { //Если группа нашлась в списке
             let users = {
             'users' : [{
               login: login,
@@ -73,7 +73,7 @@ const NewUser = () => {
                 body: JSON.stringify(users)
               })
   
-            if(response.data.status == 400) {
+            if(response.data.status == 400) { //Если такой логин уже используется
               setErorr(true)
               setErrorText(response.data.errors.login[0])
             }
@@ -82,7 +82,7 @@ const NewUser = () => {
             }
           }
         }
-        else { 
+        else {  //Создание студента без привязки к группе
           let users = {
             'users' : [{
               login: login,
@@ -99,7 +99,7 @@ const NewUser = () => {
               body: JSON.stringify(users)
             })
 
-          if(response.data.status == 400) {
+          if(response.data.status == 400) { //Если такой логин уже существует
             setErorr(true)
             setErrorText(response.data.errors.login[0])
           }
@@ -108,11 +108,11 @@ const NewUser = () => {
           }
         }
       }
-      if(role == 2) {
-        if(login.trim().length === 0 ||
+      if(role == 2) { //Создание администратора
+        if(login.trim().length === 0 || //Проверка на заполнение полей
         password.trim().length === 0 ||
         role === null ) {
-          setErorr(true)
+          setErorr(true) //Выдача ошибки
           setErrorText("Заполните логин или пароль")
         }
         else {
@@ -139,7 +139,7 @@ const NewUser = () => {
               body: JSON.stringify(users)
             })
 
-          if(response.data.status == 400) {
+          if(response.data.status == 400) { //Если такой логин уже существует
             setErorr(true)
             setErrorText(response.data.errors.login[0])
           }
