@@ -82,6 +82,10 @@ const TaskList = () => {
     removeCookies('editTask', {path:'/admin'})
     removeCookies('editTask', {path:'/admin/task'})
     removeCookies('editTask', {path:'/admin/users'})
+    removeCookies('editUser', {path:'/admin/users'})
+    removeCookies('editUser', {path:'/admin/task'})
+    removeCookies('editUser', {path:'/admin'})
+    removeCookies('editUser', {path:'/'})
   }, [])
 
   const columns = [

@@ -53,7 +53,10 @@ const Task = () => {
 
     const getTask = async () => { // получить данные задания
         try {
-            const response = await instance.get(`/task/${cookies.editTask}`)
+            const response = await axios.get(`/task/${cookies.editTask}`, {headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Bearer ' + cookies.AuthToken}
+              })
             // console.log(response.data)
             setData({
                 id: response.data.id,
@@ -87,10 +90,17 @@ const Task = () => {
     const handleChangeData = (e, editor) => {
         const data = editor.getData()
         setDescription(data)
-      }
+    }
+
+    const getLinkUser = (params) => { //получение ID изменяемого пользователя
+    setCookies("editUser", params)
+    }
 
     useEffect(() => {
         getTask()
+        removeCookies('editUser', {path:'/admin/users'})
+        removeCookies('editUser', {path:'/admin'})
+        removeCookies('editUser', {path:'/'})
     }, [])
 
     return (
@@ -136,7 +146,7 @@ const Task = () => {
                                         </Typography>
                                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                             {data.students.map((item, i) => 
-                                              <Link to={"/admin/users/"+item.id} style={{ color: 'black', textDecoration: 'none' }}><p>{item.fullName}</p></Link>
+                                              <Link to={"/admin/users/"+item.id} onClick={getLinkUser(item.id)} style={{ color: 'black', textDecoration: 'none' }}><p>{item.fullName}</p></Link>
                                             )}
                                         </Typography>
                                     </Box>
